@@ -12,6 +12,8 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import org.hibernate.annotations.Comment;
 
+import java.time.LocalDate;
+
 @Entity
 @Getter
 @Table(name = "users")
@@ -40,6 +42,10 @@ public class User {
     @Comment("회원 전화번호")
     @Column(name = "phone_number")
     private String phoneNumber;
+
+    @Comment("회원 생년월일")
+    @Column(name = "birth")
+    private LocalDate birth;
 
     @Comment("회원 역할(관리자 or 일반 유저)")
     @Column(name = "role")
