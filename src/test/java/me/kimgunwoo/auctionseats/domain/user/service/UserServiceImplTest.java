@@ -18,9 +18,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.time.LocalDate;
 
 import static me.kimgunwoo.auctionseats.global.exception.ErrorCode.EXISTED_USER_EMAIL;
+import static me.kimgunwoo.auctionseats.global.exception.ErrorCode.EXISTED_USER_NICKNAME;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
@@ -67,6 +70,63 @@ class UserServiceImplTest {
 
             // Then
             assertEquals(EXISTED_USER_EMAIL.getMessage(), exception.getMessage());
+        }
+
+        @Test
+        @DisplayName("실패 - 중복 닉네임")
+        void givenExistedNickname_fail() {
+            // Given
+            UserCreateRequest request = new UserCreateRequest(
+                    EMAIL,
+                    PASSWORD,
+                    NAME,
+                    NICKNAME,
+                    PHONE_NUMBER,
+                    BIRTH
+            );
+
+            given(userRepository.existsByEmail(request.email())).willReturn(false);
+            given(userRepository.existsByNickname(request.nickname())).willReturn(true);
+
+            // When
+            ApiException exception = assertThrows(
+                    ApiException.class,
+                    () -> sut.signup(request)
+            );
+
+            // Then
+            assertEquals(EXISTED_USER_NICKNAME.getMessage(), exception.getMessage());
+        }
+
+        @Test
+        @DisplayName("회원 가입 성공")
+        void success() {
+            // Given
+            UserCreateRequest request = new UserCreateRequest(
+                    EMAIL,
+                    PASSWORD,
+                    NAME,
+                    NICKNAME,
+                    PHONE_NUMBER,
+                    BIRTH
+            );
+
+            User user = User.of(request, passwordEncoder);
+
+            given(userRepository.existsByEmail(request.email())).willReturn(false);
+            given(userRepository.existsByNickname(request.nickname())).willReturn(false);
+            given(userRepository.save(any(User.class))).willReturn(user);
+
+            // When
+            sut.signup(request);
+
+            // Then
+            verify(userRepository).existsByEmail(request.email());
+            verify(userRepository).existsByNickname(request.nickname());
+            verify(userRepository).save(any(User.class));
+
+            verify(userRepository).save(argumentCaptor.capture());
+            assertEquals(request.nickname(), argumentCaptor.getValue().getNickname());
         }
 
     }
