@@ -1,14 +1,9 @@
 package me.kimgunwoo.auctionseats.domain.user.entity;
 
+import jakarta.persistence.*;
 import me.kimgunwoo.auctionseats.domain.user.entity.constant.Role;
 import org.hibernate.annotations.ColumnDefault;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import lombok.Getter;
 import org.hibernate.annotations.Comment;
 
@@ -49,6 +44,7 @@ public class User {
 
     @Comment("회원 역할(관리자 or 일반 유저)")
     @Column(name = "role")
+    @Enumerated(EnumType.STRING)
     private Role role = Role.USER;
 
     @Comment("회원 보유 포인트")
