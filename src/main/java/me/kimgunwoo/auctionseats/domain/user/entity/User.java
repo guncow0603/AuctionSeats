@@ -1,11 +1,13 @@
 package me.kimgunwoo.auctionseats.domain.user.entity;
 
 import jakarta.persistence.*;
+import me.kimgunwoo.auctionseats.domain.user.dto.request.UserCreateRequest;
 import me.kimgunwoo.auctionseats.domain.user.entity.constant.Role;
 import org.hibernate.annotations.ColumnDefault;
 
 import lombok.Getter;
 import org.hibernate.annotations.Comment;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 
@@ -51,4 +53,24 @@ public class User {
     @Column(name = "point")
     @ColumnDefault("0")
     private long point;
+
+    private User(String email, String password, String name, String nickname, String phoneNumber, LocalDate birth) {
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.nickname = nickname;
+        this.phoneNumber = phoneNumber;
+        this.birth = birth;
+    }
+
+    public static User of(UserCreateRequest request, PasswordEncoder encoder) {
+        return new User(
+                request.email(),
+                encoder.encode(request.password()),
+                request.name(),
+                request.nickname(),
+                request.phoneNumber(),
+                request.birth()
+        );
+    }
 }
