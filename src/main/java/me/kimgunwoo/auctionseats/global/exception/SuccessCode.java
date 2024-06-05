@@ -1,5 +1,4 @@
 package me.kimgunwoo.auctionseats.global.exception;
-
 import org.springframework.http.HttpStatus;
 
 import lombok.AllArgsConstructor;
@@ -7,12 +6,11 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum ErrorCode {
+public enum SuccessCode {
 
     /* USER */
-    EXISTED_USER_EMAIL(HttpStatus.CONFLICT, "U10000", "중복된 이메일 입니다."),
+    SUCCESS_USER_SIGN_UP(HttpStatus.CREATED, "U00000", "회원 가입에 성공했습니다.");
 
-    EXISTED_USER_NICKNAME(HttpStatus.CONFLICT, "U10001", "사용 중인 닉네임 입니다."),
 
 
 
@@ -62,8 +60,7 @@ public enum ErrorCode {
 
 
     /* GLOBAL */
-    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "", ""),
-    INTERNAL_BAD_REQUEST(HttpStatus.BAD_REQUEST, "", "");
+
     private HttpStatus httpStatus;
     private String code;
     private String message;
