@@ -1,29 +1,20 @@
 package me.kimgunwoo.auctionseats.domain.user.dto.request;
 
-import static me.kimgunwoo.auctionseats.domain.user.UserUtil.getUserCreateRequest;
-import static org.assertj.core.api.Assertions.*;
-
-import java.time.LocalDate;
-import java.util.Set;
-
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
+import org.junit.jupiter.api.*;
+import static me.kimgunwoo.auctionseats.domain.user.UserUtil.*;
+
+import java.time.LocalDate;
+import java.util.Set;
+
+import static me.kimgunwoo.auctionseats.domain.user.UserUtil.getUserCreateRequest;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("회원 가입 요청 검증 테스트")
 class UserCreateRequestTest {
-    private static final String EMAIL = "tester@gmail.com";
-    private static final String PASSWORD = "test123!@#";
-    private static final String NAME = "김수한";
-    private static final String NICKNAME = "두루미";
-    private static final String PHONE_NUMBER = "010-1234-5678";
     private static final LocalDate BIRTH = LocalDate.of(1990, 1, 1);
     private static ValidatorFactory validatorFactory;
     private static Validator validator;
