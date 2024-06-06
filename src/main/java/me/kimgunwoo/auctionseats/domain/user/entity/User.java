@@ -1,6 +1,8 @@
 package me.kimgunwoo.auctionseats.domain.user.entity;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import me.kimgunwoo.auctionseats.domain.user.dto.request.UserCreateRequest;
 import me.kimgunwoo.auctionseats.domain.user.entity.constant.Role;
 import org.hibernate.annotations.ColumnDefault;
@@ -14,6 +16,7 @@ import java.time.LocalDate;
 @Entity
 @Getter
 @Table(name = "users")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
 
     @Id
