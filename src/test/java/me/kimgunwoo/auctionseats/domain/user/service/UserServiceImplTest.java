@@ -1,5 +1,6 @@
 package me.kimgunwoo.auctionseats.domain.user.service;
 
+import static me.kimgunwoo.auctionseats.domain.user.UserUtil.*;
 import me.kimgunwoo.auctionseats.domain.user.dto.request.UserCreateRequest;
 import me.kimgunwoo.auctionseats.domain.user.entity.User;
 import me.kimgunwoo.auctionseats.domain.user.repository.UserRepository;
@@ -51,7 +52,7 @@ class UserServiceImplTest {
         @DisplayName("실패 - 중복 이메일")
         void givenExistedEmail_fail() {
             // Given
-            UserCreateRequest request = new UserCreateRequest(
+            UserCreateRequest request = getUserCreateRequest(
                     EMAIL,
                     PASSWORD,
                     NAME,
@@ -76,7 +77,7 @@ class UserServiceImplTest {
         @DisplayName("실패 - 중복 닉네임")
         void givenExistedNickname_fail() {
             // Given
-            UserCreateRequest request = new UserCreateRequest(
+            UserCreateRequest request = getUserCreateRequest(
                     EMAIL,
                     PASSWORD,
                     NAME,
@@ -102,7 +103,7 @@ class UserServiceImplTest {
         @DisplayName("회원 가입 성공")
         void success() {
             // Given
-            UserCreateRequest request = new UserCreateRequest(
+            UserCreateRequest request = getUserCreateRequest(
                     EMAIL,
                     PASSWORD,
                     NAME,
