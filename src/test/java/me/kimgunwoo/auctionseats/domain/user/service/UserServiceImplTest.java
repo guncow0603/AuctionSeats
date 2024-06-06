@@ -1,5 +1,6 @@
 package me.kimgunwoo.auctionseats.domain.user.service;
 
+import static me.kimgunwoo.auctionseats.domain.user.UserUtil.*;
 import me.kimgunwoo.auctionseats.domain.user.dto.request.UserCreateRequest;
 import me.kimgunwoo.auctionseats.domain.user.entity.User;
 import me.kimgunwoo.auctionseats.domain.user.repository.UserRepository;
@@ -28,12 +29,6 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
 
-    private static final String EMAIL = "tester@gmail.com";
-    private static final String PASSWORD = "test123!@#";
-    private static final String NAME = "김수한";
-    private static final String NICKNAME = "두루미";
-    private static final String PHONE_NUMBER = "010-1234-5678";
-    private static final LocalDate BIRTH = LocalDate.of(1990, 1, 1);
     @Mock
     UserRepository userRepository;
     @Mock
@@ -51,7 +46,7 @@ class UserServiceImplTest {
         @DisplayName("실패 - 중복 이메일")
         void givenExistedEmail_fail() {
             // Given
-            UserCreateRequest request = new UserCreateRequest(
+            UserCreateRequest request = getUserCreateRequest(
                     EMAIL,
                     PASSWORD,
                     NAME,
@@ -76,7 +71,7 @@ class UserServiceImplTest {
         @DisplayName("실패 - 중복 닉네임")
         void givenExistedNickname_fail() {
             // Given
-            UserCreateRequest request = new UserCreateRequest(
+            UserCreateRequest request = getUserCreateRequest(
                     EMAIL,
                     PASSWORD,
                     NAME,
@@ -102,7 +97,7 @@ class UserServiceImplTest {
         @DisplayName("회원 가입 성공")
         void success() {
             // Given
-            UserCreateRequest request = new UserCreateRequest(
+            UserCreateRequest request = getUserCreateRequest(
                     EMAIL,
                     PASSWORD,
                     NAME,
