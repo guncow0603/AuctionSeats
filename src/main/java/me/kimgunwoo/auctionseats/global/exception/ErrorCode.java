@@ -13,6 +13,7 @@ public enum ErrorCode {
     EXISTED_USER_EMAIL(HttpStatus.CONFLICT, "U10000", "중복된 이메일 입니다."),
 
     EXISTED_USER_NICKNAME(HttpStatus.CONFLICT, "U10001", "사용 중인 닉네임 입니다."),
+    NOT_FOUND_USER(HttpStatus.NOT_FOUND, "U10001", "존재하지 않는 회원입니다."),
 
 
 
