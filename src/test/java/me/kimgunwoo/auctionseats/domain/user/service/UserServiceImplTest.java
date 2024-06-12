@@ -55,7 +55,7 @@ class UserServiceImplTest {
                     BIRTH
             );
 
-            given(userRepository.existsByEmail(request.email())).willReturn(true);
+            given(userRepository.existsByEmailAndIsDeletedIsFalse(request.email())).willReturn(true);
 
             // When
             ApiException exception = assertThrows(
@@ -80,8 +80,8 @@ class UserServiceImplTest {
                     BIRTH
             );
 
-            given(userRepository.existsByEmail(request.email())).willReturn(false);
-            given(userRepository.existsByNickname(request.nickname())).willReturn(true);
+            given(userRepository.existsByEmailAndIsDeletedIsFalse(request.email())).willReturn(false);
+            given(userRepository.existsByNicknameAndIsDeletedIsFalse(request.nickname())).willReturn(true);
 
             // When
             ApiException exception = assertThrows(
@@ -108,16 +108,16 @@ class UserServiceImplTest {
 
             User user = User.of(request, passwordEncoder);
 
-            given(userRepository.existsByEmail(request.email())).willReturn(false);
-            given(userRepository.existsByNickname(request.nickname())).willReturn(false);
+            given(userRepository.existsByEmailAndIsDeletedIsFalse(request.email())).willReturn(false);
+            given(userRepository.existsByNicknameAndIsDeletedIsFalse(request.nickname())).willReturn(false);
             given(userRepository.save(any(User.class))).willReturn(user);
 
             // When
             sut.signup(request);
 
             // Then
-            verify(userRepository).existsByEmail(request.email());
-            verify(userRepository).existsByNickname(request.nickname());
+            verify(userRepository).existsByEmailAndIsDeletedIsFalse(request.email());
+            verify(userRepository).existsByNicknameAndIsDeletedIsFalse(request.nickname());
             verify(userRepository).save(any(User.class));
 
             verify(userRepository).save(argumentCaptor.capture());

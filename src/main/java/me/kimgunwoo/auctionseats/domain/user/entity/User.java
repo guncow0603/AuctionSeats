@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import me.kimgunwoo.auctionseats.domain.user.dto.request.UserCreateRequest;
 import me.kimgunwoo.auctionseats.domain.user.entity.constant.Role;
+import me.kimgunwoo.auctionseats.global.entity.BaseEntity;
 import org.hibernate.annotations.ColumnDefault;
 
 import lombok.Getter;
@@ -17,7 +18,7 @@ import java.time.LocalDate;
 @Getter
 @Table(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User {
+public class User extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -56,6 +57,10 @@ public class User {
     @Column(name = "point")
     @ColumnDefault("0")
     private long point;
+
+    @Comment("삭제 여부")
+    @Column(name = "is_deleted")
+    private boolean isDeleted = false;
 
     private User(String email, String password, String name, String nickname, String phoneNumber, LocalDate birth) {
         this.email = email;
