@@ -29,11 +29,11 @@ public class Sequence {
     private LocalDateTime startDateTime;
 
     @Comment("공연 id")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "show_id")
     private Shows shows;
 
-    public Sequence of(SequenceRequest sequenceRequest, Shows shows) {
+    public static Sequence of(SequenceRequest sequenceRequest, Shows shows) {
         return new Sequence(sequenceRequest.sequence(), sequenceRequest.startDateTime(), shows);
     }
 
