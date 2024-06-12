@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Comment;
 
 @Entity
 @Getter
@@ -16,12 +17,15 @@ public class ShowsImage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Comment("S3 URL")
     @Column(name = "key")
     private String key;
 
+    @Comment("대표 이미지 or 일반 이미지")
     @Column(name = "type")
-    private String type;
+    private ImageType type;
 
+    @Comment("공연 id")
     @ManyToOne
     @JoinColumn(name = "shows_id")
     private Shows shows;
@@ -32,6 +36,6 @@ public class ShowsImage {
 
     private ShowsImage(String key, String type) {
         this.key = key;
-        this.type = type;
+        this.type = ImageType.of(type);
     }
 }

@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.kimgunwoo.auctionseats.domain.show.dto.request.ShowsRequest;
+import org.hibernate.annotations.Comment;
 
 @Entity
 @Getter
@@ -16,6 +17,7 @@ public class ShowsCategory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Comment("카테고리 종류")
     @Column(name = "name")
     private String name;
 
