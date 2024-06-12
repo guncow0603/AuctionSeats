@@ -29,7 +29,7 @@ public class Sequence {
     private LocalDateTime startDateTime;
 
     @Comment("공연 id")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "show_id")
     private Shows shows;
 
