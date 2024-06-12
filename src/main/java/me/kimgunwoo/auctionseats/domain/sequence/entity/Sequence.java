@@ -30,7 +30,7 @@ public class Sequence {
 
     @Comment("공연 id")
     @ManyToOne
-    @JoinColumn(name = "goods_id")
+    @JoinColumn(name = "show_id")
     private Shows shows;
 
     public Sequence of(SequenceRequest sequenceRequest, Shows shows) {
