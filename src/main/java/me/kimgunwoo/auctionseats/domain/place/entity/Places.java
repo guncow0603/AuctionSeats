@@ -1,4 +1,4 @@
 package me.kimgunwoo.auctionseats.domain.place.entity;
 
-public class Place {
+public class Places {
 }
