@@ -21,7 +21,7 @@ public class ShowsCategory {
     @Column(name = "name")
     private String name;
 
-    public ShowsCategory of(ShowsRequest showsRequest) {
+    public static ShowsCategory of(ShowsRequest showsRequest) {
         return new ShowsCategory(showsRequest.categoryName());
     }
 

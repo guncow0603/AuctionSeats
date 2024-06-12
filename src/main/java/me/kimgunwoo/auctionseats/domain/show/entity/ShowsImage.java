@@ -30,7 +30,7 @@ public class ShowsImage {
     @JoinColumn(name = "shows_id")
     private Shows shows;
 
-    public ShowsImage of(String key, String type) {
+    public static ShowsImage of(String key, String type) {
         return new ShowsImage(key, type);
     }
 

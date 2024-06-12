@@ -10,6 +10,7 @@ import me.kimgunwoo.auctionseats.domain.show.dto.request.ShowsRequest;
 import org.hibernate.annotations.Comment;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 @Entity
 @Getter
@@ -58,10 +59,14 @@ public class Shows {
 
     @Comment("공연 이미지")
     @OneToMany(mappedBy = "shows", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ShowsImage> showsImage;
+    private List<ShowsImage> showsImage = new ArrayList<>();
 
-    public static Shows of(ShowsRequest showsRequest, ShowsCategory showsCategory, List<ShowsImage> showsImage,
-                           Places places) {
+    public static Shows of(
+            ShowsRequest showsRequest,
+            ShowsCategory showsCategory,
+            List<ShowsImage> showsImage,
+            Places places
+    ) {
         return new Shows(
                 showsRequest.name(),
                 showsRequest.description(),
@@ -71,7 +76,8 @@ public class Shows {
                 showsRequest.runningTime(),
                 showsCategory,
                 showsImage,
-                places);
+                places
+        );
     }
 
     private Shows(
