@@ -18,7 +18,7 @@ public class ShowsCategory {
     private Long id;
 
     @Comment("카테고리 종류")
-    @Column(name = "name")
+    @Column(name = "name", length = 10)
     private String name;
 
     public static ShowsCategory of(ShowsRequest showsRequest) {

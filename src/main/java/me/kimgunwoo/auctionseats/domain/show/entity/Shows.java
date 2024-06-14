@@ -9,7 +9,7 @@ import me.kimgunwoo.auctionseats.domain.place.entity.Places;
 import me.kimgunwoo.auctionseats.domain.show.dto.request.ShowsRequest;
 import org.hibernate.annotations.Comment;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 @Entity
@@ -23,20 +23,20 @@ public class Shows {
     private Long id;
 
     @Comment("공연 제목")
-    @Column(name = "name")
+    @Column(name = "name", length = 30)
     private String name;
 
     @Comment("공연 내용")
-    @Column(name = "description")
+    @Column(name = "description", length = 150)
     private String description;
 
     @Comment("공연 시작일")
     @Column(name = "start_date")
-    private LocalDateTime startDate;
+    private LocalDate startDate;
 
     @Comment("공연 마감일")
     @Column(name = "end_date")
-    private LocalDateTime endDate;
+    private LocalDate endDate;
 
     @Comment("연령대")
     @Column(name = "age_grade")
@@ -83,8 +83,8 @@ public class Shows {
     private Shows(
             String name,
             String description,
-            LocalDateTime startDate,
-            LocalDateTime endDate,
+            LocalDate startDate,
+            LocalDate endDate,
             int ageGrade,
             String runningTime,
             ShowsCategory showsCategory,
