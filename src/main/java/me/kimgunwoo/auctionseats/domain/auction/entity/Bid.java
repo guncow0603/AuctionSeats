@@ -21,12 +21,12 @@ public class Bid extends BaseEntity {
     private Long id;
 
     @Comment("입찰한 유저")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
     @Comment("경매")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "auction_id")
     private Auction auction;
 
