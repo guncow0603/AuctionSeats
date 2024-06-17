@@ -31,7 +31,7 @@ public class Seat extends BaseEntity {
     private Places places;
 
     public static Seat of(SeatRequest seatRequest, Places places) {
-        return new Seat(seatRequest.getZone(), seatRequest.getSeatNumber(), places);
+        return new Seat(seatRequest.zone(), seatRequest.seatNumber(), places);
     }
 
     private Seat(String zone, int seatNumber, Places places) {

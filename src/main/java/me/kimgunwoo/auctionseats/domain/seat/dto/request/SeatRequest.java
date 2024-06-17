@@ -6,11 +6,11 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class SeatRequest {
-    @NotBlank
-    private final String zone;
+public record SeatRequest(
+        @NotBlank
+        String zone,
+       @NotBlank
+       int seatNumber) {
 
-    @NotBlank
-    private final int seatNumber;
 
 }
