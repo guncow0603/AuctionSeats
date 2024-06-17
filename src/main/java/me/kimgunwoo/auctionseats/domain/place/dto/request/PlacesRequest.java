@@ -1,9 +1,12 @@
 package me.kimgunwoo.auctionseats.domain.place.dto.request;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
 
 @Getter
 @RequiredArgsConstructor
@@ -18,4 +21,8 @@ public class PlacesRequest {
 
     @NotBlank
     private final Integer countSeats;
+
+    @Valid
+    @NotBlank
+    private final List<PlacesSeatInfo> seats;
 }
