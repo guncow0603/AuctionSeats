@@ -4,7 +4,7 @@ package me.kimgunwoo.auctionseats.domain.auction.dto.request;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public record AuctionCreateRequest (
 
@@ -12,9 +12,9 @@ public record AuctionCreateRequest (
     Long startPrice,
 
     @JsonFormat(pattern = "yyyy-MM-dd HH")
-    LocalDate startDate,
+    LocalDateTime startDateTime,
 
     @JsonFormat(pattern = "yyyy-MM-dd HH")
-    LocalDate endDate
+    LocalDateTime endDateTime
     ){}
 
