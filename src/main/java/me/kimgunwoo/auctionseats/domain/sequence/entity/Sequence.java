@@ -7,15 +7,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.kimgunwoo.auctionseats.domain.sequence.dto.request.SequenceRequest;
 import me.kimgunwoo.auctionseats.domain.show.entity.Shows;
+import me.kimgunwoo.auctionseats.global.entity.BaseEntity;
 import org.hibernate.annotations.Comment;
 
 import java.time.LocalDateTime;
 
-@Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class Sequence {
+@Entity
+@Table(name = "sequence")
+public class Sequence extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
