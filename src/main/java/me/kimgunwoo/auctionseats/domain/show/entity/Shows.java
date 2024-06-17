@@ -7,16 +7,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.kimgunwoo.auctionseats.domain.place.entity.Places;
 import me.kimgunwoo.auctionseats.domain.show.dto.request.ShowsRequest;
+import me.kimgunwoo.auctionseats.global.entity.BaseEntity;
 import org.hibernate.annotations.Comment;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-@Entity
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class Shows {
+@Entity
+@Table(name = "shows")
+public class Shows extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,13 +49,13 @@ public class Shows {
     private int runningTime;
 
     @Comment("공연 카테고리")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "shows_category_id")
     private ShowsCategory showsCategory;
 
 
     @Comment("공연장")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "places_id")
     private Places places;
 

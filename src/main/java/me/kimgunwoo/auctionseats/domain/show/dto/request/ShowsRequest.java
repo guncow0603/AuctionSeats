@@ -2,33 +2,30 @@ package me.kimgunwoo.auctionseats.domain.show.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-
 
 import java.time.LocalDate;
 
 
 public record ShowsRequest (
-        @Size(max = 30)
-        @NotBlank
+        @Size(min = 1, max = 30, message = "1~30자 사이로 입력해주세요")
         String name,
-        @Size(max = 150)
-        @NotBlank
+        @Size(min = 1, max = 150, message = "1~150자 사이로 입력해주세요")
         String description,
 
-        @NotBlank
+        @NotBlank(message = "공연 시작일 기입은 필수입니다.")
         @JsonFormat(pattern = "yyyy-MM-dd")
 
         LocalDate startDate,
-        @NotBlank
+        @NotBlank(message = "공연 종료일은 필수입니다.")
         @JsonFormat(pattern = "yyyy-MM-dd")
         LocalDate endDate,
 
-        @NotBlank
+        @NotNull(message = "연령 입력은 필수입니다.")
         Integer ageGrade,
-        @NotBlank
+        @NotNull(message = "상영 시간은 필수입니다")
         Integer runningTime,
-        @Size(max = 30)
-        @NotBlank
+        @Size(min = 1, max = 30, message = "카테고리 입력은 필수입니다.")
         String categoryName){
 }
