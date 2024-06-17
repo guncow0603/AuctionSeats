@@ -6,13 +6,15 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.kimgunwoo.auctionseats.domain.show.dto.request.ShowsRequest;
+import me.kimgunwoo.auctionseats.global.entity.BaseEntity;
 import org.hibernate.annotations.Comment;
 
-@Entity
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class ShowsCategory {
+@Entity
+@Table(name = "shows_category")
+public class ShowsCategory extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
