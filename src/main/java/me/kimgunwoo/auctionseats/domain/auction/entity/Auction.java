@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Table(name = "auction")
 @Entity
 public class Auction extends BaseEntity {
