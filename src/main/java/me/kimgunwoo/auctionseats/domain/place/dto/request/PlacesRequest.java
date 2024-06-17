@@ -10,19 +10,19 @@ import java.util.List;
 
 @Getter
 @RequiredArgsConstructor
-public class PlacesRequest {
-    @Size(max = 30)
-    @NotBlank
-    private final String name;
+public record PlacesRequest(
+        @Size(max = 30)
+        @NotBlank
+        String name,
 
-    @Size(max = 150)
-    @NotBlank
-    private final String address;
+        @Size(max = 150)
+        @NotBlank
+        String address,
 
-    @NotBlank
-    private final Integer countSeats;
+        @NotBlank
+        Integer countSeats,
 
-    @Valid
-    @NotBlank
-    private final List<PlacesSeatInfo> seats;
-}
+        @Valid
+        @NotBlank
+        List<PlacesSeatInfo> seats
+) {}
