@@ -1,21 +1,28 @@
 package me.kimgunwoo.auctionseats.domain.place.dto.request;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
 @Getter
 @RequiredArgsConstructor
-public class PlacesRequest {
-    @Size(max = 30)
-    @NotBlank
-    private final String name;
+public record PlacesRequest(
+        @Size(max = 30)
+        @NotBlank
+        String name,
 
-    @Size(max = 150)
-    @NotBlank
-    private final String address;
+        @Size(max = 150)
+        @NotBlank
+        String address,
 
-    @NotBlank
-    private final Integer countSeats;
-}
+        @NotBlank
+        Integer countSeats,
+
+        @Valid
+        @NotBlank
+        List<PlacesSeatInfo> seats
+) {}
