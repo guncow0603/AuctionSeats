@@ -9,7 +9,7 @@ import me.kimgunwoo.auctionseats.domain.auction.dto.request.AuctionCreateRequest
 import me.kimgunwoo.auctionseats.global.entity.BaseEntity;
 import org.hibernate.annotations.Comment;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -31,21 +31,21 @@ public class Auction extends BaseEntity {
     private long bidPrice;
     @Comment("시작일")
     @Column(name = "start_date", nullable = false)
-    private LocalDate startDate;
+    private LocalDateTime startDateTime;
 
     @Comment("마감일")
     @Column(name = "end_date", nullable = false)
-    private LocalDate endDate;
+    private LocalDateTime endDateTime;
 
     @Comment("종료여부 T - 종료 / F - 진행 중")
     @Column(name = "is_ended")
     private boolean isEnded;
 
-    private Auction(long startPrice, long bidPrice, LocalDate startDate, LocalDate endDate, boolean isEnded) {
+    private Auction(long startPrice, long bidPrice, LocalDateTime startDate, LocalDateTime endDate, boolean isEnded) {
         this.startPrice = startPrice;
         this.bidPrice = bidPrice;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.startDateTime = startDate;
+        this.endDateTime = endDate;
         this.isEnded = isEnded;
     }
 
@@ -53,8 +53,8 @@ public class Auction extends BaseEntity {
         return new Auction(
                 request.startPrice(),
                 0,
-                request.startDate(),
-                request.endDate(),
+                request.startDateTime(),
+                request.endDateTime(),
                 false
         );
     }
