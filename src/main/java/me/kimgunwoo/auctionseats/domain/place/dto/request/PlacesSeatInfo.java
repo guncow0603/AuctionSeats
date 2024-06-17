@@ -9,5 +9,5 @@ public record PlacesSeatInfo (
         String zone,
 
         @NotBlank
-        int seat_number
+        Integer seatNumber
 ){}
