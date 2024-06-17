@@ -18,9 +18,6 @@ public record PlacesRequest(
         @Size(min = 1, max = 150, message = "주소 입력은 필수입니다.")
         String address,
 
-        @NotBlank
-        Integer countSeats,
-
         @Valid
         @NotNull(message = "좌석 정보는 필수입니다.")
         List<PlacesSeatInfo> seats
