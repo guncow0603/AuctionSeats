@@ -27,6 +27,5 @@ public record ShowsRequest (
         @NotNull(message = "상영 시간은 필수입니다")
         Integer runningTime,
         @Size(min = 1, max = 30, message = "카테고리 입력은 필수입니다.")
-        @NotBlank
         String categoryName){
 }
