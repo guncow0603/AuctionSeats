@@ -5,8 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-@Getter
-@RequiredArgsConstructor
+
 public record SeatRequest(
         @NotBlank(message = "필수로 해당 구역을 입력해야 합니다.")
         String zone,
