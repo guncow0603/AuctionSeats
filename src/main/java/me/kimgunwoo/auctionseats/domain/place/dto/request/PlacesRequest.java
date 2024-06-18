@@ -9,8 +9,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
-@Getter
-@RequiredArgsConstructor
+
 public record PlacesRequest(
         @Size(min = 1, max = 30, message = "공연장 이름은 필수입니다.")
         String name,
@@ -20,5 +19,5 @@ public record PlacesRequest(
 
         @Valid
         @NotNull(message = "좌석 정보는 필수입니다.")
-        List<PlacesSeatInfo> seats
+        List<PlaceSeatAuctionInfo> seats
 ) {}

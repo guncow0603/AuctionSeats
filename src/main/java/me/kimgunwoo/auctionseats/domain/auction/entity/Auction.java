@@ -25,7 +25,7 @@ public class Auction extends BaseEntity {
     private long startPrice;
 
     @Comment("입찰가")
-    @Column(name = "start_price", nullable = false)
+    @Column(name = "bid_price", nullable = false)
     private long bidPrice;
     @Comment("시작일시")
     @Column(name = "start_date", nullable = false)
