@@ -27,8 +27,8 @@ public class Places extends BaseEntity {
     @Comment("총 좌석 개수")
     @Column(name = "count_seats")
     private int countSeats;
-    public static Places of(PlacesRequest placesRequest) {
-        return new Places(placesRequest.name(), placesRequest.address(), placesRequest.countSeats());
+    public static Places of(PlacesRequest placesRequest, int countSeats) {
+        return new Places(placesRequest.name(), placesRequest.address(), countSeats);
     }
     private Places(String name, String address, int countSeats) {
         this.name = name;
