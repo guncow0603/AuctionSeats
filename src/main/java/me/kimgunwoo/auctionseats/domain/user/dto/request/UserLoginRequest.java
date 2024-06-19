@@ -1,11 +1,19 @@
 package me.kimgunwoo.auctionseats.domain.user.dto.request;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
+
 
 @Getter
-@RequiredArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserLoginRequest {
-    private final String email;
-    private final String password;
+
+    private String email;
+    private String password;
+
+    @Builder
+    public UserLoginRequest(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
 }
+
