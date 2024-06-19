@@ -78,6 +78,7 @@ public class ShowsSequenceSeat extends BaseEntity {
         this.price = price;
         this.sellType = sellType;
         this.isSelled = isSelled;
+        this.id = new ShowsSequenceSeatID(seat.getId(), sequence.getId());
     }
 
 }
