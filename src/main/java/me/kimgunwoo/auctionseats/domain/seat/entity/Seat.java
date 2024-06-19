@@ -2,10 +2,10 @@ package me.kimgunwoo.auctionseats.domain.seat.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.kimgunwoo.auctionseats.domain.place.entity.Places;
-import me.kimgunwoo.auctionseats.domain.seat.dto.request.SeatRequest;
 import me.kimgunwoo.auctionseats.global.entity.BaseEntity;
 import org.hibernate.annotations.Comment;
 
@@ -30,10 +30,7 @@ public class Seat extends BaseEntity {
     @JoinColumn(name = "places_id")
     private Places places;
 
-    public static Seat of(SeatRequest seatRequest, Places places) {
-        return new Seat(seatRequest.zone(), seatRequest.seatNumber(), places);
-    }
-
+    @Builder
     private Seat(String zone, int seatNumber, Places places) {
         this.zone = zone;
         this.seatNumber = seatNumber;

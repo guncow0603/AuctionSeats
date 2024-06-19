@@ -1,4 +1,4 @@
-package me.kimgunwoo.auctionseats.domain.place.dto.request;
+package me.kimgunwoo.auctionseats.domain.admin.dto.request;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import me.kimgunwoo.auctionseats.domain.place.entity.Places;
+import me.kimgunwoo.auctionseats.domain.seat.dto.request.SeatRequest;
 
 import java.util.List;
 
@@ -19,5 +21,15 @@ public record PlacesRequest(
 
         @Valid
         @NotNull(message = "좌석 정보는 필수입니다.")
-        List<PlaceSeatAuctionInfo> seats
-) {}
+        List<SeatRequest> seats
+) {
+        public Places toEntity(int countSeats) {
+                return Places
+                        .builder()
+                        .name(this.name)
+                        .address(this.address)
+                        .countSeats(countSeats)
+                        .build();
+
+        }
+}

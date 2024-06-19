@@ -3,7 +3,7 @@ package me.kimgunwoo.auctionseats.domain.show.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.kimgunwoo.auctionseats.global.entity.BaseEntity;
@@ -31,10 +31,7 @@ public class ShowsImage extends BaseEntity {
     @JoinColumn(name = "shows_id")
     private Shows shows;
 
-    public static ShowsImage of(String s3key, String type) {
-        return new ShowsImage(s3key, type);
-    }
-
+    @Builder
     private ShowsImage(String s3key, String type) {
         this.s3key = s3key;
         this.type = ImageType.of(type);

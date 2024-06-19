@@ -1,11 +1,16 @@
-package me.kimgunwoo.auctionseats.domain.show.dto.request;
+package me.kimgunwoo.auctionseats.domain.admin.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import me.kimgunwoo.auctionseats.domain.place.entity.Places;
+import me.kimgunwoo.auctionseats.domain.show.entity.Shows;
+import me.kimgunwoo.auctionseats.domain.show.entity.ShowsCategory;
+import me.kimgunwoo.auctionseats.domain.show.entity.ShowsImage;
 
 import java.time.LocalDate;
+import java.util.List;
 
 
 public record ShowsRequest (
@@ -28,4 +33,15 @@ public record ShowsRequest (
         Integer runningTime,
         @Size(min = 1, max = 30, message = "카테고리 입력은 필수입니다.")
         String categoryName){
+        public Shows toEntity(List<ShowsImage>showsImages, Places places) {
+                return Shows.builder().name(this.name)
+                        .description(this.description)
+                        .startDate(this.startDate)
+                        .endDate(this.endDate)
+                        .ageGrade(this.ageGrade)
+                        .runningTime(this.runningTime)
+                        .showsCategory(ShowsCategory.builder().name(this.categoryName).build())
+                        .showsImage(showsImages)
+                        .places(places)
+                        .build();}
 }

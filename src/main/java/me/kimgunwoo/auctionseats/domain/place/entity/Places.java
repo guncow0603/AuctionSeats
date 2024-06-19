@@ -1,11 +1,7 @@
 package me.kimgunwoo.auctionseats.domain.place.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import me.kimgunwoo.auctionseats.domain.place.dto.request.PlacesRequest;
+import lombok.*;
 import me.kimgunwoo.auctionseats.global.entity.BaseEntity;
 import org.hibernate.annotations.Comment;
 
@@ -27,9 +23,7 @@ public class Places extends BaseEntity {
     @Comment("총 좌석 개수")
     @Column(name = "count_seats")
     private int countSeats;
-    public static Places of(PlacesRequest placesRequest, int countSeats) {
-        return new Places(placesRequest.name(), placesRequest.address(), countSeats);
-    }
+    @Builder
     private Places(String name, String address, int countSeats) {
         this.name = name;
         this.address = address;
