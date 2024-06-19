@@ -19,8 +19,8 @@ public class ShowsImage extends BaseEntity {
     private Long id;
 
     @Comment("S3 URL")
-    @Column(name = "key", length = 50)
-    private String key;
+    @Column(name = "s3_key", length = 50)
+    private String s3key;
 
     @Comment("대표 이미지 or 일반 이미지")
     @Column(name = "type", length = 10)
@@ -31,12 +31,12 @@ public class ShowsImage extends BaseEntity {
     @JoinColumn(name = "shows_id")
     private Shows shows;
 
-    public static ShowsImage of(String key, String type) {
-        return new ShowsImage(key, type);
+    public static ShowsImage of(String s3key, String type) {
+        return new ShowsImage(s3key, type);
     }
 
-    private ShowsImage(String key, String type) {
-        this.key = key;
+    private ShowsImage(String s3key, String type) {
+        this.s3key = s3key;
         this.type = ImageType.of(type);
     }
 }
