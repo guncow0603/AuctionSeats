@@ -24,8 +24,13 @@ public class RedisConfig {
     public RedissonClient redissonClient() {
         Config config = new Config();
         config.useSingleServer()
-                .setAddress("redis://localhost:6379");
+                .setAddress("redis://" + host + ":" + port);
         return Redisson.create(config);
+    }
+
+    @Bean
+    public LettuceConnectionFactory lettuceConnectionFactory() {
+        return new LettuceConnectionFactory(host, port);
     }
 
     @Bean
@@ -33,8 +38,7 @@ public class RedisConfig {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new StringRedisSerializer());
-        redisTemplate.setConnectionFactory(new LettuceConnectionFactory(host, port));
-
+        redisTemplate.setConnectionFactory(lettuceConnectionFactory());
         return redisTemplate;
     }
 }
