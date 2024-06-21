@@ -2,12 +2,13 @@ package me.kimgunwoo.auctionseats.domain.show.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.kimgunwoo.auctionseats.domain.place.entity.Places;
-import me.kimgunwoo.auctionseats.domain.show.dto.request.ShowsRequest;
+import me.kimgunwoo.auctionseats.domain.admin.dto.request.ShowsRequest;
 import me.kimgunwoo.auctionseats.global.entity.BaseEntity;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 
 import java.time.LocalDate;
@@ -46,7 +47,8 @@ public class Shows extends BaseEntity {
 
     @Comment("공연 시간")
     @Column(name = "running_time")
-    private int runningTime;
+    @ColumnDefault("0")
+    private Integer runningTime = 0;
 
     @Comment("공연 카테고리")
     @ManyToOne(fetch = FetchType.LAZY)
@@ -63,32 +65,15 @@ public class Shows extends BaseEntity {
     @OneToMany(mappedBy = "shows", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ShowsImage> showsImage = new ArrayList<>();
 
-    public static Shows of(
-            ShowsRequest showsRequest,
-            ShowsCategory showsCategory,
-            List<ShowsImage> showsImage,
-            Places places
-    ) {
-        return new Shows(
-                showsRequest.name(),
-                showsRequest.description(),
-                showsRequest.startDate(),
-                showsRequest.endDate(),
-                showsRequest.ageGrade(),
-                showsRequest.runningTime(),
-                showsCategory,
-                showsImage,
-                places
-        );
-    }
 
+    @Builder
     private Shows(
             String name,
             String description,
             LocalDate startDate,
             LocalDate endDate,
-            int ageGrade,
-            int runningTime,
+            Integer ageGrade,
+            Integer runningTime,
             ShowsCategory showsCategory,
             List<ShowsImage> showsImage,
             Places places

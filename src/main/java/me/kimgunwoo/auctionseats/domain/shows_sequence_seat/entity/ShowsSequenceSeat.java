@@ -2,12 +2,13 @@ package me.kimgunwoo.auctionseats.domain.shows_sequence_seat.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.kimgunwoo.auctionseats.domain.seat.entity.Seat;
 import me.kimgunwoo.auctionseats.domain.sequence.entity.Sequence;
-import me.kimgunwoo.auctionseats.domain.shows_sequence_seat.dto.request.ShowsSequenceSeatRequest;
 import me.kimgunwoo.auctionseats.global.entity.BaseEntity;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 
 @Getter
@@ -21,7 +22,8 @@ public class ShowsSequenceSeat extends BaseEntity {
 
     @Comment("가격")
     @Column(name = "price")
-    private Long price;
+    @ColumnDefault("0")
+    private Long price = 0L;
 
     @Comment("판매 타입 - NOMAL, AUCTION")
     @Column(name = "sell_type")
@@ -30,7 +32,7 @@ public class ShowsSequenceSeat extends BaseEntity {
 
     @Comment("판매 여부")
     @Column(name = "is_selled")
-    private boolean isSelled = false;
+    private Boolean isSelled = false;
 
     @Comment("좌석")
     @MapsId("seatId")
@@ -44,34 +46,7 @@ public class ShowsSequenceSeat extends BaseEntity {
     @JoinColumn(name = "sequence_id")
     private Sequence sequence;
 
-    public static ShowsSequenceSeat generalOf(
-            Seat seat,
-            Sequence sequence,
-            ShowsSequenceSeatRequest showsSequenceSeatRequest
-    ) {
-        return new ShowsSequenceSeat(
-                seat,
-                sequence,
-                showsSequenceSeatRequest.generalAuctionPrice(),
-                SellType.NORMAL,
-                false
-        );
-    }
-
-    public static ShowsSequenceSeat auctionOf(
-            Seat seat,
-            Sequence sequence,
-            ShowsSequenceSeatRequest showsSequenceSeatRequest
-    ) {
-        return new ShowsSequenceSeat(
-                seat,
-                sequence,
-                showsSequenceSeatRequest.generalAuctionPrice(),
-                SellType.AUCTION,
-                false
-        );
-    }
-
+    @Builder
     private ShowsSequenceSeat(Seat seat, Sequence sequence, Long price, SellType sellType, boolean isSelled) {
         this.seat = seat;
         this.sequence = sequence;

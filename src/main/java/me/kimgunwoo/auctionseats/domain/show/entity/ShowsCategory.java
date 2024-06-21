@@ -2,10 +2,9 @@ package me.kimgunwoo.auctionseats.domain.show.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import me.kimgunwoo.auctionseats.domain.show.dto.request.ShowsRequest;
 import me.kimgunwoo.auctionseats.global.entity.BaseEntity;
 import org.hibernate.annotations.Comment;
 
@@ -23,10 +22,7 @@ public class ShowsCategory extends BaseEntity {
     @Column(name = "name", length = 10)
     private String name;
 
-    public static ShowsCategory of(ShowsRequest showsRequest) {
-        return new ShowsCategory(showsRequest.categoryName());
-    }
-
+    @Builder
     private ShowsCategory(String name) {
         this.name = name;
     }
