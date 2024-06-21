@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.kimgunwoo.auctionseats.domain.place.entity.Places;
 import me.kimgunwoo.auctionseats.global.entity.BaseEntity;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 
 @Getter
@@ -24,7 +25,8 @@ public class Seat extends BaseEntity {
 
     @Comment("좌석번호")
     @Column(name = "seat_number")
-    private int seatNumber;
+    @ColumnDefault("0")
+    private Integer seatNumber = 0;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "places_id")

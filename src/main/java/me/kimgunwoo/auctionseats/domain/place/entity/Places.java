@@ -3,6 +3,7 @@ package me.kimgunwoo.auctionseats.domain.place.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import me.kimgunwoo.auctionseats.global.entity.BaseEntity;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 
 @Entity
@@ -22,7 +23,8 @@ public class Places extends BaseEntity {
     private String address;
     @Comment("총 좌석 개수")
     @Column(name = "count_seats")
-    private int countSeats;
+    @ColumnDefault("0")
+    private Integer countSeats = 0;
     @Builder
     private Places(String name, String address, int countSeats) {
         this.name = name;

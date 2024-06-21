@@ -3,6 +3,7 @@ package me.kimgunwoo.auctionseats.domain.sequence.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import me.kimgunwoo.auctionseats.domain.show.entity.Shows;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 
 import java.time.LocalDateTime;
@@ -18,7 +19,8 @@ public class Sequence {
 
     @Comment("회차 수")
     @Column(name = "sequence")
-    private int sequence;
+    @ColumnDefault("0")
+    private Integer sequence = 0;
 
     @Comment("공연 일시")
     @Column(name = "start_date_time")
