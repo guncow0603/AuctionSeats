@@ -3,15 +3,12 @@ package me.kimgunwoo.auctionseats.domain.user.entity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import me.kimgunwoo.auctionseats.domain.user.dto.request.UserCreateRequest;
 import me.kimgunwoo.auctionseats.domain.user.entity.constant.Role;
 import me.kimgunwoo.auctionseats.global.entity.BaseEntity;
 import org.hibernate.annotations.ColumnDefault;
-
-import lombok.Getter;
 import org.hibernate.annotations.Comment;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 
@@ -50,7 +47,6 @@ public class User extends BaseEntity {
     @Comment("회원 보유 포인트")
     @Column(name = "point")
     @ColumnDefault("0")
-    @Builder.Default
     private Long point = 0L;
 
     @Comment("삭제 여부")
