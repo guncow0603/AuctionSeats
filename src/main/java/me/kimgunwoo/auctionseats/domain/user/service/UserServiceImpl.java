@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
             throw new ApiException(ErrorCode.EXISTED_USER_NICKNAME);
         }
 
-        User user = User.of(request, passwordEncoder);
+        User user = request.toEntity(passwordEncoder);
         userRepository.save(user);
     }
 }
