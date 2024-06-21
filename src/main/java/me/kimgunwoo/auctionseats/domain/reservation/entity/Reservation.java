@@ -1,5 +1,6 @@
 package me.kimgunwoo.auctionseats.domain.reservation.entity;
 
+import lombok.Builder;
 import me.kimgunwoo.auctionseats.domain.shows_sequence_seat.entity.ShowsSequenceSeat;
 import me.kimgunwoo.auctionseats.domain.user.entity.User;
 import me.kimgunwoo.auctionseats.global.entity.BaseEntity;
@@ -47,13 +48,12 @@ public class Reservation extends BaseEntity {
     @Column(name = "status", length = 10)
     @Enumerated(EnumType.STRING)
     private ReservationStatus status;
+
+    @Builder
     private Reservation(User user, ShowsSequenceSeat showsSequenceSeat, Long price) {
         this.user = user;
         this.showsSequenceSeat = showsSequenceSeat;
         this.price = price;
         this.status = ReservationStatus.OK;
-    }
-    public static Reservation of(User user, ShowsSequenceSeat showsSequenceSeat, Long price) {
-        return new Reservation(user, showsSequenceSeat, price);
     }
 }
