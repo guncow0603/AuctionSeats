@@ -32,6 +32,7 @@ public class ShowsSequenceSeat extends BaseEntity {
 
     @Comment("판매 여부")
     @Column(name = "is_selled")
+    @ColumnDefault("false")
     private Boolean isSelled = false;
 
     @Comment("좌석")
