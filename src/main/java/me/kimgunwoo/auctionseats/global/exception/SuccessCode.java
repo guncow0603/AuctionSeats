@@ -50,7 +50,7 @@ public enum SuccessCode {
 
 
     /* RESERVATION */
-
+    SUCCESS_RESERVE(HttpStatus.CREATED, "R00000", "예매 성공했습니다."),
 
 
 
