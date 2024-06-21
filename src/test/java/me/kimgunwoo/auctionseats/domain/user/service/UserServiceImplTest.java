@@ -106,7 +106,7 @@ class UserServiceImplTest {
                     BIRTH
             );
 
-            User user = User.of(request, passwordEncoder);
+            User user = request.toEntity(passwordEncoder);
 
             given(userRepository.existsByEmailAndIsDeletedIsFalse(request.email())).willReturn(false);
             given(userRepository.existsByNicknameAndIsDeletedIsFalse(request.nickname())).willReturn(false);

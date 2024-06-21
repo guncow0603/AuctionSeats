@@ -2,6 +2,8 @@ package me.kimgunwoo.auctionseats.domain.user.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.*;
+import me.kimgunwoo.auctionseats.domain.user.entity.User;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 
@@ -32,4 +34,14 @@ public record UserCreateRequest(
         @NotNull(message = "필수 입력입니다.")
         @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
         LocalDate birth
-) {}
+) {
+        public User toEntity(PasswordEncoder encoder) {
+        return User.builder()
+                .email(email)
+                .password(encoder.encode(password))
+                .name(name)
+                .nickname(nickname)
+                .phoneNumber(phoneNumber)
+                .birth(birth)
+                .build();
+}}
