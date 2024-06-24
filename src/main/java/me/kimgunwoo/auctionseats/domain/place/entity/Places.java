@@ -26,7 +26,7 @@ public class Places extends BaseEntity {
     @ColumnDefault("0")
     private Integer countSeats = 0;
     @Builder
-    private Places(String name, String address, int countSeats) {
+    private Places(String name, String address, Integer countSeats) {
         this.name = name;
         this.address = address;
         this.countSeats = countSeats;
