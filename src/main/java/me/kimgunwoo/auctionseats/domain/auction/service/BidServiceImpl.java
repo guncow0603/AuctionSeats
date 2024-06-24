@@ -29,7 +29,7 @@ public class BidServiceImpl implements BidService {
     private final RedissonClient redissonClient;
 
     @Override
-    @DistributedLock(key = "T(com.sparta.ticketauction.domain.auction.constant.AuctionConstant).AUCTION_BID_KEY_PREFIX.concat(#auctionId)")
+    @DistributedLock(key = "T(me.kimgunwoo.auctionseats.domain.auction.constant.AuctionConstant).AUCTION_BID_KEY_PREFIX.concat(#auctionId)")
     public void bid(Long auctionId, BidRequest bidRequest, User loginUser) {
         String key = AUCTION_BID_KEY_PREFIX + auctionId;
         RAtomicLong currentBid = redissonClient.getAtomicLong(key);
