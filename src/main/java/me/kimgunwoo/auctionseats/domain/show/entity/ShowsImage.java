@@ -24,6 +24,7 @@ public class ShowsImage extends BaseEntity {
 
     @Comment("대표 이미지 or 일반 이미지")
     @Column(name = "type", length = 10, nullable = false)
+    @Enumerated(value = EnumType.STRING)
     private ImageType type;
 
     @Comment("공연 id")
