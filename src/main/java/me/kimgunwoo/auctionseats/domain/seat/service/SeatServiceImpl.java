@@ -13,7 +13,7 @@ public class SeatServiceImpl implements SeatService {
 
     private final SeatRepository seatRepository;
 
-    public List<Seat> saveAllSeat(List<Seat> seats) {
-        return seatRepository.saveAll(seats);
+    public void saveAllSeat(List<Seat> seats) {
+        seatRepository.saveAll(seats);
     }
 }
