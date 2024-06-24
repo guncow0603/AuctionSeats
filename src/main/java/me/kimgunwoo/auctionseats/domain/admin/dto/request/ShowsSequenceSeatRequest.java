@@ -17,26 +17,26 @@ public record ShowsSequenceSeatRequest (
         Long auctionPrice,
         @Valid
         @NotNull(message = "정확한 경매 좌석을 입력해 주세요.")
-        List<SeatRequest> actionSeats
+        List<SeatRequest> auctionSeats
         ){
-        public ShowsSequenceSeat generalToEntity(Seat seat, Sequence sequence) {
+        public ShowsSequenceSeat generalToEntity(Seat seat, Sequence sequence, SellType sellType) {
                 return ShowsSequenceSeat
                         .builder()
                         .price(this.generalAuctionPrice)
                         .seat(seat)
                         .sequence(sequence)
-                        .sellType(SellType.NORMAL)
+                        .sellType(sellType)
                         .isSelled(false)
                         .build();
         }
 
-        public ShowsSequenceSeat auctionToEntity(Seat seat, Sequence sequence) {
+        public ShowsSequenceSeat auctionToEntity(Seat seat, Sequence sequence, SellType sellType) {
                 return ShowsSequenceSeat
                         .builder()
                         .price(this.auctionPrice)
                         .seat(seat)
                         .sequence(sequence)
-                        .sellType(SellType.AUCTION)
+                        .sellType(sellType)
                         .isSelled(false)
                         .build();
         }

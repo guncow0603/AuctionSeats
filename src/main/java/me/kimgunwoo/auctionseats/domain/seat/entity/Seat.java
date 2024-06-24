@@ -20,11 +20,11 @@ public class Seat extends BaseEntity {
     private Long id;
 
     @Comment("구역명")
-    @Column(name = "zone")
+    @Column(name = "zone", nullable = false)
     private String zone;
 
     @Comment("좌석번호")
-    @Column(name = "seat_number")
+    @Column(name = "seat_number", nullable = false)
     @ColumnDefault("0")
     private Integer seatNumber = 0;
 
@@ -33,7 +33,7 @@ public class Seat extends BaseEntity {
     private Places places;
 
     @Builder
-    private Seat(String zone, int seatNumber, Places places) {
+    private Seat(String zone, Integer seatNumber, Places places) {
         this.zone = zone;
         this.seatNumber = seatNumber;
         this.places = places;

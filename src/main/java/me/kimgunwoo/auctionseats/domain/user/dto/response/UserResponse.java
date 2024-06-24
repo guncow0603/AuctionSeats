@@ -6,5 +6,5 @@ public record UserResponse(
         String name,
         String nickname,
         String phoneNumber,
-        long point
+        Long point
 ) {}
