@@ -1,11 +1,8 @@
 package me.kimgunwoo.auctionseats.domain.admin.dto.request;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import me.kimgunwoo.auctionseats.domain.place.entity.Places;
 import me.kimgunwoo.auctionseats.domain.seat.dto.request.SeatRequest;
 
@@ -20,10 +17,10 @@ public record PlacesRequest(
         String address,
 
         @Valid
-        @NotNull(message = "좌석 정보는 필수입니다.")
+        @NotEmpty(message = "좌석 정보는 필수입니다.")
         List<SeatRequest> seats
 ) {
-        public Places toEntity(int countSeats) {
+        public Places toEntity(Integer countSeats) {
                 return Places
                         .builder()
                         .name(this.name)
