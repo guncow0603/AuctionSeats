@@ -1,6 +1,7 @@
 package me.kimgunwoo.auctionseats.domain.reservation.entity;
 
 import lombok.Builder;
+import me.kimgunwoo.auctionseats.domain.show.entity.Shows;
 import me.kimgunwoo.auctionseats.domain.shows_sequence_seat.entity.ShowsSequenceSeat;
 import me.kimgunwoo.auctionseats.domain.user.entity.User;
 import me.kimgunwoo.auctionseats.global.entity.BaseEntity;
@@ -48,6 +49,9 @@ public class Reservation extends BaseEntity {
     @Column(name = "status", length = 10)
     @Enumerated(EnumType.STRING)
     private ReservationStatus status;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Shows shows;
 
     @Builder
     private Reservation(User user, ShowsSequenceSeat showsSequenceSeat, Long price) {

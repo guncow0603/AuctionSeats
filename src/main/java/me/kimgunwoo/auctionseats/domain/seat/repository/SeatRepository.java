@@ -9,6 +9,6 @@ import java.util.Optional;
 @Repository
 public interface SeatRepository extends JpaRepository<Seat, Long> {
 
-    @Query("select s from Seat s join fetch s.place where s.id = :seatId")
+    @Query("select s from Seat s join fetch s.places where s.id = :seatId")
     Optional<Seat> findSeatWithPlaceById(Long seatId);
 }
