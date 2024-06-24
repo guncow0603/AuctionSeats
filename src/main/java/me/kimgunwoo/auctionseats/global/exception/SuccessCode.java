@@ -13,7 +13,7 @@ public enum SuccessCode {
 
     SUCCESS_USER_LOGIN(HttpStatus.OK, "U00100", "로그인에 성공했습니다."),
 
-
+    SUCCESS_USER_LOGOUT(HttpStatus.OK, "U00200", "로그아웃에 성공했습니다"),
 
 
 
