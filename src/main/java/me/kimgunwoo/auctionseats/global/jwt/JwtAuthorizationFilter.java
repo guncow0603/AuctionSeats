@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import static me.kimgunwoo.auctionseats.global.exception.ErrorCode.INVALID_TOKEN;
-import static me.kimgunwoo.auctionseats.global.exception.ErrorCode.REQUIRED_LOGIN;
+import static me.kimgunwoo.auctionseats.global.exception.ErrorCode.REQUIRED_ADMIN_USER_AUTHORITY;
 import static me.kimgunwoo.auctionseats.global.jwt.JwtUtil.ACCESS_TOKEN_HEADER;
 
 @Slf4j(topic = "JWT 토큰 검증 및 인가")
@@ -57,7 +57,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
         // 로그 아웃 되어 있는지 검증
         if (!lettuceUtils.hasKey(refreshToken)) {
-            throw new ApiException(REQUIRED_LOGIN);
+            throw new ApiException(REQUIRED_ADMIN_USER_AUTHORITY);
         }
 
         // 리프레시 토큰이 만료되지 않았는데, 엑세스 토큰이 없다면 재발급하자
