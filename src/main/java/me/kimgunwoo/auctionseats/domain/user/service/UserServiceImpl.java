@@ -1,7 +1,6 @@
 package me.kimgunwoo.auctionseats.domain.user.service;
 
-import java.util.Optional;
-
+import lombok.RequiredArgsConstructor;
 import me.kimgunwoo.auctionseats.domain.user.dto.request.UserCreateRequest;
 import me.kimgunwoo.auctionseats.domain.user.entity.User;
 import me.kimgunwoo.auctionseats.domain.user.repository.UserRepository;
@@ -9,9 +8,6 @@ import me.kimgunwoo.auctionseats.global.exception.ApiException;
 import me.kimgunwoo.auctionseats.global.exception.ErrorCode;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-
-import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -22,8 +18,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void signup(UserCreateRequest request) {
-        String email = request.email();
-        String nickname = request.nickname();
+        String email = request.getEmail();
+        String nickname = request.getNickname();
 
         /* 이메일 중복 검사 */
         if (userRepository.existsByEmailAndIsDeletedIsFalse(email)) {
