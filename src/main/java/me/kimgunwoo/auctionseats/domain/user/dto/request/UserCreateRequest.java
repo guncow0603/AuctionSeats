@@ -3,6 +3,7 @@ package me.kimgunwoo.auctionseats.domain.user.dto.request;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.*;
 import me.kimgunwoo.auctionseats.domain.user.entity.User;
+import me.kimgunwoo.auctionseats.domain.user.entity.constant.Role;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
@@ -43,5 +44,6 @@ public record UserCreateRequest(
                 .nickname(nickname)
                 .phoneNumber(phoneNumber)
                 .birth(birth)
+                .role(Role.USER)
                 .build();
 }}

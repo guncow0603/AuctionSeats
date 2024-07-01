@@ -43,7 +43,7 @@ public class User extends BaseEntity {
     @Comment("회원 역할(관리자 or 일반 유저)")
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
-    private Role role = Role.USER;
+    private Role role;
     @Comment("회원 보유 포인트")
     @Column(name = "point")
     @ColumnDefault("0")
@@ -54,13 +54,15 @@ public class User extends BaseEntity {
     private Boolean isDeleted = false;
 
     @Builder
-    private User(String email, String password, String name, String nickname, String phoneNumber, LocalDate birth) {
+    private User(String email, String password, String name, String nickname, String phoneNumber, LocalDate birth,
+                 Role role) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.nickname = nickname;
         this.phoneNumber = phoneNumber;
         this.birth = birth;
+        this.role = role;
     }
 
     public void chargePoint(Long point) {
