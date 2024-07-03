@@ -33,8 +33,10 @@ public class ShowsImage extends BaseEntity {
     private Shows shows;
 
     @Builder
-    private ShowsImage(String s3key, String type) {
+    private ShowsImage(String s3Key, String type, Shows shows) {
         this.s3key = s3key;
         this.type = ImageType.of(type);
+        this.shows = shows;
+        
     }
 }

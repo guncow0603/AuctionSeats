@@ -20,6 +20,7 @@ public enum SuccessCode {
 
 
     /* SHOWS */
+    SUCCESS_SHOWS_AND_SEQUENCE_CREATE(HttpStatus.CREATED, "S09900", "공연 및 회차가 추가되었습니다."),
 
 
 

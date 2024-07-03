@@ -89,4 +89,12 @@ public class Shows extends BaseEntity {
         this.places = places;
     }
 
+    public void createShowsImage(List<ShowsImage> showsImage) {
+        this.showsImage = showsImage;
+    }
+
+    public void createShowsCategory(ShowsCategory showsCategory) {
+        this.showsCategory = showsCategory;
+    }
+
 }
