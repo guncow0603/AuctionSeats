@@ -15,8 +15,9 @@ public interface UserRepository extends JpaRepository<User,Long> {
     Boolean existsByNicknameAndIsDeletedIsFalse(String nickname);
 
 
-    Optional<User> findByEmail(String email);
+    Optional<User> findByEmailAndIsDeletedIsFalse(String email);
 
+    Boolean existsByPhoneNumberAndIsDeletedIsFalse(String phoneNumber);
     // id를 사용하여 point 조회
     @Query("SELECT u.point FROM User u WHERE u.id = :userId")
     Long findPointById(@Param("userId") Long userId);

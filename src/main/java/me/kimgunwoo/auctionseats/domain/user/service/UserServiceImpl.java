@@ -34,4 +34,9 @@ public class UserServiceImpl implements UserService {
         User user = request.toEntity(passwordEncoder);
         userRepository.save(user);
     }
+
+    @Override
+    public boolean isExistedPhoneNumber(String phoneNumber) {
+        return userRepository.existsByPhoneNumberAndIsDeletedIsFalse(phoneNumber);
+    }
 }
