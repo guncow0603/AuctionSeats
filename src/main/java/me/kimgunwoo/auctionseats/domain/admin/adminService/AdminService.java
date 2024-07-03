@@ -13,5 +13,6 @@ public interface AdminService {
     List<PlacesResponse> createPlace(PlacesRequest placeRequest);
 
 
-    void createShows(ShowsRequest showsRequest, Long placeId, List<MultipartFile> files);
+    // 공연 생성
+    void createShowsAndSequence(ShowsRequest showsRequest, Long placeId, List<MultipartFile> files);
 }
