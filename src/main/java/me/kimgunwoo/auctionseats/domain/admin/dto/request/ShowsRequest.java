@@ -8,6 +8,7 @@ import me.kimgunwoo.auctionseats.domain.show.entity.Shows;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 
 
 public record ShowsRequest (
@@ -42,5 +43,6 @@ public record ShowsRequest (
                         .ageGrade(this.ageGrade)
                         .runningTime(this.runningTime)
                         .places(places)
+                        .showsImage(new ArrayList<>())
                         .build();}
 }
