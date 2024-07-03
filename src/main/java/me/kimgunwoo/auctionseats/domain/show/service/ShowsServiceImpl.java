@@ -2,6 +2,7 @@ package me.kimgunwoo.auctionseats.domain.show.service;
 
 import lombok.RequiredArgsConstructor;
 import me.kimgunwoo.auctionseats.domain.show.entity.Shows;
+import me.kimgunwoo.auctionseats.domain.show.entity.ShowsCategory;
 import me.kimgunwoo.auctionseats.domain.show.entity.ShowsImage;
 import me.kimgunwoo.auctionseats.domain.show.repository.ShowsCategoryRepository;
 import me.kimgunwoo.auctionseats.domain.show.repository.ShowsImageRepository;
@@ -30,5 +31,13 @@ public class ShowsServiceImpl implements ShowsService {
 
     public ShowsImage saveShowsImage(ShowsImage fileUrl) {
         return showsImageRepository.save(fileUrl);
+    }
+
+    public ShowsCategory findShowsCategory(String category) {
+        return showsCategoryRepository.findByName(category).orElse(null);
+    }
+
+    public ShowsCategory saveShowsCategory(ShowsCategory category) {
+        return showsCategoryRepository.save(category);
     }
 }

@@ -86,10 +86,10 @@ public class AdminServiceImpl implements AdminService {
         List<String> fileUrl = s3tUpload(files, saveShows.getId());
         List<ShowsImage> showsImageList = saveAllShowsImage(fileUrl, saveShows);
 
-        saveShows.createShowsImage(showsImageList);
+        saveShows.addShowsImage(showsImageList);
 
         ShowsCategory showsCategory = createShowsCategory(showsRequest.categoryName());
-        saveShows.createShowsCategory(showsCategory);
+        saveShows.updateShowsCategory(showsCategory);
 
         createSequence(saveShows, showsRequest.startTime());
     }
@@ -107,46 +107,46 @@ public class AdminServiceImpl implements AdminService {
 
     // 좌석 생성
     private List<Seat> createSeat(List<SeatRequest> seats, Places places) {
-        List<Seat> seatList = new ArrayList<>();
-
-        seatList = seats.stream()
+        return seats.stream()
                 .flatMap(seat -> IntStream.rangeClosed(1, seat.getZoneCountSeat())
                         .mapToObj(i -> seat.toEntity(places, i)))
                 .collect(Collectors.toList());
 
-        return seatList;
 
     }
 
     // 이미지 저장
-    public List<ShowsImage> saveAllShowsImage(List<String> fileKeyList, Shows shows) {
-        List<ShowsImage> showsImageList = new ArrayList<>();
-        for (String fileKey : fileKeyList) {
-            if (fileKey.contains(THUMBNAIL)) {
-                ShowsImage showsImage =
-                        ShowsImage
-                                .builder()
-                                .s3Key(fileKey)
-                                .type("대표")
-                                .shows(shows)
-                                .build();
-                showsImageList.add(showsImage);
-            } else if (fileKey.contains(GENERAL)) {
-                ShowsImage showsImage =
-                        ShowsImage
-                                .builder()
-                                .s3Key(fileKey)
-                                .type("일반")
-                                .shows(shows)
-                                .build();
-                showsImageList.add(showsImage);
-            }
-        }
+    private List<ShowsImage> saveAllShowsImage(List<String> fileKeyList, Shows shows) {
+        List<ShowsImage> showsImageList = divideShowsImageList(fileKeyList, shows);
         return showsService.saveAllShowsImage(showsImageList);
     }
 
+    // 이미지 종류 분리
+    private List<ShowsImage> divideShowsImageList(List<String> fileKeyList, Shows shows) {
+        List<ShowsImage> returnShowsIamgeList = new ArrayList<>();
+        for (String fileKey : fileKeyList) {
+            ShowsImage showsImage =
+                    ShowsImage
+                            .builder()
+                            .s3Key(fileKey)
+                            .type(this.checkShowsType(fileKey))
+                            .shows(shows)
+                            .build();
+            returnShowsIamgeList.add(showsImage);
+        }
+        return returnShowsIamgeList;
+    }
+
+    // 이미지 종류 체크
+    private String checkShowsType(String type) {
+        if (type.contains(THUMBNAIL)) {
+            return "대표";
+        }
+        return "일반";
+    }
+
     // S3 저장
-    public List<String> s3tUpload(List<MultipartFile> fileList, Long showId) {
+    private List<String> s3tUpload(List<MultipartFile> fileList, Long showId) {
         List<String> fileUrl = new ArrayList<>();
 
         String thumbnailFilePath = FILE_PATH + THUMBNAIL + showId;
@@ -165,30 +165,39 @@ public class AdminServiceImpl implements AdminService {
     }
 
     // 회차 생성
-    public void createSequence(Shows shows, LocalTime startTime) {
-        List<Sequence> sequenceList = new ArrayList<>();
+    private void createSequence(Shows shows, LocalTime startTime) {
+        List<Sequence> saveSequenceList = distributeSequence(shows, startTime);
+        saveSequence(saveSequenceList);
+    }
+
+    private List<Sequence> distributeSequence(Shows shows, LocalTime startTime) {
         LocalDate startDate = shows.getStartDate();
         LocalDate endDate = shows.getEndDate();
+        List<Sequence> distributeSequenceList = new ArrayList<>();
         long daysBetween = ChronoUnit.DAYS.between(startDate, endDate);
         for (int i = 1; i <= daysBetween; i++) {
-            LocalDateTime dateTIme = startDate.atTime(startTime);
+            LocalDateTime dateTime = startDate.atTime(startTime);
             Sequence sequence =
                     Sequence
                             .builder()
-                            .startDateTime(dateTIme)
+                            .startDateTime(dateTime)
                             .shows(shows)
                             .sequence(i)
                             .build();
-            sequenceList.add(sequence);
+            distributeSequenceList.add(sequence);
             startDate = startDate.plusDays(1);
         }
+        return distributeSequenceList;
+    }
+
+    private void saveSequence(List<Sequence> sequenceList) {
 
         sequenceService.saveAllSequence(sequenceList);
     }
 
     // 카테고리 생성 기타 입력시
-    public ShowsCategory createShowsCategory(String category) {
-        ShowsCategory showsCategory = showsSequenceSeatService.findShowsCategory(category);
+    private ShowsCategory createShowsCategory(String category) {
+        ShowsCategory showsCategory = showsService.findShowsCategory(category);
         if (showsCategory == null) {
             showsCategory =
                     ShowsCategory
@@ -196,8 +205,7 @@ public class AdminServiceImpl implements AdminService {
                             .name(category)
                             .build();
         }
-
-        return showsSequenceSeatService.saveShowSCategory(showsCategory);
+        return showsService.saveShowsCategory(showsCategory);
     }
 
 }
