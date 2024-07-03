@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.kimgunwoo.auctionseats.domain.place.entity.Places;
-import me.kimgunwoo.auctionseats.domain.admin.dto.request.ShowsRequest;
 import me.kimgunwoo.auctionseats.global.entity.BaseEntity;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
@@ -89,12 +88,11 @@ public class Shows extends BaseEntity {
         this.places = places;
     }
 
-    public void createShowsImage(List<ShowsImage> showsImage) {
-        this.showsImage = showsImage;
+    public void addShowsImage(List<ShowsImage> showsImages) {
+        this.showsImage.addAll(showsImages);
     }
 
-    public void createShowsCategory(ShowsCategory showsCategory) {
+    public void updateShowsCategory(ShowsCategory showsCategory) {
         this.showsCategory = showsCategory;
     }
-
 }
