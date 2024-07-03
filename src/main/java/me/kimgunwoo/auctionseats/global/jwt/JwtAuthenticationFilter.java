@@ -30,7 +30,7 @@ import static me.kimgunwoo.auctionseats.global.exception.SuccessCode.SUCCESS_USE
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-    private static final int REFRESH_TOKEN_EXPIRATION = 60 * 60 * 24 * 30;
+    private static final Long REFRESH_TOKEN_EXPIRATION = 60 * 60 * 24 * 1000L;
 
     private final JwtUtil jwtUtil;
     private final LettuceUtils lettuceUtils;
