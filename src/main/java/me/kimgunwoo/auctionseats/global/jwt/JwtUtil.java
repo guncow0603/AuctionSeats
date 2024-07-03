@@ -8,18 +8,13 @@ import io.jsonwebtoken.security.SecurityException;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import me.kimgunwoo.auctionseats.domain.user.entity.constant.Role;
 import me.kimgunwoo.auctionseats.global.exception.ApiException;
-import me.kimgunwoo.auctionseats.global.exception.SuccessCode;
-import me.kimgunwoo.auctionseats.global.response.ApiResponse;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.io.IOException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -156,31 +151,5 @@ public class JwtUtil {
     public Integer getRemainingTime(Date expiration) {
         Date now = new Date();
         return Math.toIntExact((expiration.getTime() - now.getTime()) / 60 / 1000);
-    }
-
-    public void setExceptionResponse(HttpServletResponse response, ApiException apiException) throws IOException {
-        response.setStatus(apiException.getHttpStatus().value());
-
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-
-        String result = mapper.writeValueAsString(
-                ApiResponse.of(apiException.getCode(), apiException.getMessage(), "{}")
-        );
-
-        response.getWriter().write(result);
-    }
-
-    public void setSuccessResponse(HttpServletResponse response, SuccessCode successCode) throws IOException {
-        response.setStatus(successCode.getHttpStatus().value());
-
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-
-        String result = mapper.writeValueAsString(
-                ApiResponse.of(successCode.getCode(), successCode.getMessage(), "{}")
-        );
-
-        response.getWriter().write(result);
     }
 }

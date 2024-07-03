@@ -9,7 +9,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.kimgunwoo.auctionseats.domain.user.entity.User;
-import me.kimgunwoo.auctionseats.global.exception.ApiException;
 import me.kimgunwoo.auctionseats.global.security.UserDetailsImpl;
 import me.kimgunwoo.auctionseats.global.util.LettuceUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -38,26 +37,20 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         // 엑세스 토큰 검증
 
         if (StringUtils.hasText(accessToken)) {
-            try {
-                jwtUtil.validateToken(accessToken);
+            jwtUtil.validateToken(accessToken);
 
-                Claims info = jwtUtil.getUserInfoFromToken(accessToken);
-                Long id = Long.parseLong(info.get("identify").toString());
-                String username = info.getSubject();
+            Claims info = jwtUtil.getUserInfoFromToken(accessToken);
+            Long id = Long.parseLong(info.get("identify").toString());
+            String username = info.getSubject();
 
-                String logoutToken = lettuceUtils.get("Logout: " + username);
-                // 로그아웃 토큰 검증
-                if (!StringUtils.hasText(logoutToken) || !accessToken.equals(logoutToken)) {
-                    setAuthentication(id, username);
-                }
-            } catch (ApiException e) {
-                jwtUtil.setExceptionResponse(response, e);
-                return;
+            String logoutToken = lettuceUtils.get("Logout: " + username);
+            // 로그아웃 토큰 검증
+            if (!StringUtils.hasText(logoutToken) || !accessToken.equals(logoutToken)) {
+                setAuthentication(id, username);
             }
         }
         filterChain.doFilter(request, response);
     }
-
     /*
      * 인증 처리하기
      * */
@@ -65,10 +58,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         Authentication authentication = createAuthentication(id, username);
         context.setAuthentication(authentication);
-
         SecurityContextHolder.setContext(context);
     }
-
     private Authentication createAuthentication(Long id, String username) {
         UserDetails userDetails = new UserDetailsImpl(
                 User.builder()
@@ -76,7 +67,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                         .email(username)
                         .build()
         );
-
         return new UsernamePasswordAuthenticationToken(
                 userDetails, null, userDetails.getAuthorities()
         );

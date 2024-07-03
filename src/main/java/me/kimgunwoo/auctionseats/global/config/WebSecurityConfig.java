@@ -1,6 +1,7 @@
 package me.kimgunwoo.auctionseats.global.config;
 
 import lombok.RequiredArgsConstructor;
+import me.kimgunwoo.auctionseats.global.jwt.ExceptionHandlerFilter;
 import me.kimgunwoo.auctionseats.global.jwt.JwtAuthenticationFilter;
 import me.kimgunwoo.auctionseats.global.jwt.JwtAuthorizationFilter;
 import me.kimgunwoo.auctionseats.global.jwt.JwtUtil;
@@ -51,6 +52,11 @@ public class WebSecurityConfig {
     }
 
     @Bean
+    public ExceptionHandlerFilter exceptionHandlerFilter() {
+        return new ExceptionHandlerFilter();
+    }
+
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(
@@ -70,7 +76,7 @@ public class WebSecurityConfig {
 
         http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-
+        http.addFilterBefore(exceptionHandlerFilter(), JwtAuthenticationFilter.class);
         return http.build();
     }
 }
