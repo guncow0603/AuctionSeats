@@ -1,7 +1,8 @@
-package me.kimgunwoo.auctionseats.domain.auction.entity;
+package me.kimgunwoo.auctionseats.domain.bid.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import me.kimgunwoo.auctionseats.domain.auction.entity.Auction;
 import me.kimgunwoo.auctionseats.domain.user.entity.User;
 import me.kimgunwoo.auctionseats.global.entity.BaseEntity;
 import org.hibernate.annotations.Comment;

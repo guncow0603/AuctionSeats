@@ -1,9 +1,9 @@
-package me.kimgunwoo.auctionseats.domain.auction.controller;
+package me.kimgunwoo.auctionseats.domain.bid.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import me.kimgunwoo.auctionseats.domain.auction.dto.request.BidRequest;
-import me.kimgunwoo.auctionseats.domain.auction.service.BidService;
+import me.kimgunwoo.auctionseats.domain.bid.dto.request.BidRequest;
+import me.kimgunwoo.auctionseats.domain.bid.service.BidService;
 import me.kimgunwoo.auctionseats.domain.user.entity.User;
 import me.kimgunwoo.auctionseats.global.annotaion.CurrentUser;
 import me.kimgunwoo.auctionseats.global.dto.EmptyObject;
