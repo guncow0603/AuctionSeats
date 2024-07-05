@@ -46,7 +46,13 @@ public enum ErrorCode {
     /* AUCTION */
     NOT_FOUND_AUCTION(HttpStatus.NOT_FOUND, "", "해당하는 경매를 찾지 못했습니다."),
     ENDED_AUCTION(HttpStatus.BAD_REQUEST, "", "경매가 종료되었습니다."),
-    BAD_REQUEST_BID(HttpStatus.BAD_REQUEST, "", "현재 입찰가보다 5% 이상이어야합니다."),
+
+
+
+    /* BID */
+    NOT_FOUND_BID(HttpStatus.NOT_FOUND, "B10000", "입찰을 찾지 못했습니다."),
+    NOT_FOUND_WIN_BID(HttpStatus.NOT_FOUND, "B10001", "낙찰자를 찾지 못했습니다."),
+    BAD_REQUEST_BID(HttpStatus.BAD_REQUEST, "B10100", "현재 입찰가보다 5% 이상이어야합니다."),
 
 
     /* RESERVATION */
@@ -55,12 +61,6 @@ public enum ErrorCode {
 
     /* PAYMENT */
     NOT_ENOUGH_POINT(HttpStatus.OK, "", "결제할 포인트가 부족합니다"),
-
-
-
-
-
-
 
 
 
@@ -73,6 +73,7 @@ public enum ErrorCode {
     EXPIRED_JWT_TOKEN(HttpStatus.UNAUTHORIZED, "T10001", "만료된 JWT 토큰입니다."),
     UNSUPPORTED_JWT_TOKEN(HttpStatus.UNAUTHORIZED, "T10002", "지원하지 않는 JWT 토큰입니다."),
     NON_ILLEGAL_ARGUMENT_JWT_TOKEN(HttpStatus.UNAUTHORIZED, "T10003", "잘못된 JWT 토큰입니다.");
+
 
     private HttpStatus httpStatus;
     private String code;

@@ -19,6 +19,7 @@ import java.util.Set;
 @Entity
 @Table(name = "auction")
 public class Auction extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -34,6 +35,7 @@ public class Auction extends BaseEntity {
     @Comment("시작일시")
     @Column(name = "start_date", nullable = false)
     private LocalDateTime startDateTime;
+
     @Comment("마감일시")
     @Column(name = "end_date", nullable = false)
     private LocalDateTime endDateTime;
