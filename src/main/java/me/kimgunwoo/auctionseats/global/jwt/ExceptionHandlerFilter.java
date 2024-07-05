@@ -27,10 +27,7 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         } catch (ApiException e) {
             setExceptionResponse(response, e);
-            return;
         }
-
-        filterChain.doFilter(request, response);
     }
 
     private void setExceptionResponse(HttpServletResponse response, ApiException e) throws IOException {
