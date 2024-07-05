@@ -9,6 +9,8 @@ import me.kimgunwoo.auctionseats.global.exception.ErrorCode;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import static me.kimgunwoo.auctionseats.global.exception.ErrorCode.NOT_FOUND_BY_ID;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -38,5 +40,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean isExistedPhoneNumber(String phoneNumber) {
         return userRepository.existsByPhoneNumberAndIsDeletedIsFalse(phoneNumber);
+    }
+
+    @Override
+    public User findByUserId(Long userId) {
+        return userRepository.findByIdAndIsDeletedIsFalse(userId)
+                .orElseThrow(() -> new ApiException(NOT_FOUND_BY_ID));
     }
 }

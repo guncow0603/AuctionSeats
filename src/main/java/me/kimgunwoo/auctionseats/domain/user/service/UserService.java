@@ -1,6 +1,7 @@
 package me.kimgunwoo.auctionseats.domain.user.service;
 
 import me.kimgunwoo.auctionseats.domain.user.dto.request.UserCreateRequest;
+import me.kimgunwoo.auctionseats.domain.user.entity.User;
 
 public interface UserService {
     /*
@@ -18,4 +19,13 @@ public interface UserService {
      * @return boolean
      * */
     boolean isExistedPhoneNumber(String phoneNumber);
+
+
+    /*
+     * 해당 id 값의 유저 찾기 메서드
+     *
+     * @param userId 찾을 유저의 id
+     * @return User  해당 id를 가진 유저 객체
+     * */
+    User findByUserId(Long userId);
 }
