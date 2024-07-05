@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 
-import static me.kimgunwoo.auctionseats.global.exception.ErrorCode.NOT_FOUND_USER;
 import static me.kimgunwoo.auctionseats.global.exception.ErrorCode.NOT_FOUND_USER_FOR_LOGIN;
 
 @Service
