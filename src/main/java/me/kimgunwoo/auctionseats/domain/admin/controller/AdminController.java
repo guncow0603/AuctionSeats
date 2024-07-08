@@ -16,7 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-import static me.kimgunwoo.auctionseats.global.exception.SuccessCode.SUCCESS_PLACE_CREATE;
 import static me.kimgunwoo.auctionseats.global.exception.SuccessCode.SUCCESS_SHOWS_AND_SEQUENCE_CREATE;
 
 @RestController

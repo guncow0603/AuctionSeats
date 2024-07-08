@@ -3,9 +3,12 @@ package me.kimgunwoo.auctionseats.domain.sequence.service;
 import lombok.RequiredArgsConstructor;
 import me.kimgunwoo.auctionseats.domain.sequence.entity.Sequence;
 import me.kimgunwoo.auctionseats.domain.sequence.repository.SequenceRepository;
+import me.kimgunwoo.auctionseats.global.exception.ApiException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static me.kimgunwoo.auctionseats.global.exception.ErrorCode.NOT_FOUND_SEQUENCE;
 
 @Service
 @RequiredArgsConstructor
@@ -21,4 +24,8 @@ public class SequenceServiceImpl implements SequenceService {
         return sequenceRepository.save(sequence);
     }
 
+    public Sequence findSequence(Long sequenceId) {
+        return sequenceRepository.findById(sequenceId)
+                .orElseThrow(() -> new ApiException(NOT_FOUND_SEQUENCE));
+    }
 }
