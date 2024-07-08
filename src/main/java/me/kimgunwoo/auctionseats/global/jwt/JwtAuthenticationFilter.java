@@ -83,6 +83,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 JwtUtil.REFRESH_TOKEN_TIME
         );
 
+
         jwtUtil.setAccessTokenInHeader(response, accessToken);
         jwtUtil.setRefreshTokenInCookie(response, refreshToken);
 
@@ -91,8 +92,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         String result = mapper.writeValueAsString(
+
                 ApiResponse.of(SUCCESS_USER_LOGIN.getCode(), SUCCESS_USER_LOGIN.getMessage(), "{}")
         );
+
         response.getWriter().write(result);
     }
     @Override
@@ -102,6 +105,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             AuthenticationException failed
     ) throws IOException, ServletException {
         log.info("Login Fail, msg : {}", failed.getMessage());
+
         throw new ApiException(NOT_FOUND_USER_FOR_LOGIN);
+
     }
 }

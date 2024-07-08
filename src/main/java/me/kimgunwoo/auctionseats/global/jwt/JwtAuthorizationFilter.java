@@ -1,6 +1,7 @@
 package me.kimgunwoo.auctionseats.global.jwt;
 
 
+
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -20,17 +21,21 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+
 import java.io.IOException;
+
 
 @Slf4j(topic = "JWT 토큰 검증 및 인가")
 @RequiredArgsConstructor
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
     private final JwtUtil jwtUtil;
     private final LettuceUtils lettuceUtils;
+  
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
         String accessToken = jwtUtil.resolveAccessToken(request);
+
         // 엑세스 토큰 검증
         if (StringUtils.hasText(accessToken)) {
             jwtUtil.validateToken(accessToken);
@@ -47,6 +52,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         }
         filterChain.doFilter(request, response);
     }
+
     /*
      * 인증 처리하기
      * */
@@ -54,9 +60,9 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         Authentication authentication = createAuthentication(id, username, role);
         context.setAuthentication(authentication);
-
         SecurityContextHolder.setContext(context);
     }
+
 
     private Authentication createAuthentication(Long id, String username, Role role) {
         UserDetails userDetails = new UserDetailsImpl(
@@ -66,6 +72,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                         .role(role)
                         .build()
         );
+
 
         return new UsernamePasswordAuthenticationToken(
                 userDetails, null, userDetails.getAuthorities()

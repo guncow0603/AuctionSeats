@@ -9,11 +9,13 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+
 import me.kimgunwoo.auctionseats.domain.user.entity.constant.Role;
 import me.kimgunwoo.auctionseats.global.exception.ApiException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+
 
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -22,17 +24,21 @@ import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
 
+
 import static me.kimgunwoo.auctionseats.global.exception.ErrorCode.*;
 
 @Slf4j(topic = "JwtUtil")
 @Component
 public class JwtUtil {
+
     public static final String ACCESS_TOKEN_HEADER = "Authorization";
     public static final String REFRESH_TOKEN_HEADER = "RefreshToken";
     public static final String AUTHORIZATION_KEY = "auth";
     public static final String BEARER_PREFIX = "Bearer ";
+
     public static final Long REFRESH_TOKEN_TIME = 30 * 24 * 60 * 60 * 1000L; // 한 달
     private final Long ACCESS_TOKEN_TIME = 60 * 60 * 1000L; // 60분
+
 
     @Value("${jwt.secret.key}")
     private String secretKey;
@@ -57,11 +63,9 @@ public class JwtUtil {
                         .signWith(key, SignatureAlgorithm.HS256)
                         .compact();
     }
-
     /* 리프레시 토큰 생성 */
     public String createRefreshToken(Long id, String username, Role role) {
         Date now = new Date();
-
         return BEARER_PREFIX +
                 Jwts.builder()
                         .setSubject(username)
@@ -78,13 +82,16 @@ public class JwtUtil {
             return token.substring(7);
         }
 
-        throw new ApiException(INVALID_JWT_TOKEN);
-    }
 
+        throw new ApiException(INVALID_JWT_TOKEN);
+
+    }
     /* 토큰 검증 */
     public void validateToken(String token) {
         try {
             jwtParser.parseClaimsJws(token);
+
+
         } catch (SecurityException | MalformedJwtException e) {
             throw new ApiException(INVALID_JWT_TOKEN);
         } catch (ExpiredJwtException e) {
@@ -92,13 +99,17 @@ public class JwtUtil {
         } catch (UnsupportedJwtException e) {
             throw new ApiException(UNSUPPORTED_JWT_TOKEN);
         } catch (IllegalArgumentException e) {
+
             throw new ApiException(NON_ILLEGAL_ARGUMENT_JWT_TOKEN);
         }
+
     }
     /* 토큰에서 사용자 정보 가져오기 */
     public Claims getUserInfoFromToken(String token) {
         return jwtParser.parseClaimsJws(token).getBody();
+
     }
+
     public String resolveAccessToken(HttpServletRequest request) {
         String accessToken = request.getHeader(ACCESS_TOKEN_HEADER);
         if (StringUtils.hasText(accessToken) && accessToken.startsWith(BEARER_PREFIX)) {
@@ -108,15 +119,18 @@ public class JwtUtil {
     }
     public String resolveRefreshToken(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
+
         if (cookies == null) {
             return null;
         }
+
         String refreshToken = "";
         for (Cookie cookie : cookies) {
             refreshToken = URLDecoder.decode(cookie.getValue(), StandardCharsets.UTF_8);
         }
         return substringToken(refreshToken);
     }
+
 
     public String getAccessTokenFromRequestHeader(HttpServletRequest request) {
         String accessToken = request.getHeader(ACCESS_TOKEN_HEADER);
@@ -135,6 +149,7 @@ public class JwtUtil {
     }
 
     public void setRefreshTokenInCookie(HttpServletResponse response, String refreshToken) {
+
         refreshToken = URLEncoder.encode(refreshToken, StandardCharsets.UTF_8)
                 .replaceAll("\\+", "%20");
 
@@ -143,6 +158,8 @@ public class JwtUtil {
         cookie.setHttpOnly(true);
         cookie.setPath("/");
 
+
         response.addCookie(cookie);
+
     }
 }
