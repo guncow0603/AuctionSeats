@@ -3,19 +3,22 @@ package me.kimgunwoo.auctionseats.domain.admin.adminService;
 import lombok.RequiredArgsConstructor;
 import me.kimgunwoo.auctionseats.domain.admin.dto.request.PlacesRequest;
 import me.kimgunwoo.auctionseats.domain.admin.dto.request.ShowsRequest;
+import me.kimgunwoo.auctionseats.domain.admin.dto.request.ShowsSequenceSeatRequest;
 import me.kimgunwoo.auctionseats.domain.admin.dto.response.PlacesResponse;
 import me.kimgunwoo.auctionseats.domain.place.entity.Places;
-import me.kimgunwoo.auctionseats.domain.place.service.PlaceServiceImpl;
+import me.kimgunwoo.auctionseats.domain.place.service.PlaceService;
 import me.kimgunwoo.auctionseats.domain.seat.dto.request.SeatRequest;
 import me.kimgunwoo.auctionseats.domain.seat.entity.Seat;
-import me.kimgunwoo.auctionseats.domain.seat.service.SeatServiceImpl;
+import me.kimgunwoo.auctionseats.domain.seat.service.SeatService;
 import me.kimgunwoo.auctionseats.domain.sequence.entity.Sequence;
-import me.kimgunwoo.auctionseats.domain.sequence.service.SequenceServiceImpl;
+import me.kimgunwoo.auctionseats.domain.sequence.service.SequenceService;
 import me.kimgunwoo.auctionseats.domain.show.entity.Shows;
 import me.kimgunwoo.auctionseats.domain.show.entity.ShowsCategory;
 import me.kimgunwoo.auctionseats.domain.show.entity.ShowsImage;
-import me.kimgunwoo.auctionseats.domain.show.service.ShowsServiceImpl;
-import me.kimgunwoo.auctionseats.domain.shows_sequence_seat.service.ShowsSequenceSeatServiceImpl;
+import me.kimgunwoo.auctionseats.domain.show.service.ShowsService;
+import me.kimgunwoo.auctionseats.domain.shows_sequence_seat.entity.SellType;
+import me.kimgunwoo.auctionseats.domain.shows_sequence_seat.entity.ShowsSequenceSeat;
+import me.kimgunwoo.auctionseats.domain.shows_sequence_seat.service.ShowsSequenceSeatService;
 import me.kimgunwoo.auctionseats.global.util.S3Uploader;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +30,7 @@ import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -34,15 +38,15 @@ import java.util.stream.IntStream;
 @RequiredArgsConstructor
 public class AdminServiceImpl implements AdminService {
 
-    private final ShowsServiceImpl showsService;
+    private final ShowsService showsService;
 
-    private final PlaceServiceImpl placeService;
+    private final PlaceService placeService;
 
-    private final SequenceServiceImpl sequenceService;
+    private final SequenceService sequenceService;
 
-    private final SeatServiceImpl seatService;
+    private final SeatService seatService;
 
-    private final ShowsSequenceSeatServiceImpl showsSequenceSeatService;
+    private final ShowsSequenceSeatService showsSequenceSeatService;
 
     private final S3Uploader s3Uploader;
 
@@ -58,12 +62,13 @@ public class AdminServiceImpl implements AdminService {
     @Override
     @Transactional
     public List<PlacesResponse> createPlace(PlacesRequest placesRequest) {
+        // 좌석 카운트
         List<SeatRequest> seats = placesRequest.seats();
         Integer totalSeat = totalCountSeat(seats);
-
+        // 공연 저장
         Places places = placesRequest.toEntity(totalSeat);
         Places savePlaces = placeService.savePlace(places);
-
+        // 좌석 저장
         List<Seat> seatList = createSeat(seats, savePlaces);
         seatService.saveAllSeat(seatList);
 
@@ -79,23 +84,93 @@ public class AdminServiceImpl implements AdminService {
     @Transactional
     public void createShowsAndSequence(ShowsRequest showsRequest, Long placeId, List<MultipartFile> files) {
         Places places = placeService.findPlace(placeId);
-
+        // 공연 저장
         Shows shows = showsRequest.toEntity(places);
         Shows saveShows = showsService.saveShows(shows);
 
+        // 이미지 저장
         List<String> fileUrl = s3tUpload(files, saveShows.getId());
         List<ShowsImage> showsImageList = saveAllShowsImage(fileUrl, saveShows);
 
         saveShows.addShowsImage(showsImageList);
 
+        // 카테고리 저장
         ShowsCategory showsCategory = createShowsCategory(showsRequest.categoryName());
         saveShows.updateShowsCategory(showsCategory);
 
+        // 회차 저장
         createSequence(saveShows, showsRequest.startTime());
     }
 
+    // 공연별 회차 생성 및 경매 생성
+    @Override
+    @Transactional
+    public void createShowsSequenceSeatAndAuction(
+            Long placeId,
+            Long sequenceId,
+            ShowsSequenceSeatRequest showsSequenceSeatRequest
+    ) {
+        List<Seat> allSeatOfZone = seatService.findAllSeatOfZone(placeId, showsSequenceSeatRequest.zone());
+        Sequence sequence = sequenceService.findSequence(sequenceId);
+        List<ShowsSequenceSeat> showsSequenceSeatList = checkAndCreateAuctionSeat(allSeatOfZone, sequence,
+                showsSequenceSeatRequest);
+
+        saveAllShowsSequenceSeat(showsSequenceSeatList);
+
+        List<ShowsSequenceSeat> sequenceAuctionList =
+                showsSequenceSeatService.findAllBySequenceIdAndSellType(sequence.getId(), SellType.AUCTION);
+        // createAuction(List<ShowsSequenceSeat> sequenceAuctionList);
+    }
+
+    // 옥션 공연 회차별 좌석 생성
+    public List<ShowsSequenceSeat> checkAndCreateAuctionSeat(
+            List<Seat> allSeatOfZone,
+            Sequence sequence,
+            ShowsSequenceSeatRequest showsSequenceSeatRequest
+    ) {
+        List<Integer> auctionSeatList = showsSequenceSeatRequest.auctionSeats();
+        List<ShowsSequenceSeat> showsSequenceSeatList = new ArrayList<>();
+
+        for (Integer seatNumber : auctionSeatList) {
+            // 임시 체크 처리
+            if (Objects.equals(allSeatOfZone.get(seatNumber).getSeatNumber(), seatNumber)) {
+                Seat auctionSeat = allSeatOfZone.get(seatNumber);
+                ShowsSequenceSeat auctionShowsSequenceSeat =
+                        showsSequenceSeatRequest.auctionToEntity(
+                                auctionSeat,
+                                sequence
+                        );
+                showsSequenceSeatList.add(auctionShowsSequenceSeat);
+                allSeatOfZone.remove(seatNumber.intValue());
+
+            }
+        }
+
+        return restCreateGeneralSeat(showsSequenceSeatList, allSeatOfZone, sequence, showsSequenceSeatRequest);
+    }
+
+    // 일반 좌석 공연 회차별 좌석 생성
+    public List<ShowsSequenceSeat> restCreateGeneralSeat(
+            List<ShowsSequenceSeat> showsSequenceSeatList,
+            List<Seat> allSeatOfZone,
+            Sequence sequence,
+            ShowsSequenceSeatRequest showsSequenceSeatRequest
+    ) {
+
+        for (Seat seat : allSeatOfZone) {
+            showsSequenceSeatList.add(showsSequenceSeatRequest.generalToEntity(seat, sequence));
+        }
+
+        return showsSequenceSeatList;
+    }
+
+    // 모든 좌석 생성
+    public void saveAllShowsSequenceSeat(List<ShowsSequenceSeat> showsSequenceSeatList) {
+        showsSequenceSeatService.saveAllShowsSequenceSeat(showsSequenceSeatList);
+    }
+
     // 총 좌석 개수 연산
-    private Integer totalCountSeat(List<SeatRequest> seatRequests) {
+    public Integer totalCountSeat(List<SeatRequest> seatRequests) {
         Integer totalSeat = 0;
 
         for (SeatRequest seat : seatRequests) {
@@ -106,7 +181,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     // 좌석 생성
-    private List<Seat> createSeat(List<SeatRequest> seats, Places places) {
+    public List<Seat> createSeat(List<SeatRequest> seats, Places places) {
         return seats.stream()
                 .flatMap(seat -> IntStream.rangeClosed(1, seat.getZoneCountSeat())
                         .mapToObj(i -> seat.toEntity(places, i)))
@@ -116,13 +191,13 @@ public class AdminServiceImpl implements AdminService {
     }
 
     // 이미지 저장
-    private List<ShowsImage> saveAllShowsImage(List<String> fileKeyList, Shows shows) {
+    public List<ShowsImage> saveAllShowsImage(List<String> fileKeyList, Shows shows) {
         List<ShowsImage> showsImageList = divideShowsImageList(fileKeyList, shows);
         return showsService.saveAllShowsImage(showsImageList);
     }
 
     // 이미지 종류 분리
-    private List<ShowsImage> divideShowsImageList(List<String> fileKeyList, Shows shows) {
+    public List<ShowsImage> divideShowsImageList(List<String> fileKeyList, Shows shows) {
         List<ShowsImage> returnShowsIamgeList = new ArrayList<>();
         for (String fileKey : fileKeyList) {
             ShowsImage showsImage =
@@ -138,7 +213,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     // 이미지 종류 체크
-    private String checkShowsType(String type) {
+    public String checkShowsType(String type) {
         if (type.contains(THUMBNAIL)) {
             return "대표";
         }
@@ -146,7 +221,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     // S3 저장
-    private List<String> s3tUpload(List<MultipartFile> fileList, Long showId) {
+    public List<String> s3tUpload(List<MultipartFile> fileList, Long showId) {
         List<String> fileUrl = new ArrayList<>();
 
         String thumbnailFilePath = FILE_PATH + THUMBNAIL + showId;
@@ -165,12 +240,17 @@ public class AdminServiceImpl implements AdminService {
     }
 
     // 회차 생성
-    private void createSequence(Shows shows, LocalTime startTime) {
+    public void createSequence(Shows shows, LocalTime startTime) {
         List<Sequence> saveSequenceList = distributeSequence(shows, startTime);
         saveSequence(saveSequenceList);
     }
 
-    private List<Sequence> distributeSequence(Shows shows, LocalTime startTime) {
+    public void saveSequence(List<Sequence> sequenceList) {
+        sequenceService.saveAllSequence(sequenceList);
+    }
+
+    // 회차 분리
+    public List<Sequence> distributeSequence(Shows shows, LocalTime startTime) {
         LocalDate startDate = shows.getStartDate();
         LocalDate endDate = shows.getEndDate();
         List<Sequence> distributeSequenceList = new ArrayList<>();
@@ -190,13 +270,8 @@ public class AdminServiceImpl implements AdminService {
         return distributeSequenceList;
     }
 
-    private void saveSequence(List<Sequence> sequenceList) {
-
-        sequenceService.saveAllSequence(sequenceList);
-    }
-
     // 카테고리 생성 기타 입력시
-    private ShowsCategory createShowsCategory(String category) {
+    public ShowsCategory createShowsCategory(String category) {
         ShowsCategory showsCategory = showsService.findShowsCategory(category);
         if (showsCategory == null) {
             showsCategory =
@@ -205,7 +280,7 @@ public class AdminServiceImpl implements AdminService {
                             .name(category)
                             .build();
         }
-        return showsService.saveShowsCategory(showsCategory);
+        return showsService.saveShowSCategory(showsCategory);
     }
 
 }
