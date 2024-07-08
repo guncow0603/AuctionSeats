@@ -2,6 +2,7 @@ package me.kimgunwoo.auctionseats.domain.admin.adminService;
 
 import me.kimgunwoo.auctionseats.domain.admin.dto.request.PlacesRequest;
 import me.kimgunwoo.auctionseats.domain.admin.dto.request.ShowsRequest;
+import me.kimgunwoo.auctionseats.domain.admin.dto.request.ShowsSequenceSeatRequest;
 import me.kimgunwoo.auctionseats.domain.admin.dto.response.PlacesResponse;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,4 +16,11 @@ public interface AdminService {
 
     // 공연 생성
     void createShowsAndSequence(ShowsRequest showsRequest, Long placeId, List<MultipartFile> files);
+
+    // 공연 별 회차 별 좌석
+    void createShowsSequenceSeatAndAuction(
+            Long placeId,
+            Long sequenceId,
+            ShowsSequenceSeatRequest showsSequenceSeatRequest
+    );
 }

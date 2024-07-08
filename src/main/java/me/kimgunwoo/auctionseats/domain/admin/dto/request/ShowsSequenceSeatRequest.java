@@ -18,7 +18,9 @@ public record ShowsSequenceSeatRequest (
         Long auctionPrice,
 
         @NotBlank(message = "구역 입력은 필수입니다.")
-        String zone
+        String zone,
+        List<Integer> auctionSeats
+
         ){
         public ShowsSequenceSeat generalToEntity(Seat seat, Sequence sequence) {
                 return ShowsSequenceSeat
