@@ -6,18 +6,18 @@ import me.kimgunwoo.auctionseats.domain.admin.dto.request.ShowsRequest;
 import me.kimgunwoo.auctionseats.domain.admin.dto.request.ShowsSequenceSeatRequest;
 import me.kimgunwoo.auctionseats.domain.admin.dto.response.PlacesResponse;
 import me.kimgunwoo.auctionseats.domain.place.entity.Places;
-import me.kimgunwoo.auctionseats.domain.place.service.PlaceServiceImpl;
+import me.kimgunwoo.auctionseats.domain.place.service.PlaceService;
 import me.kimgunwoo.auctionseats.domain.seat.dto.request.SeatRequest;
 import me.kimgunwoo.auctionseats.domain.seat.entity.Seat;
-import me.kimgunwoo.auctionseats.domain.seat.service.SeatServiceImpl;
+import me.kimgunwoo.auctionseats.domain.seat.service.SeatService;
 import me.kimgunwoo.auctionseats.domain.sequence.entity.Sequence;
-import me.kimgunwoo.auctionseats.domain.sequence.service.SequenceServiceImpl;
+import me.kimgunwoo.auctionseats.domain.sequence.service.SequenceService;
 import me.kimgunwoo.auctionseats.domain.show.entity.Shows;
 import me.kimgunwoo.auctionseats.domain.show.entity.ShowsCategory;
 import me.kimgunwoo.auctionseats.domain.show.entity.ShowsImage;
-import me.kimgunwoo.auctionseats.domain.show.service.ShowsServiceImpl;
+import me.kimgunwoo.auctionseats.domain.show.service.ShowsService;
 import me.kimgunwoo.auctionseats.domain.shows_sequence_seat.entity.ShowsSequenceSeat;
-import me.kimgunwoo.auctionseats.domain.shows_sequence_seat.service.ShowsSequenceSeatServiceImpl;
+import me.kimgunwoo.auctionseats.domain.shows_sequence_seat.service.ShowsSequenceSeatService;
 import me.kimgunwoo.auctionseats.global.util.S3Uploader;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,15 +37,15 @@ import java.util.stream.IntStream;
 @RequiredArgsConstructor
 public class AdminServiceImpl implements AdminService {
 
-    private final ShowsServiceImpl showsService;
+    private final ShowsService showsService;
 
-    private final PlaceServiceImpl placeService;
+    private final PlaceService placeService;
 
-    private final SequenceServiceImpl sequenceService;
+    private final SequenceService sequenceService;
 
-    private final SeatServiceImpl seatService;
+    private final SeatService seatService;
 
-    private final ShowsSequenceSeatServiceImpl showsSequenceSeatService;
+    private final ShowsSequenceSeatService showsSequenceSeatService;
 
     private final S3Uploader s3Uploader;
 
@@ -109,7 +109,7 @@ public class AdminServiceImpl implements AdminService {
             Long sequenceId,
             ShowsSequenceSeatRequest showsSequenceSeatRequest
     ) {
-        List<Seat> allSeatOfZone = seatService.findAllSeatOfZone(placeId, showsSequenceSeatRequest.getZone());
+        List<Seat> allSeatOfZone = seatService.findAllSeatOfZone(placeId, showsSequenceSeatRequest.zone());
         Sequence sequence = sequenceService.findSequence(sequenceId);
         List<ShowsSequenceSeat> showsSequenceSeatList = checkAndCreateAuctionSeat(allSeatOfZone, sequence,
                 showsSequenceSeatRequest);
@@ -278,7 +278,7 @@ public class AdminServiceImpl implements AdminService {
                             .name(category)
                             .build();
         }
-        return showsService.saveShowsCategory(showsCategory);
+        return showsService.saveShowSCategory(showsCategory);
     }
 
 }
