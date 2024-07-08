@@ -16,6 +16,7 @@ import me.kimgunwoo.auctionseats.domain.show.entity.Shows;
 import me.kimgunwoo.auctionseats.domain.show.entity.ShowsCategory;
 import me.kimgunwoo.auctionseats.domain.show.entity.ShowsImage;
 import me.kimgunwoo.auctionseats.domain.show.service.ShowsService;
+import me.kimgunwoo.auctionseats.domain.shows_sequence_seat.entity.SellType;
 import me.kimgunwoo.auctionseats.domain.shows_sequence_seat.entity.ShowsSequenceSeat;
 import me.kimgunwoo.auctionseats.domain.shows_sequence_seat.service.ShowsSequenceSeatService;
 import me.kimgunwoo.auctionseats.global.util.S3Uploader;
@@ -116,7 +117,8 @@ public class AdminServiceImpl implements AdminService {
 
         saveAllShowsSequenceSeat(showsSequenceSeatList);
 
-        List<ShowsSequenceSeat> sequenceAuctionList = showsSequenceSeatService.findAllBySequenceId(sequence.getId());
+        List<ShowsSequenceSeat> sequenceAuctionList =
+                showsSequenceSeatService.findAllBySequenceIdAndSellType(sequence.getId(), SellType.AUCTION);
         // createAuction(List<ShowsSequenceSeat> sequenceAuctionList);
     }
 

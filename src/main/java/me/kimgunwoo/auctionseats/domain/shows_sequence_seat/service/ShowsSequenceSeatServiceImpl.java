@@ -1,6 +1,7 @@
 package me.kimgunwoo.auctionseats.domain.shows_sequence_seat.service;
 
 import lombok.RequiredArgsConstructor;
+import me.kimgunwoo.auctionseats.domain.shows_sequence_seat.entity.SellType;
 import me.kimgunwoo.auctionseats.domain.shows_sequence_seat.entity.ShowsSequenceSeat;
 import me.kimgunwoo.auctionseats.domain.shows_sequence_seat.repository.ShowsSequenceSeatRepository;
 import org.springframework.stereotype.Service;
@@ -16,9 +17,9 @@ public class ShowsSequenceSeatServiceImpl implements ShowsSequenceSeatService {
     public void saveAllShowsSequenceSeat(List<ShowsSequenceSeat> showsSequenceSeatList) {
         showsSequenceSeatRepository.saveAll(showsSequenceSeatList);
     }
-    // 회차별 공연 조회
+    // 공연 회차별 타입 좌석 조회
     @Override
-    public List<ShowsSequenceSeat> findAllBySequenceId(Long sequenceId) {
-        return showsSequenceSeatRepository.findAllBySequenceId(sequenceId);
-    }
+    public List<ShowsSequenceSeat> findAllBySequenceIdAndSellType(Long sequenceId, SellType sellType) {
+        return showsSequenceSeatRepository.findAllBySequenceIdAndSellType(sequenceId, sellType);
+        }
 }
