@@ -179,7 +179,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     // 좌석 생성
-    private List<Seat> createSeat(List<SeatRequest> seats, Places places) {
+    public List<Seat> createSeat(List<SeatRequest> seats, Places places) {
         return seats.stream()
                 .flatMap(seat -> IntStream.rangeClosed(1, seat.getZoneCountSeat())
                         .mapToObj(i -> seat.toEntity(places, i)))
@@ -189,13 +189,13 @@ public class AdminServiceImpl implements AdminService {
     }
 
     // 이미지 저장
-    private List<ShowsImage> saveAllShowsImage(List<String> fileKeyList, Shows shows) {
+    public List<ShowsImage> saveAllShowsImage(List<String> fileKeyList, Shows shows) {
         List<ShowsImage> showsImageList = divideShowsImageList(fileKeyList, shows);
         return showsService.saveAllShowsImage(showsImageList);
     }
 
     // 이미지 종류 분리
-    private List<ShowsImage> divideShowsImageList(List<String> fileKeyList, Shows shows) {
+    public List<ShowsImage> divideShowsImageList(List<String> fileKeyList, Shows shows) {
         List<ShowsImage> returnShowsIamgeList = new ArrayList<>();
         for (String fileKey : fileKeyList) {
             ShowsImage showsImage =
@@ -211,7 +211,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     // 이미지 종류 체크
-    private String checkShowsType(String type) {
+    public String checkShowsType(String type) {
         if (type.contains(THUMBNAIL)) {
             return "대표";
         }
@@ -219,7 +219,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     // S3 저장
-    private List<String> s3tUpload(List<MultipartFile> fileList, Long showId) {
+    public List<String> s3tUpload(List<MultipartFile> fileList, Long showId) {
         List<String> fileUrl = new ArrayList<>();
 
         String thumbnailFilePath = FILE_PATH + THUMBNAIL + showId;
@@ -238,17 +238,17 @@ public class AdminServiceImpl implements AdminService {
     }
 
     // 회차 생성
-    private void createSequence(Shows shows, LocalTime startTime) {
+    public void createSequence(Shows shows, LocalTime startTime) {
         List<Sequence> saveSequenceList = distributeSequence(shows, startTime);
         saveSequence(saveSequenceList);
     }
 
-    private void saveSequence(List<Sequence> sequenceList) {
+    public void saveSequence(List<Sequence> sequenceList) {
         sequenceService.saveAllSequence(sequenceList);
     }
 
     // 회차 분리
-    private List<Sequence> distributeSequence(Shows shows, LocalTime startTime) {
+    public List<Sequence> distributeSequence(Shows shows, LocalTime startTime) {
         LocalDate startDate = shows.getStartDate();
         LocalDate endDate = shows.getEndDate();
         List<Sequence> distributeSequenceList = new ArrayList<>();
@@ -269,7 +269,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     // 카테고리 생성 기타 입력시
-    private ShowsCategory createShowsCategory(String category) {
+    public ShowsCategory createShowsCategory(String category) {
         ShowsCategory showsCategory = showsService.findShowsCategory(category);
         if (showsCategory == null) {
             showsCategory =
