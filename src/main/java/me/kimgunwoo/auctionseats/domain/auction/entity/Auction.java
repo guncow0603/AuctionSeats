@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.kimgunwoo.auctionseats.domain.bid.entity.Bid;
+import me.kimgunwoo.auctionseats.domain.shows_sequence_seat.entity.ShowsSequenceSeat;
 import me.kimgunwoo.auctionseats.global.entity.BaseEntity;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
@@ -27,7 +28,7 @@ public class Auction extends BaseEntity {
     @Comment("시작가")
     @ColumnDefault("0")
     @Column(name = "start_price", nullable = false)
-    private Long startPrice = 0L;
+    private Long startPrice;
 
     @Comment("입찰가")
     @Column(name = "bid_price", nullable = false)
@@ -45,17 +46,32 @@ public class Auction extends BaseEntity {
     @Column(name = "is_ended")
     private Boolean isEnded = false;
 
-    @OneToMany(mappedBy = "auction")
-    private Set<Bid> bid = new LinkedHashSet<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumns({
+            @JoinColumn(name = "seat_id", referencedColumnName = "seatId"),
+            @JoinColumn(name = "sequence_id", referencedColumnName = "sequenceId")
+    })
+    private ShowsSequenceSeat sequenceSeat;
 
     @Builder
-    private Auction(Long startPrice, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+    private Auction(
+            Long startPrice,
+            LocalDateTime startDateTime,
+            LocalDateTime endDateTime,
+            ShowsSequenceSeat sequenceSeat
+    ) {
         this.startPrice = startPrice;
+        this.bidPrice = startPrice;
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
+        this.sequenceSeat = sequenceSeat;
     }
 
     public void updateBidPrice(Long bidPrice) {
         this.bidPrice = bidPrice;
+    }
+
+    public void ended() {
+        this.isEnded = true;
     }
 }
