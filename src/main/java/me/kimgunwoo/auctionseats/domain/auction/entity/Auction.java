@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import me.kimgunwoo.auctionseats.domain.bid.entity.Bid;
 import me.kimgunwoo.auctionseats.global.entity.BaseEntity;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
@@ -18,6 +19,7 @@ import java.util.Set;
 @Entity
 @Table(name = "auction")
 public class Auction extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -33,6 +35,7 @@ public class Auction extends BaseEntity {
     @Comment("시작일시")
     @Column(name = "start_date", nullable = false)
     private LocalDateTime startDateTime;
+
     @Comment("마감일시")
     @Column(name = "end_date", nullable = false)
     private LocalDateTime endDateTime;

@@ -1,6 +1,6 @@
-package me.kimgunwoo.auctionseats.domain.auction.service;
+package me.kimgunwoo.auctionseats.domain.bid.service;
 
-import me.kimgunwoo.auctionseats.domain.auction.dto.request.BidRequest;
+import me.kimgunwoo.auctionseats.domain.bid.dto.request.BidRequest;
 import me.kimgunwoo.auctionseats.domain.user.entity.User;
 
 public interface BidService {

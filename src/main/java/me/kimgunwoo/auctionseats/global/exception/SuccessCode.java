@@ -36,8 +36,7 @@ public enum SuccessCode {
 
 
     /* TOKEN */
-    SUCCESS_REISSUE_TOKEN(HttpStatus.OK, "T00000", "토큰 재발급에 성공했습니다."),
-
+    SUCCESS_REISSUE_TOKEN(HttpStatus.CREATED, "T00000", "토큰 재발급에 성공했습니다."),
 
 
 

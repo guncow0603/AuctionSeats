@@ -1,10 +1,10 @@
-package me.kimgunwoo.auctionseats.domain.auction.dto.request;
+package me.kimgunwoo.auctionseats.domain.bid.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import me.kimgunwoo.auctionseats.domain.auction.entity.Auction;
-import me.kimgunwoo.auctionseats.domain.auction.entity.Bid;
+import me.kimgunwoo.auctionseats.domain.bid.entity.Bid;
 import me.kimgunwoo.auctionseats.domain.user.entity.User;
 
 @Getter

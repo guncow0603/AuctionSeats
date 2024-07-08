@@ -1,6 +1,6 @@
-package me.kimgunwoo.auctionseats.domain.auction.repository;
+package me.kimgunwoo.auctionseats.domain.bid.repository;
 
-import me.kimgunwoo.auctionseats.domain.auction.entity.Bid;
+import me.kimgunwoo.auctionseats.domain.bid.entity.Bid;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface BidRepository extends JpaRepository<Bid, Long> {
