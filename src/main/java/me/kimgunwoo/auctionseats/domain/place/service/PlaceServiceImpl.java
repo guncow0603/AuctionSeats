@@ -6,7 +6,8 @@ import me.kimgunwoo.auctionseats.domain.place.repository.PlaceRepository;
 import me.kimgunwoo.auctionseats.global.exception.ApiException;
 import org.springframework.stereotype.Service;
 
-import static me.kimgunwoo.auctionseats.global.exception.ErrorCode.NOTFOUND_PLACE;
+import static me.kimgunwoo.auctionseats.global.exception.ErrorCode.NOT_FOUND_PLACE;
+
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +23,6 @@ public class PlaceServiceImpl implements PlaceService {
     // 공연장 찾기
     public Places findPlace(Long placeId) {
         return placeRepository.findById(placeId)
-                .orElseThrow(() -> new ApiException(NOTFOUND_PLACE));
+                .orElseThrow(() -> new ApiException(NOT_FOUND_PLACE));
     }
 }
