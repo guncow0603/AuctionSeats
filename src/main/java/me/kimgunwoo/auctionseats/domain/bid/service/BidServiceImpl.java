@@ -77,8 +77,7 @@ public class BidServiceImpl implements BidService {
     }
 
     public Optional<Bid> getCurrentBid(Auction auction) {
-        return auction.getBid().stream()
-                .max(Comparator.comparingLong(Bid::getPrice));
+        return bidRepository.findTopByAuctionOrderByIdDesc(auction);
     }
 
     /**
