@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import me.kimgunwoo.auctionseats.domain.show.entity.Shows;
 import me.kimgunwoo.auctionseats.domain.show.entity.ShowsCategory;
 import me.kimgunwoo.auctionseats.domain.show.entity.ShowsImage;
+import me.kimgunwoo.auctionseats.domain.show.entity.ShowsInfo;
 import me.kimgunwoo.auctionseats.domain.show.repository.ShowsCategoryRepository;
 import me.kimgunwoo.auctionseats.domain.show.repository.ShowsImageRepository;
 import me.kimgunwoo.auctionseats.domain.show.repository.ShowsRepository;
@@ -21,8 +22,8 @@ public class ShowsServiceImpl implements ShowsService {
 
     // 이미지 저장
     @Override
-    public Shows saveShows(Shows shows) {
-        return showsRepository.save(shows);
+    public ShowsInfo saveShows(ShowsInfo showsInfo) {
+        return showsRepository.save(showsInfo);
     }
 
     // 모든 이미지 저장
