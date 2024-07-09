@@ -21,4 +21,7 @@ public class LettuceUtils {
     public void delete(String key) {
         lettuceTemplate.opsForValue().getOperations().delete(key);
     }
+    public boolean hasKey(String key) {
+        return Boolean.TRUE.equals(lettuceTemplate.hasKey(key));
+    }
 }
