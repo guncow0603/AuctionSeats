@@ -51,8 +51,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
             return getAuthenticationManager().authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            req.getEmail(),
-                            req.getPassword(),
+                            req.email(),
+                            req.password(),
                             null
                     )
             );

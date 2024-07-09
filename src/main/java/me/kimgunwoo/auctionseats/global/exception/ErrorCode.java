@@ -65,6 +65,7 @@ public enum ErrorCode {
     /* GLOBAL */
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "", ""),
     INTERNAL_BAD_REQUEST(HttpStatus.BAD_REQUEST, "", ""),
+    ACCESS_DENIED(HttpStatus.FORBIDDEN, "G10000", "해당 요청에 대한 권한이 없습니다."),
 
     /* TOKEN */
     INVALID_JWT_TOKEN(HttpStatus.UNAUTHORIZED, "T10000", "유효하지 않는 JWT 토큰입니다."),
