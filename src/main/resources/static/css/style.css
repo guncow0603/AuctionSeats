@@ -1,0 +1,13 @@
+* {
+    font-family: 'IBM Plex Sans KR', sans-serif;
+    box-sizing: border-box;
+}
+
+a {
+    color: black;
+    text-decoration: none;
+}
+
+.btn {
+    font-family: 'IBM Plex Sans KR', sans-serif;
+}
