@@ -1,4 +1,4 @@
-package me.kimgunwoo.auctionseats.domain.shows_sequence_seat.entity;
+package me.kimgunwoo.auctionseats.domain.shows_schedule_seat.entity;
 
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
@@ -14,5 +14,5 @@ import java.io.Serializable;
 public class ShowsScheduleSeatID implements Serializable {
     private Long seatId;
 
-    private Long sequenceId;
+    private Long scheduleId;
 }

@@ -2,7 +2,7 @@ package me.kimgunwoo.auctionseats.domain.reservation.entity;
 
 import lombok.Builder;
 import me.kimgunwoo.auctionseats.domain.show.entity.Shows;
-import me.kimgunwoo.auctionseats.domain.shows_sequence_seat.entity.ShowsScheduleSeat;
+import me.kimgunwoo.auctionseats.domain.shows_schedule_seat.entity.ShowsScheduleSeat;
 import me.kimgunwoo.auctionseats.domain.user.entity.User;
 import me.kimgunwoo.auctionseats.global.entity.BaseEntity;
 import org.hibernate.annotations.Comment;

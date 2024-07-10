@@ -1,4 +1,4 @@
-package me.kimgunwoo.auctionseats.domain.shows_sequence_seat.entity;
+package me.kimgunwoo.auctionseats.domain.shows_schedule_seat.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -13,7 +13,7 @@ import org.hibernate.annotations.Comment;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "shows_sequence_seat")
+@Table(name = "shows_schedule_seat")
 public class ShowsScheduleSeat extends BaseEntity {
 
     @EmbeddedId
@@ -41,19 +41,19 @@ public class ShowsScheduleSeat extends BaseEntity {
     private Seat seat;
 
     @Comment("회차")
-    @MapsId("sequenceId")
+    @MapsId("scheduleId")
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sequence_id")
-    private Schedule sequence;
+    @JoinColumn(name = "schedule_id")
+    private Schedule schedule;
 
     @Builder
-    private ShowsScheduleSeat(Seat seat, Schedule sequence, Long price, SellType sellType, boolean isSelled) {
+    private ShowsScheduleSeat(Seat seat, Schedule schedule, Long price, SellType sellType, boolean isSelled) {
         this.seat = seat;
-        this.sequence = sequence;
+        this.schedule = schedule;
         this.price = price;
         this.sellType = sellType;
         this.isSelled = isSelled;
-        this.id = new ShowsScheduleSeatID(seat.getId(), sequence.getId());
+        this.id = new ShowsScheduleSeatID(seat.getId(), schedule.getId());
     }
     public void updateIsSelled() {
         this.isSelled = true;
