@@ -7,7 +7,7 @@ import me.kimgunwoo.auctionseats.domain.admin.adminService.AdminServiceImpl;
 import me.kimgunwoo.auctionseats.domain.admin.dto.request.PlacesRequest;
 import me.kimgunwoo.auctionseats.domain.admin.dto.request.ShowsRequest;
 import me.kimgunwoo.auctionseats.domain.admin.dto.response.PlacesResponse;
-import me.kimgunwoo.auctionseats.global.dto.EmptyObject;
+import me.kimgunwoo.auctionseats.domain.admin.dto.response.ShowsResponse;
 import me.kimgunwoo.auctionseats.global.response.ApiResponse;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,9 +24,7 @@ import static me.kimgunwoo.auctionseats.global.exception.SuccessCode.SUCCESS_SHO
 @RequiredArgsConstructor
 @Slf4j
 public class AdminController {
-
     private final AdminServiceImpl adminService;
-
     // 공연장 및 구역 생성
     @PostMapping("/admin/places")
     public ResponseEntity<ApiResponse<List<PlacesResponse>>> createPlaceAndZone(
@@ -42,27 +40,31 @@ public class AdminController {
                                 placeResponseList)
                 );
     }
-
     //  공연과 관련된 공연 정보, 공연 카테고리, 공연 이미지, 공연 및 회차 생성
     @PostMapping(value = "/admin/places/{placeId}/shows",
             consumes = {
                     MediaType.APPLICATION_JSON_VALUE,
                     MediaType.MULTIPART_FORM_DATA_VALUE
             })
-    public ResponseEntity<ApiResponse<EmptyObject>> createShowsBundleAndSchedule(
+    public ResponseEntity<ApiResponse<ShowsResponse>> createShowsBundleAndSchedule(
             @Valid @RequestPart ShowsRequest showsRequest,
             @RequestPart(value = "files", required = false) List<MultipartFile> multipartFiles,
             @PathVariable Long placeId
     ) {
-        adminService.createShowsBundleAndSchedule(placeId, showsRequest, multipartFiles);
+        ShowsResponse showsResponse =
+                adminService.createShowsBundleAndSchedule(
+                        placeId,
+                        showsRequest,
+                        multipartFiles
+                );
         return ResponseEntity
                 .status(SUCCESS_SHOWS_AND_SCHEDULE_CREATE.getHttpStatus())
                 .body(
                         ApiResponse.of(
                                 SUCCESS_SHOWS_AND_SCHEDULE_CREATE.getCode(),
-                                SUCCESS_SHOWS_AND_SCHEDULE_CREATE.getMessage()
+                                SUCCESS_SHOWS_AND_SCHEDULE_CREATE.getMessage(),
+                                showsResponse
                         )
                 );
     }
-
 }

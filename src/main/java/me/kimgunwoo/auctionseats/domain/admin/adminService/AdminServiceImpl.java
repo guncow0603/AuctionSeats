@@ -5,6 +5,7 @@ import me.kimgunwoo.auctionseats.domain.admin.dto.ZoneInfo;
 import me.kimgunwoo.auctionseats.domain.admin.dto.request.PlacesRequest;
 import me.kimgunwoo.auctionseats.domain.admin.dto.request.ShowsRequest;
 import me.kimgunwoo.auctionseats.domain.admin.dto.response.PlacesResponse;
+import me.kimgunwoo.auctionseats.domain.admin.dto.response.ShowsResponse;
 import me.kimgunwoo.auctionseats.domain.place.entity.Places;
 import me.kimgunwoo.auctionseats.domain.place.entity.Zone;
 import me.kimgunwoo.auctionseats.domain.place.service.PlaceService;
@@ -72,7 +73,7 @@ public class AdminServiceImpl implements AdminService {
     //  공연과 관련된 공연 정보, 공연 카테고리, 공연 이미지, 공연 및 회차 생성
     @Override
     @Transactional
-    public void createShowsBundleAndSchedule(
+    public ShowsResponse createShowsBundleAndSchedule(
             Long placeId,
             ShowsRequest showsRequest,
             List<MultipartFile> multipartFiles) {
@@ -91,6 +92,8 @@ public class AdminServiceImpl implements AdminService {
 
         LocalTime startTime = showsRequest.startTime();
         scheduleService.createSchedule(shows, startTime);
+
+        return new ShowsResponse(shows.getId());
 
     }
 
