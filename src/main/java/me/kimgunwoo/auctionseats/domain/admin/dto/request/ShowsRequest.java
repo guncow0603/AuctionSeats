@@ -3,6 +3,8 @@ package me.kimgunwoo.auctionseats.domain.admin.dto.request;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import me.kimgunwoo.auctionseats.domain.place.entity.Places;
+import me.kimgunwoo.auctionseats.domain.show.entity.Shows;
 import me.kimgunwoo.auctionseats.domain.show.entity.ShowsInfo;
 
 import java.time.LocalDate;
@@ -41,4 +43,13 @@ public record ShowsRequest (
                         .runningTime(this.runningTime)
                         .showsImage(new ArrayList<>())
                         .build();}
+        public Shows toEntity(Places places, ShowsInfo showsInfo) {
+                return Shows
+                        .builder()
+                        .places(places)
+                        .showsInfo(showsInfo)
+                        .startDate(this.startDate)
+                        .endDate(this.endDate)
+                        .build();
+        }
 }
