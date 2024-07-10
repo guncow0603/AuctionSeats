@@ -3,12 +3,13 @@ package me.kimgunwoo.auctionseats.domain.show.service;
 import me.kimgunwoo.auctionseats.domain.show.entity.Shows;
 import me.kimgunwoo.auctionseats.domain.show.entity.ShowsCategory;
 import me.kimgunwoo.auctionseats.domain.show.entity.ShowsImage;
+import me.kimgunwoo.auctionseats.domain.show.entity.ShowsInfo;
 
 import java.util.List;
 
 public interface ShowsService {
     // 공연 저장
-    Shows saveShows(Shows shows);
+    ShowsInfo saveShows(ShowsInfo showsInfo);
 
     // 모든 이미지 저장
     List<ShowsImage> saveAllShowsImage(List<ShowsImage> fileUrl);

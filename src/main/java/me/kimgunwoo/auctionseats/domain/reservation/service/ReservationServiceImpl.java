@@ -4,8 +4,6 @@ import me.kimgunwoo.auctionseats.domain.reservation.dto.request.ReservationCreat
 import me.kimgunwoo.auctionseats.domain.reservation.dto.response.ReservationDetailResponse;
 import me.kimgunwoo.auctionseats.domain.reservation.entity.Reservation;
 import me.kimgunwoo.auctionseats.domain.reservation.repository.ReservationRepository;
-import me.kimgunwoo.auctionseats.domain.seat.entity.Seat;
-import me.kimgunwoo.auctionseats.domain.seat.repository.SeatRepository;
 import me.kimgunwoo.auctionseats.domain.sequence.entity.Sequence;
 import me.kimgunwoo.auctionseats.domain.sequence.repository.SequenceRepository;
 import me.kimgunwoo.auctionseats.domain.shows_sequence_seat.entity.ShowsSequenceSeat;

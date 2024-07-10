@@ -1,12 +1,9 @@
 package me.kimgunwoo.auctionseats.domain.admin.dto.request;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import me.kimgunwoo.auctionseats.domain.admin.dto.ZoneInfo;
 import me.kimgunwoo.auctionseats.domain.place.entity.Places;
-import me.kimgunwoo.auctionseats.domain.seat.dto.request.SeatRequest;
 
 import java.util.List;
 
@@ -17,10 +14,6 @@ public record PlacesRequest(
 
         @Size(min = 1, max = 150, message = "주소 입력은 필수입니다.")
         String address,
-
-        @Valid
-        @NotEmpty(message = "좌석 정보는 필수입니다.")
-        List<SeatRequest> seats,
 
         @NotNull(message = "구역 정보 입력은 필수입니다.")
         List<ZoneInfo> zoneInfos
