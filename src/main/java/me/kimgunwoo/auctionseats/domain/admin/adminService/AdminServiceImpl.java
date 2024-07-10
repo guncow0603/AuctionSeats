@@ -50,7 +50,7 @@ public class AdminServiceImpl implements AdminService {
     @Transactional
     public List<PlacesResponse> createPlaceAndZone(PlacesRequest placesRequest) {
         List<ZoneInfo> zoneInfos = placesRequest.zoneInfos();
-        Places places = placeService.createPlaces(placesRequest);
+        Places places = placeService.createPlace(placesRequest);
         List<Zone> zone = zoneService.createZone(places, zoneInfos);
 
         return createPlaceResponse(zone);
@@ -89,7 +89,7 @@ public class AdminServiceImpl implements AdminService {
 
         Shows shows = showsService.createShows(showsRequest, places, showsInfo);
 
-        LocalTime startTime = showsRequest.getStartTime();
+        LocalTime startTime = showsRequest.startTime();
         scheduleService.createSchedule(shows, startTime);
 
     }
