@@ -2,8 +2,9 @@ package me.kimgunwoo.auctionseats.domain.user.service;
 
 import lombok.RequiredArgsConstructor;
 import me.kimgunwoo.auctionseats.domain.user.dto.request.UserCreateRequest;
-import me.kimgunwoo.auctionseats.domain.user.dto.request.UserNicknameUpdateRequest;
-import me.kimgunwoo.auctionseats.domain.user.dto.request.UserPhoneUpdateRequest;
+import me.kimgunwoo.auctionseats.domain.user.dto.request.UserPasswordUpdateRequest;
+import me.kimgunwoo.auctionseats.domain.user.dto.request.UserUpdateRequest;
+import me.kimgunwoo.auctionseats.domain.user.dto.response.UserResponse;
 import me.kimgunwoo.auctionseats.domain.user.entity.User;
 import me.kimgunwoo.auctionseats.domain.user.repository.UserRepository;
 import me.kimgunwoo.auctionseats.global.exception.ApiException;
@@ -12,6 +13,8 @@ import me.kimgunwoo.auctionseats.global.util.LettuceUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Objects;
 
 import static me.kimgunwoo.auctionseats.global.exception.ErrorCode.*;
 
@@ -26,9 +29,10 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void signup(UserCreateRequest request) {
+    public UserResponse signup(UserCreateRequest request) {
         String email = request.getEmail();
         String nickname = request.getNickname();
+
         /* 이메일 중복 검사 */
         if (userRepository.existsByEmailAndIsDeletedIsFalse(email)) {
             throw new ApiException(ErrorCode.EXISTED_USER_EMAIL);
@@ -39,11 +43,14 @@ public class UserServiceImpl implements UserService {
 
         User user = request.toEntity(passwordEncoder);
         userRepository.save(user);
+
+        return UserResponse.from(user);
     }
 
     @Override
     public boolean isExistedPhoneNumber(String phoneNumber) {
         return userRepository.existsByPhoneNumberAndIsDeletedIsFalse(phoneNumber);
+
     }
 
     @Override
@@ -54,28 +61,44 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void updateUserNicknameInfo(User loginUser, Long userId, UserNicknameUpdateRequest request) {
+    public UserResponse updateUserInfo(User loginUser, Long userId, UserUpdateRequest request) {
         User user = checkAndGetUser(loginUser, userId);
-        checkNickname(request.nickname());
-        user.updateUserNickName(request.nickname());
-    }
 
-    @Transactional
-    @Override
-    public void updateUserPhoneInfo(User loginUser, Long userId, UserPhoneUpdateRequest request) {
-        User user = checkAndGetUser(loginUser, userId);
-        checkPhoneVerificationCode(request.phoneNumber(), request.verificationNumber());
-        user.updatePhoneNumber(request.phoneNumber());
-    }
-
-    private void checkPhoneVerificationCode(String phoneNumber, String verificationCode) {
-        /* 핸드폰 번호 인증 번호 검사 */
-        if (!lettuceUtils.hasKey("[Verification]" + phoneNumber)) {
-            throw new ApiException(EXCEED_VERIFICATION_TIME);
+        if (!Objects.requireNonNullElse(request.nickname(), "").isBlank()) {
+            checkNickname(request.nickname());
+            user.updateUserNickName(request.nickname());
         }
 
-        if (!lettuceUtils.get("[Verification]" + phoneNumber).equals(verificationCode)) {
-            throw new ApiException(INVALID_VERIFICATION_NUMBER);
+        return UserResponse.from(user);
+    }
+
+    @Override
+    public UserResponse getUserInfo(User loginUser, Long userId) {
+        User user = checkAndGetUser(loginUser, userId);
+
+        return UserResponse.from(user);
+    }
+
+    @Override
+    @Transactional
+    public void updateUserPassword(User loginUser, Long userId, UserPasswordUpdateRequest request) {
+        User user = checkAndGetUser(loginUser, userId);
+
+        checkPassword(user, request.password());
+        user.updatePassword(passwordEncoder.encode(request.password()));
+    }
+
+    @Override
+    @Transactional
+    public void deleteUser(User loginUser, Long userId) {
+        User user = checkAndGetUser(loginUser, userId);
+
+        user.delete();
+    }
+
+    private void checkPassword(User user, String password) {
+        if (passwordEncoder.matches(password, user.getPassword())) {
+            throw new ApiException(ALREADY_USED_PASSWORD);
         }
     }
 
