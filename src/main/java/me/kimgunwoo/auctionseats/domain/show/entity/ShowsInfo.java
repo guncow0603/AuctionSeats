@@ -44,7 +44,7 @@ public class ShowsInfo extends BaseEntity {
     private ShowsCategory showsCategory;
 
     @Comment("공연 이미지")
-    @OneToMany(mappedBy = "shows", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "showsInfo", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ShowsImage> showsImage = new ArrayList<>();
 
     @Builder

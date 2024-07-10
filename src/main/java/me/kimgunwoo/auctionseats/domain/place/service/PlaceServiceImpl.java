@@ -1,30 +1,45 @@
 package me.kimgunwoo.auctionseats.domain.place.service;
 
 import lombok.RequiredArgsConstructor;
+import me.kimgunwoo.auctionseats.domain.admin.dto.ZoneInfo;
+import me.kimgunwoo.auctionseats.domain.admin.dto.request.PlacesRequest;
 import me.kimgunwoo.auctionseats.domain.place.entity.Places;
+import me.kimgunwoo.auctionseats.domain.place.entity.Zone;
 import me.kimgunwoo.auctionseats.domain.place.repository.PlaceRepository;
-import me.kimgunwoo.auctionseats.global.exception.ApiException;
+import me.kimgunwoo.auctionseats.domain.place.repository.ZoneRepository;
 import org.springframework.stereotype.Service;
 
-import static me.kimgunwoo.auctionseats.global.exception.ErrorCode.NOT_FOUND_PLACE;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Service
 @RequiredArgsConstructor
 public class PlaceServiceImpl implements PlaceService {
 
-    private final PlaceRepository placeRepository;
+    private final PlaceRepository placesRepository;
 
-    // 공연장 저장
+    // 공연장 생성
     @Override
-    public Places savePlace(Places place) {
-        return placeRepository.save(place);
+    public Places createPlaces(PlacesRequest placesRequest) {
+        List<ZoneInfo> zoneInfos = placesRequest.zoneInfos();
+
+        Integer totalSeat = calculateSeats(zoneInfos);
+
+        Places places = placesRequest.toEntity(totalSeat);
+
+        return placesRepository.save(places);
     }
 
-    // 공연장 찾기
+    // 공연장 총 좌석 개수 계산
     @Override
-    public Places findPlace(Long placeId) {
-        return placeRepository.findById(placeId)
-                .orElseThrow(() -> new ApiException(NOT_FOUND_PLACE));
+    public Integer calculateSeats(List<ZoneInfo> seats) {
+        Integer totalSeat = 0;
+
+        for (ZoneInfo seat : seats) {
+            totalSeat += seat.seatNumber();
+        }
+
+        return totalSeat;
     }
 }

@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface ShowsImageRepository extends JpaRepository<ShowsImage, Long> {
     // 대표 이미지 조회
-    Optional<ShowsImage> findThumbnailByShowsId(Long showsId);
+    Optional<ShowsImage> findThumbnailByShowsInfoId(Long showsInfoId);
 }
