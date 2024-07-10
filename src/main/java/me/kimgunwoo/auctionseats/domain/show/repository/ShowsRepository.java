@@ -1,7 +1,7 @@
 package me.kimgunwoo.auctionseats.domain.show.repository;
 
-import me.kimgunwoo.auctionseats.domain.show.entity.ShowsInfo;
+import me.kimgunwoo.auctionseats.domain.show.entity.Shows;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ShowsRepository extends JpaRepository<ShowsInfo, Long> {
+public interface ShowsRepository extends JpaRepository<Shows, Long> {
 }
