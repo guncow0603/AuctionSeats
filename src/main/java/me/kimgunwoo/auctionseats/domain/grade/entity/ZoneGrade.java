@@ -1,4 +1,4 @@
-package me.kimgunwoo.auctionseats.domain.seat.entity;
+package me.kimgunwoo.auctionseats.domain.grade.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
