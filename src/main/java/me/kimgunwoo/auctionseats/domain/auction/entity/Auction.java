@@ -5,7 +5,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import me.kimgunwoo.auctionseats.domain.shows_schedule_seat.entity.ShowsScheduleSeat;
+import me.kimgunwoo.auctionseats.domain.grade.entity.ZoneGrade;
+import me.kimgunwoo.auctionseats.domain.schedule.entity.Schedule;
 import me.kimgunwoo.auctionseats.global.entity.BaseEntity;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
@@ -21,6 +22,20 @@ public class Auction extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Comment("공연 회차")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "schedule_id", nullable = false)
+    private Schedule schedule;
+
+    @Comment("구역등급")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "zone_grade_id", nullable = false)
+    private ZoneGrade zoneGrade;
+
+    @Comment("시작가")
+    @Column(name = "seat_number", nullable = false)
+    private Integer seatNumber;
 
     @Comment("시작가")
     @ColumnDefault("0")
@@ -43,23 +58,24 @@ public class Auction extends BaseEntity {
     @Column(name = "is_ended")
     private Boolean isEnded = false;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "seat_id")
-    @JoinColumn(name = "schedule_id")
-    private ShowsScheduleSeat scheduleSeat;
 
     @Builder
     private Auction(
+            Schedule schedule,
+            ZoneGrade zoneGrade,
+            Integer seatNumber,
             Long startPrice,
+            Long bidPrice,
             LocalDateTime startDateTime,
-            LocalDateTime endDateTime,
-            ShowsScheduleSeat scheduleSeat
+            LocalDateTime endDateTime
     ) {
+        this.schedule = schedule;
+        this.zoneGrade = zoneGrade;
+        this.seatNumber = seatNumber;
         this.startPrice = startPrice;
-        this.bidPrice = startPrice;
+        this.bidPrice = bidPrice;
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
-        this.scheduleSeat = scheduleSeat;
     }
 
     public void updateBidPrice(Long bidPrice) {
