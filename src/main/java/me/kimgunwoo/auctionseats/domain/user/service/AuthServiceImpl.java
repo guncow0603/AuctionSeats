@@ -47,26 +47,24 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public void reissue(HttpServletRequest request, HttpServletResponse response) {
         String refreshToken = jwtUtil.resolveRefreshToken(request);
-
         // 토큰 검증
         jwtUtil.validateToken(refreshToken);
-
         // 유저 정보 추출
         Claims claims = jwtUtil.getUserInfoFromToken(refreshToken);
         String username = claims.getSubject();
-        Role role = Role.valueOf((String)claims.get("auth"));
-        Long id = Long.parseLong(claims.get("identify").toString());
+        Role role = Role.valueOf(String.valueOf(claims.get("auth")));
+        Long id = Long.parseLong(String.valueOf(claims.get("identify")));
+        String nickname = String.valueOf(claims.get("nickname"));
 
         if (!lettuceUtils.get(REFRESH_TOKEN_HEADER + " " + username).equals(refreshToken)) {
             throw new ApiException(INVALID_JWT_TOKEN);
         }
 
-        String newAccessToken = jwtUtil.createAccessToken(id, username, role);
-        String newRefreshToken = jwtUtil.createRefreshToken(id, username, role);
+        String newAccessToken = jwtUtil.createAccessToken(id, username, role, nickname);
+        String newRefreshToken = jwtUtil.createRefreshToken(id, username, role, nickname);
 
         jwtUtil.setAccessTokenInHeader(response, newAccessToken);
         jwtUtil.setRefreshTokenInCookie(response, newRefreshToken);
-
         lettuceUtils.delete(REFRESH_TOKEN_HEADER + " " + username);
         lettuceUtils.save(
                 REFRESH_TOKEN_HEADER + " " + username,
