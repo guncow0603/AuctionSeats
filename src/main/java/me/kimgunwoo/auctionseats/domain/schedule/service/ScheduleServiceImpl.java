@@ -14,7 +14,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
-import static me.kimgunwoo.auctionseats.global.exception.ErrorCode.NOT_FOUND_SEQUENCE;
+import static me.kimgunwoo.auctionseats.global.exception.ErrorCode.NOT_FOUND_SCHEDULE;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +26,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public Schedule findSchedule(Long scheduleId) {
         return sequenceRepository.findById(scheduleId)
-                .orElseThrow(() -> new ApiException(NOT_FOUND_SEQUENCE));
+                .orElseThrow(() -> new ApiException(NOT_FOUND_SCHEDULE));
     }
 
     // 회차 생성
