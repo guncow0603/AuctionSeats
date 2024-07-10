@@ -36,7 +36,7 @@ public enum SuccessCode {
     SUCCESS_BID(HttpStatus.CREATED, "A00100", "입찰에 성공했습니다."),
 
     /* ADMIN */
-    SUCCESS_SHOWS_AND_SEQUENCE_CREATE(HttpStatus.CREATED, "Z09900", "공연 및 회차가 추가되었습니다."),
+    SUCCESS_SHOWS_AND_SCHEDULE_CREATE(HttpStatus.CREATED, "Z09900", "공연정보, 공연 및 회차가 추가되었습니다."),
     SUCCESS_PLACE_AND_ZONE_CREATE(HttpStatus.CREATED, "Z09901", "공연장 및 구역이 추가되었습니다."),
     SUCCESS_SHOWS_SEQUENCE_SEAT_AND_AUCTION_CREATE(HttpStatus.CREATED, "Z09902", "공연 회차 별 좌석"),
 
