@@ -18,14 +18,15 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "auction")
 public class Auction extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Comment("공연 회차")
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sequence_id", nullable = false)
-    private Schedule sequence;
+    @JoinColumn(name = "schedule_id", nullable = false)
+    private Schedule schedule;
 
     @Comment("구역등급")
     @OneToOne(fetch = FetchType.LAZY)
@@ -39,12 +40,11 @@ public class Auction extends BaseEntity {
     @Comment("시작가")
     @ColumnDefault("0")
     @Column(name = "start_price", nullable = false)
-    private Long startPrice = 0L;
+    private Long startPrice;
 
     @Comment("입찰가")
     @Column(name = "bid_price", nullable = false)
     private Long bidPrice;
-
     @Comment("시작일시")
     @Column(name = "start_date", nullable = false)
     private LocalDateTime startDateTime;
@@ -61,22 +61,28 @@ public class Auction extends BaseEntity {
 
     @Builder
     private Auction(
-            Schedule sequence,
+            Schedule schedule,
             ZoneGrade zoneGrade,
             Integer seatNumber,
             Long startPrice,
+            Long bidPrice,
             LocalDateTime startDateTime,
             LocalDateTime endDateTime
     ) {
-        this.sequence = sequence;
+        this.schedule = schedule;
         this.zoneGrade = zoneGrade;
         this.seatNumber = seatNumber;
         this.startPrice = startPrice;
+        this.bidPrice = bidPrice;
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
     }
 
     public void updateBidPrice(Long bidPrice) {
         this.bidPrice = bidPrice;
+    }
+
+    public void ended() {
+        this.isEnded = true;
     }
 }

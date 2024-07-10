@@ -53,7 +53,7 @@ public class ScheduleServiceImpl implements ScheduleService {
                             .builder()
                             .startDateTime(dateTime)
                             .shows(shows)
-                            .sequence(i)
+                            .schedule(i)
                             .build();
             distributeSequenceList.add(schedule);
             startDate = startDate.plusDays(1);
