@@ -5,16 +5,13 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import me.kimgunwoo.auctionseats.domain.bid.entity.Bid;
 import me.kimgunwoo.auctionseats.domain.grade.entity.ZoneGrade;
-import me.kimgunwoo.auctionseats.domain.sequence.entity.Sequence;
+import me.kimgunwoo.auctionseats.domain.schedule.entity.Schedule;
 import me.kimgunwoo.auctionseats.global.entity.BaseEntity;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 
 import java.time.LocalDateTime;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -28,7 +25,7 @@ public class Auction extends BaseEntity {
     @Comment("공연 회차")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sequence_id", nullable = false)
-    private Sequence sequence;
+    private Schedule sequence;
 
     @Comment("구역등급")
     @OneToOne(fetch = FetchType.LAZY)
@@ -64,7 +61,7 @@ public class Auction extends BaseEntity {
 
     @Builder
     private Auction(
-            Sequence sequence,
+            Schedule sequence,
             ZoneGrade zoneGrade,
             Integer seatNumber,
             Long startPrice,

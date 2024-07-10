@@ -1,4 +1,4 @@
-package me.kimgunwoo.auctionseats.domain.sequence.entity;
+package me.kimgunwoo.auctionseats.domain.schedule.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -12,15 +12,15 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class Sequence {
+public class Schedule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Comment("회차 수")
-    @Column(name = "sequence", nullable = false)
+    @Column(name = "schedule", nullable = false)
     @ColumnDefault("0")
-    private Integer sequence = 0;
+    private Integer schedule = 0;
 
     @Comment("공연 일시")
     @Column(name = "start_date_time", nullable = false)
@@ -33,8 +33,8 @@ public class Sequence {
 
 
     @Builder
-    private Sequence(int sequence, LocalDateTime startDateTime, Shows shows) {
-        this.sequence = sequence;
+    private Schedule(int schedule, LocalDateTime startDateTime, Shows shows) {
+        this.schedule = schedule;
         this.startDateTime = startDateTime;
         this.shows = shows;
     }

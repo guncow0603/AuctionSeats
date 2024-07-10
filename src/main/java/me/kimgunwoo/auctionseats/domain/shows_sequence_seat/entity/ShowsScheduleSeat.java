@@ -5,7 +5,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import me.kimgunwoo.auctionseats.domain.sequence.entity.Sequence;
+import me.kimgunwoo.auctionseats.domain.schedule.entity.Schedule;
 import me.kimgunwoo.auctionseats.global.entity.BaseEntity;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
@@ -14,10 +14,10 @@ import org.hibernate.annotations.Comment;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "shows_sequence_seat")
-public class ShowsSequenceSeat extends BaseEntity {
+public class ShowsScheduleSeat extends BaseEntity {
 
     @EmbeddedId
-    private ShowsSequenceSeatID id;
+    private ShowsScheduleSeatID id;
 
     @Comment("가격")
     @Column(name = "price", nullable = false)
@@ -44,16 +44,16 @@ public class ShowsSequenceSeat extends BaseEntity {
     @MapsId("sequenceId")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sequence_id")
-    private Sequence sequence;
+    private Schedule sequence;
 
     @Builder
-    private ShowsSequenceSeat(Seat seat, Sequence sequence, Long price, SellType sellType, boolean isSelled) {
+    private ShowsScheduleSeat(Seat seat, Schedule sequence, Long price, SellType sellType, boolean isSelled) {
         this.seat = seat;
         this.sequence = sequence;
         this.price = price;
         this.sellType = sellType;
         this.isSelled = isSelled;
-        this.id = new ShowsSequenceSeatID(seat.getId(), sequence.getId());
+        this.id = new ShowsScheduleSeatID(seat.getId(), sequence.getId());
     }
     public void updateIsSelled() {
         this.isSelled = true;

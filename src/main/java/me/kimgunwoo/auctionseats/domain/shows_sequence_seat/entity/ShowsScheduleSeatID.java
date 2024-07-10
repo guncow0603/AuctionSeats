@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ShowsSequenceSeatID implements Serializable {
+public class ShowsScheduleSeatID implements Serializable {
     private Long seatId;
 
     private Long sequenceId;
