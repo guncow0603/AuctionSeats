@@ -9,6 +9,7 @@ import me.kimgunwoo.auctionseats.domain.schedule.entity.Schedule;
 import me.kimgunwoo.auctionseats.domain.schedule.repository.ScheduleRepository;
 import me.kimgunwoo.auctionseats.domain.shows_schedule_seat.entity.ShowsScheduleSeat;
 import me.kimgunwoo.auctionseats.domain.shows_schedule_seat.entity.ShowsScheduleSeatID;
+import me.kimgunwoo.auctionseats.domain.shows_schedule_seat.repository.ShowsScheduleSeatRepository;
 import me.kimgunwoo.auctionseats.domain.user.entity.User;
 import me.kimgunwoo.auctionseats.domain.user.repository.UserRepository;
 import me.kimgunwoo.auctionseats.global.exception.ApiException;
@@ -26,7 +27,7 @@ public class ReservationServiceImpl implements ReservationService {
 
     private final ShowsScheduleSeatRepository showsScheduleSeatRepository;
 
-    private final ScheduleRepository sequenceRepository;
+    private final ScheduleRepository scheduleRepository;
 
     private final SeatRepository seatRepository;
 
@@ -35,11 +36,11 @@ public class ReservationServiceImpl implements ReservationService {
     public ReservationDetailResponse reserve(
             User user,
             Long seatId,
-            Long sequenceId,
+            Long scheduleId,
             ReservationCreateRequest request
     ) {
         // 좌석 예매 가능한지 확인
-        ShowsScheduleSeatID showsScheduleSeatId = new ShowsScheduleSeatID(seatId, sequenceId);
+        ShowsScheduleSeatID showsScheduleSeatId = new ShowsScheduleSeatID(seatId, scheduleId);
         ShowsScheduleSeat showsScheduleSeat = showsScheduleSeatRepository.findById(showsScheduleSeatId)
                 .orElseThrow(); // TODO: 예외 추가하기
 
@@ -62,7 +63,7 @@ public class ReservationServiceImpl implements ReservationService {
         savedUser.usePoint(request.price());
 
         // 공연 정보 조회
-        Schedule sequence = sequenceRepository.findScheduleWithShowsById(sequenceId)
+        Schedule schedule = scheduleRepository.findScheduleWithShowsById(scheduleId)
                 .orElseThrow(); // TODO: 예외 추가하기
 
         // 좌석 정보 조회
@@ -76,13 +77,13 @@ public class ReservationServiceImpl implements ReservationService {
                 savedReservation.getId(),
                 user.getName(),
                 savedReservation.getCreatedAt(),
-                sequence.getShows().getName(),
-                sequence.getSchedule(),
+                schedule.getShows().getName(),
+                schedule.getSchedule(),
                 seat.getZone(),
                 seat.getSeatNumber(),
                 seat.getPlaces().getAddress(),
-                sequence.getStartDateTime(),
-                sequence.getShows().getShowsImage().get(0).getS3key() // TODO: S3 PREFIX 붙여야함
+                schedule.getStartDateTime(),
+                schedule.getShows().getShowsImage().get(0).getS3key() // TODO: S3 PREFIX 붙여야함
         );
     }
 }

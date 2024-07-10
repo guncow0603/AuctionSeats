@@ -7,6 +7,7 @@ import me.kimgunwoo.auctionseats.domain.admin.dto.response.PlacesResponse;
 import me.kimgunwoo.auctionseats.domain.place.entity.Places;
 import me.kimgunwoo.auctionseats.domain.place.entity.Zone;
 import me.kimgunwoo.auctionseats.domain.place.service.PlaceService;
+import me.kimgunwoo.auctionseats.domain.place.service.ZoneService;
 import me.kimgunwoo.auctionseats.domain.show.service.ShowsService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +20,8 @@ import java.util.List;
 public class AdminServiceImpl implements AdminService {
 
     private final PlaceService placeService;
+
+    private final ZoneService zoneService;
 
     private final ShowsService showsService;
 
@@ -35,7 +38,7 @@ public class AdminServiceImpl implements AdminService {
     public List<PlacesResponse> createPlaceAndZone(PlacesRequest placesRequest) {
         List<ZoneInfo> zoneInfos = placesRequest.zoneInfos();
         Places places = placeService.createPlaces(placesRequest);
-        List<Zone> zone = placeService.createZone(places, zoneInfos);
+        List<Zone> zone = zoneService.createZone(places, zoneInfos);
 
         return createPlaceResponse(zone);
 

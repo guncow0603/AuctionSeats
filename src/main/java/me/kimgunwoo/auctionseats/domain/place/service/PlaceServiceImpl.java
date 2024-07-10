@@ -19,8 +19,6 @@ public class PlaceServiceImpl implements PlaceService {
 
     private final PlaceRepository placesRepository;
 
-    private final ZoneRepository zoneRepository;
-
     // 공연장 생성
     @Override
     public Places createPlaces(PlacesRequest placesRequest) {
@@ -43,23 +41,5 @@ public class PlaceServiceImpl implements PlaceService {
         }
 
         return totalSeat;
-    }
-
-    // 공연장 구역 생성
-    public List<Zone> createZone(Places places, List<ZoneInfo> zoneInfos) {
-        List<Zone> zoneList = new ArrayList<>();
-
-        for (ZoneInfo zoneInfo : zoneInfos) {
-            Zone zone =
-                    Zone
-                            .builder()
-                            .places(places)
-                            .name(zoneInfo.zone())
-                            .seatNumber(zoneInfo.seatNumber())
-                            .build();
-            zoneList.add(zone);
-        }
-
-        return zoneRepository.saveAll(zoneList);
     }
 }
