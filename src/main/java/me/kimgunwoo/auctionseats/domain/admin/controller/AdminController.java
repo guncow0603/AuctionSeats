@@ -69,12 +69,12 @@ public class AdminController {
                 );
     }
 
-    @PostMapping("/admin/goods/{goodsId}/grades")
+    @PostMapping("/admin/shows/{showsId}/grades")
     public ResponseEntity<ApiResponse<GradeResponse>> createGrade(
-            @PathVariable Long goodsId,
+            @PathVariable Long showsId,
             @Valid @RequestBody GradeRequest gradeRequest) {
 
-        GradeResponse gradeResponse = adminService.createGrade(goodsId, gradeRequest);
+        GradeResponse gradeResponse = adminService.createGrade(showsId, gradeRequest);
 
         return ResponseEntity
                 .status(SUCCESS_GRADE.getHttpStatus())

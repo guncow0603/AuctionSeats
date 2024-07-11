@@ -8,6 +8,7 @@ import me.kimgunwoo.auctionseats.domain.admin.dto.request.ShowsRequest;
 import me.kimgunwoo.auctionseats.domain.admin.dto.response.GradeResponse;
 import me.kimgunwoo.auctionseats.domain.admin.dto.response.PlacesResponse;
 import me.kimgunwoo.auctionseats.domain.admin.dto.response.ShowsResponse;
+import me.kimgunwoo.auctionseats.domain.grade.entity.Grade;
 import me.kimgunwoo.auctionseats.domain.grade.service.GradeService;
 import me.kimgunwoo.auctionseats.domain.place.entity.Places;
 import me.kimgunwoo.auctionseats.domain.place.entity.Zone;
@@ -104,7 +105,7 @@ public class AdminServiceImpl implements AdminService {
     @Transactional
     public GradeResponse createGrade(Long showsId, GradeRequest gradeRequest) {
         Shows shows = showsService.findById(showsId);
-        gradeService.createGrade(gradeRequest, shows);
-        return new GradeResponse(shows.getPlaces().getId());
+        Grade grade = gradeService.createGrade(gradeRequest, shows);
+        return new GradeResponse(shows.getPlaces().getId(),grade.getId());
     }
 }
