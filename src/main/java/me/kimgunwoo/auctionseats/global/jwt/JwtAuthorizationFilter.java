@@ -10,7 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.kimgunwoo.auctionseats.domain.user.entity.User;
-import me.kimgunwoo.auctionseats.domain.user.entity.constant.Role;
+import me.kimgunwoo.auctionseats.domain.user.enums.Role;
 import me.kimgunwoo.auctionseats.global.security.UserDetailsImpl;
 import me.kimgunwoo.auctionseats.global.util.LettuceUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

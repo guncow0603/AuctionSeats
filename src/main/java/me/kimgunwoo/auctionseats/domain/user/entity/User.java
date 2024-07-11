@@ -5,7 +5,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import me.kimgunwoo.auctionseats.domain.user.entity.constant.Role;
+import me.kimgunwoo.auctionseats.domain.user.enums.Role;
 import me.kimgunwoo.auctionseats.global.entity.BaseEntity;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
@@ -49,7 +49,6 @@ public class User extends BaseEntity {
     @Comment("회원 역할(관리자 or 일반 유저)")
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
-
     private Role role;
 
     @Comment("회원 보유 포인트")
@@ -59,9 +58,7 @@ public class User extends BaseEntity {
 
     @Comment("삭제 여부")
     @Column(name = "is_deleted", nullable = false)
-
     @ColumnDefault("false")
-
     private Boolean isDeleted = false;
 
     @Builder
@@ -99,5 +96,11 @@ public class User extends BaseEntity {
 
     public void updatePhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+    public void updatePassword(String password) {
+        this.password = password;
+    }
+    public void delete() {
+        this.isDeleted = true;
     }
 }

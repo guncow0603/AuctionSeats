@@ -4,7 +4,7 @@ import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import me.kimgunwoo.auctionseats.domain.user.entity.constant.Role;
+import me.kimgunwoo.auctionseats.domain.user.enums.Role;
 import me.kimgunwoo.auctionseats.global.exception.ApiException;
 import me.kimgunwoo.auctionseats.global.jwt.JwtUtil;
 import me.kimgunwoo.auctionseats.global.util.LettuceUtils;
