@@ -8,4 +8,6 @@ import me.kimgunwoo.auctionseats.domain.show.entity.ShowsInfo;
 public interface ShowsService {
     // 공연 생성
     Shows createShows(ShowsRequest showsRequest, Places places, ShowsInfo showsInfo);
+
+    Shows findById(Long showsId);
 }

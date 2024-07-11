@@ -2,10 +2,13 @@ package me.kimgunwoo.auctionseats.domain.admin.adminService;
 
 import lombok.RequiredArgsConstructor;
 import me.kimgunwoo.auctionseats.domain.admin.dto.ZoneInfo;
+import me.kimgunwoo.auctionseats.domain.admin.dto.request.GradeRequest;
 import me.kimgunwoo.auctionseats.domain.admin.dto.request.PlacesRequest;
 import me.kimgunwoo.auctionseats.domain.admin.dto.request.ShowsRequest;
+import me.kimgunwoo.auctionseats.domain.admin.dto.response.GradeResponse;
 import me.kimgunwoo.auctionseats.domain.admin.dto.response.PlacesResponse;
 import me.kimgunwoo.auctionseats.domain.admin.dto.response.ShowsResponse;
+import me.kimgunwoo.auctionseats.domain.grade.service.GradeService;
 import me.kimgunwoo.auctionseats.domain.place.entity.Places;
 import me.kimgunwoo.auctionseats.domain.place.entity.Zone;
 import me.kimgunwoo.auctionseats.domain.place.service.PlaceService;
@@ -38,13 +41,12 @@ public class AdminServiceImpl implements AdminService {
     private final ShowsInfoService showsInfoService;
 
     private final ScheduleService scheduleService;
-
     public static final String S3_PATH = "https://auction-ticket.s3.ap-northeast-2.amazonaws.com/";
-
     public static final String FILE_PATH = "shows/";
     public static final String THUMBNAIL = "thumbnail/";
-
     public static final String GENERAL = "general/";
+
+    private final GradeService gradeService;
 
     // 공연장 및 구역 생성
     @Override
@@ -97,4 +99,12 @@ public class AdminServiceImpl implements AdminService {
 
     }
 
+    // 구역 생성
+    @Override
+    @Transactional
+    public GradeResponse createGrade(Long showsId, GradeRequest gradeRequest) {
+        Shows shows = showsService.findById(showsId);
+        gradeService.createGrade(gradeRequest, shows);
+        return new GradeResponse(shows.getPlaces().getId());
+    }
 }

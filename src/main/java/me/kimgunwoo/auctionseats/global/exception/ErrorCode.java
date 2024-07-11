@@ -22,7 +22,7 @@ public enum ErrorCode {
 
 
     /* SHOWS */
-
+    NOT_FOUND_SHOWS(HttpStatus.NOT_FOUND, "G10000", "해당하는 공연 정보가 없습니다."),
 
 
 

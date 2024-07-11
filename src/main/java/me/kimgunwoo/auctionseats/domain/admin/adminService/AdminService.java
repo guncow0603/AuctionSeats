@@ -1,7 +1,9 @@
 package me.kimgunwoo.auctionseats.domain.admin.adminService;
 
+import me.kimgunwoo.auctionseats.domain.admin.dto.request.GradeRequest;
 import me.kimgunwoo.auctionseats.domain.admin.dto.request.PlacesRequest;
 import me.kimgunwoo.auctionseats.domain.admin.dto.request.ShowsRequest;
+import me.kimgunwoo.auctionseats.domain.admin.dto.response.GradeResponse;
 import me.kimgunwoo.auctionseats.domain.admin.dto.response.PlacesResponse;
 import me.kimgunwoo.auctionseats.domain.admin.dto.response.ShowsResponse;
 import me.kimgunwoo.auctionseats.domain.place.entity.Zone;
@@ -19,4 +21,6 @@ public interface AdminService {
     //  공연과 관련된 공연 정보, 공연 카테고리, 공연 이미지, 공연 및 회차 생성
     ShowsResponse createShowsBundleAndSchedule(Long placeId, ShowsRequest showsRequest,
                                                List<MultipartFile> multipartFiles);
+    // 등급 생성
+    GradeResponse createGrade(Long goodsId, GradeRequest gradeRequest);
 }

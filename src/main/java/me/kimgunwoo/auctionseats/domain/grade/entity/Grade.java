@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import me.kimgunwoo.auctionseats.domain.show.entity.Shows;
 import me.kimgunwoo.auctionseats.global.entity.BaseEntity;
 import org.hibernate.annotations.Comment;
 
@@ -30,10 +31,16 @@ public class Grade extends BaseEntity {
     @Column(name = "auctionPrice", nullable = false)
     private Long auctionPrice;
 
+    @Comment("공연")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "shows_id")
+    private Shows shows;
+
     @Builder
-    public Grade(String name, Long normalPrice, Long auctionPrice) {
+    private Grade(String name, Long normalPrice, Long auctionPrice, Shows shows) {
         this.name = name;
         this.normalPrice = normalPrice;
         this.auctionPrice = auctionPrice;
+        this.shows = shows;
     }
 }
