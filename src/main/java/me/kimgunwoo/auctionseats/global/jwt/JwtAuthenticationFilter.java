@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.kimgunwoo.auctionseats.domain.user.dto.request.UserLoginRequest;
 import me.kimgunwoo.auctionseats.domain.user.entity.User;
-import me.kimgunwoo.auctionseats.domain.user.entity.constant.Role;
+import me.kimgunwoo.auctionseats.domain.user.enums.Role;
 import me.kimgunwoo.auctionseats.global.exception.ApiException;
 import me.kimgunwoo.auctionseats.global.response.ApiResponse;
 import me.kimgunwoo.auctionseats.global.security.UserDetailsImpl;

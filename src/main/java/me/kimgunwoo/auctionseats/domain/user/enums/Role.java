@@ -1,4 +1,4 @@
-package me.kimgunwoo.auctionseats.domain.user.entity.constant;
+package me.kimgunwoo.auctionseats.domain.user.enums;
 
 
 import lombok.AllArgsConstructor;
