@@ -4,8 +4,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.kimgunwoo.auctionseats.domain.admin.adminService.AdminServiceImpl;
+import me.kimgunwoo.auctionseats.domain.admin.dto.request.GradeRequest;
 import me.kimgunwoo.auctionseats.domain.admin.dto.request.PlacesRequest;
 import me.kimgunwoo.auctionseats.domain.admin.dto.request.ShowsRequest;
+import me.kimgunwoo.auctionseats.domain.admin.dto.response.GradeResponse;
 import me.kimgunwoo.auctionseats.domain.admin.dto.response.PlacesResponse;
 import me.kimgunwoo.auctionseats.domain.admin.dto.response.ShowsResponse;
 import me.kimgunwoo.auctionseats.global.response.ApiResponse;
@@ -16,8 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-import static me.kimgunwoo.auctionseats.global.exception.SuccessCode.SUCCESS_PLACE_AND_ZONE_CREATE;
-import static me.kimgunwoo.auctionseats.global.exception.SuccessCode.SUCCESS_SHOWS_AND_SCHEDULE_CREATE;
+import static me.kimgunwoo.auctionseats.global.exception.SuccessCode.*;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -65,6 +66,23 @@ public class AdminController {
                                 SUCCESS_SHOWS_AND_SCHEDULE_CREATE.getMessage(),
                                 showsResponse
                         )
+                );
+    }
+
+    @PostMapping("/admin/goods/{goodsId}/grades")
+    public ResponseEntity<ApiResponse<GradeResponse>> createGrade(
+            @PathVariable Long goodsId,
+            @Valid @RequestBody GradeRequest gradeRequest) {
+
+        GradeResponse gradeResponse = adminService.createGrade(goodsId, gradeRequest);
+
+        return ResponseEntity
+                .status(SUCCESS_GRADE.getHttpStatus())
+                .body(
+                        ApiResponse.of(
+                                SUCCESS_GRADE.getCode(),
+                                SUCCESS_GRADE.getMessage(),
+                                gradeResponse)
                 );
     }
 }
