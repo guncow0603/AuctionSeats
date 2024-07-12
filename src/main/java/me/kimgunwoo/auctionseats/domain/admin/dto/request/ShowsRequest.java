@@ -36,14 +36,14 @@ public record ShowsRequest (
         Integer runningTime,
         @Size(min = 1, max = 30, message = "카테고리 입력은 필수입니다.")
         String categoryName){
-        public ShowsInfo toEntity() {
+        public ShowsInfo toShowsInfoEntity() {
                 return ShowsInfo.builder().name(this.name)
                         .description(this.description)
                         .ageGrade(this.ageGrade)
                         .runningTime(this.runningTime)
                         .showsImage(new ArrayList<>())
                         .build();}
-        public Shows toEntity(Places places, ShowsInfo showsInfo) {
+        public Shows toShowsEntity(Places places, ShowsInfo showsInfo) {
                 return Shows
                         .builder()
                         .places(places)
