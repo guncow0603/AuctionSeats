@@ -31,7 +31,7 @@ public class ShowsInfoServiceImpl implements ShowsInfoService {
     // 공연 정보 생성
     @Override
     public ShowsInfo createShowsInfo(ShowsRequest showsRequest) {
-        ShowsInfo showsInfo = showsRequest.toEntity();
+        ShowsInfo showsInfo = showsRequest.toShowsInfoEntity();
 
         return showsInfoRepository.save(showsInfo);
     }

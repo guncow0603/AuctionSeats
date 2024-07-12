@@ -18,7 +18,7 @@ public class ShowsServiceImpl implements ShowsService {
     public final ShowsRepository showsRepository;
 
     public Shows createShows(ShowsRequest showsRequest, Places places, ShowsInfo showsInfo) {
-        Shows shows = showsRequest.toEntity(places, showsInfo);
+        Shows shows = showsRequest.toShowsEntity(places, showsInfo);
 
         return showsRepository.save(shows);
     }
