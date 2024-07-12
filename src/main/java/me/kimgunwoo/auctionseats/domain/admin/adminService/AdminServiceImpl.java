@@ -61,7 +61,7 @@ public class AdminServiceImpl implements AdminService {
     public List<PlacesResponse> createPlaceAndZone(PlacesRequest placesRequest) {
         List<ZoneInfo> zoneInfos = placesRequest.zoneInfos();
         Places places = placeService.createPlace(placesRequest);
-        List<Zone> zoneList = zoneService.createZone(places, zoneInfos);
+        List<Zone> zoneList = zoneService.createZone(zoneInfos);
         places.updateZone(zoneList);
 
         return createPlaceResponse(zoneList);

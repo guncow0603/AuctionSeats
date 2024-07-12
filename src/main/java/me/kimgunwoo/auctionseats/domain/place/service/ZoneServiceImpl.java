@@ -18,14 +18,13 @@ public class ZoneServiceImpl implements ZoneService {
 
     // 공연장 구역 생성
     @Override
-    public List<Zone> createZone(Places places, List<ZoneInfo> zoneInfos) {
+    public List<Zone> createZone( List<ZoneInfo> zoneInfos) {
         List<Zone> zoneList = new ArrayList<>();
 
         for (ZoneInfo zoneInfo : zoneInfos) {
             Zone zone =
                     Zone
                             .builder()
-                            .places(places)
                             .name(zoneInfo.zone())
                             .seatNumber(zoneInfo.seatNumber())
                             .build();
