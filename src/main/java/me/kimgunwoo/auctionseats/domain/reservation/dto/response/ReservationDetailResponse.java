@@ -1,53 +1,22 @@
 package me.kimgunwoo.auctionseats.domain.reservation.dto.response;
 
 import lombok.Builder;
+import me.kimgunwoo.auctionseats.domain.reservation.dto.ReservationSeatInfo;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
 @Builder
 public record ReservationDetailResponse(
-         Long reservationId,// 예약 번호
+        Long reservationId, // 예약 번호
 
-         String username, // 유저 이름
+        String username, // 예매자
 
-         LocalDateTime reservationDate, // 예약일자
+        String title, // 제목
 
-         String goodsTitle,// 공연 제목
+        LocalDateTime useDate, // 이용일
 
-         int sequence, // 회차
+        String address, // 공연 장소
 
-         String zone, // 좌석 구역
-
-         Integer seatNumber, // 좌석 번호
-
-         String address, // 예약 장소
-
-         LocalDateTime goodsStartDateTime, // 이용일자
-
-         String thumbnailUrl // 썸네일 이미지
-) {
-    public static ReservationDetailResponse from(
-            Long reservationId,
-            String username,
-            LocalDateTime reservationDate,
-            String goodsTitle,
-            int sequence,
-            String zone,
-            Integer seatNumber,
-            String address,
-            LocalDateTime goodsStartDateTime,
-            String thumbnailUrl
-    ) {
-        return ReservationDetailResponse.builder()
-                .reservationId(reservationId)
-                .username(username)
-                .reservationDate(reservationDate)
-                .goodsTitle(goodsTitle)
-                .sequence(sequence)
-                .zone(zone)
-                .seatNumber(seatNumber)
-                .address(address)
-                .goodsStartDateTime(goodsStartDateTime)
-                .thumbnailUrl(thumbnailUrl)
-                .build();
-    }
-}
+        List<ReservationSeatInfo> seats // 좌석 정보
+){}

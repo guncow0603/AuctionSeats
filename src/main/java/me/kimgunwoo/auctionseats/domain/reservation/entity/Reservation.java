@@ -22,7 +22,6 @@ public class Reservation extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
-
     @Comment("유저")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
@@ -35,7 +34,8 @@ public class Reservation extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ReservationStatus status;
 
-    @OneToMany(mappedBy = "reservation")
+    @Comment("예매 좌석 목록")
+    @OneToMany(mappedBy = "reservation", cascade = CascadeType.PERSIST)
     private List<ReservationSeat> reservationSeats = new ArrayList<>();
 
     @Builder
@@ -44,9 +44,12 @@ public class Reservation extends BaseEntity {
         this.price = price;
         this.status = status;
     }
-
     public void addSeat(ReservationSeat seat) {
         seat.setReservation(this);
         reservationSeats.add(seat);
+    }
+
+    public void updateStatus(ReservationStatus status) {
+        this.status = status;
     }
 }
