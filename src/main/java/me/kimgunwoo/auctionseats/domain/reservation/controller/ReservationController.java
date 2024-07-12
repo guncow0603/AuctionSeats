@@ -1,16 +1,21 @@
 package me.kimgunwoo.auctionseats.domain.reservation.controller;
 
 import lombok.RequiredArgsConstructor;
+import me.kimgunwoo.auctionseats.domain.reservation.dto.request.ReservationCreateRequest;
 import me.kimgunwoo.auctionseats.domain.reservation.dto.response.ReservationDetailResponse;
+import me.kimgunwoo.auctionseats.domain.reservation.dto.response.ReservationResponse;
 import me.kimgunwoo.auctionseats.domain.reservation.service.ReservationService;
 import me.kimgunwoo.auctionseats.domain.user.entity.User;
 import me.kimgunwoo.auctionseats.global.annotaion.CurrentUser;
+import me.kimgunwoo.auctionseats.global.dto.EmptyObject;
 import me.kimgunwoo.auctionseats.global.exception.ApiException;
 import me.kimgunwoo.auctionseats.global.exception.ErrorCode;
 import me.kimgunwoo.auctionseats.global.response.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static me.kimgunwoo.auctionseats.global.exception.SuccessCode.SUCCESS_RESERVE;
 
