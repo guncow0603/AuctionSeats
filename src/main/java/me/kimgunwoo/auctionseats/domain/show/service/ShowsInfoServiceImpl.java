@@ -95,14 +95,13 @@ public class ShowsInfoServiceImpl implements ShowsInfoService {
     // 카테고리 생성 기타 입력시
     @Override
     public ShowsCategory createShowsCategory(String name) {
-        ShowsCategory showsCategory = showsCategoryRepository.findByName(name).orElse(null);
-        if (showsCategory == null) {
-            showsCategory =
+        ShowsCategory showsCategory = showsCategoryRepository.findByName(name)
+                .orElse(
                     ShowsCategory
                             .builder()
                             .name(name)
-                            .build();
-        }
+                            .build());
+
         return showsCategoryRepository.save(showsCategory);
     }
 
