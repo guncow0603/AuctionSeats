@@ -33,7 +33,7 @@ public class Places extends BaseEntity {
     private Integer countSeats = 0;
 
     @Comment("공연장 구역")
-    @OneToMany(mappedBy = "place", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "places", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Zone> zones = new ArrayList<>();
 
     @Builder

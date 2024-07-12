@@ -3,9 +3,11 @@ package me.kimgunwoo.auctionseats.domain.admin.adminService;
 import me.kimgunwoo.auctionseats.domain.admin.dto.request.GradeRequest;
 import me.kimgunwoo.auctionseats.domain.admin.dto.request.PlacesRequest;
 import me.kimgunwoo.auctionseats.domain.admin.dto.request.ShowsRequest;
+import me.kimgunwoo.auctionseats.domain.admin.dto.request.ZoneGradeRequest;
 import me.kimgunwoo.auctionseats.domain.admin.dto.response.GradeResponse;
 import me.kimgunwoo.auctionseats.domain.admin.dto.response.PlacesResponse;
 import me.kimgunwoo.auctionseats.domain.admin.dto.response.ShowsResponse;
+import me.kimgunwoo.auctionseats.domain.admin.dto.response.ZoneGradeResponse;
 import me.kimgunwoo.auctionseats.domain.place.entity.Zone;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,4 +25,7 @@ public interface AdminService {
                                                List<MultipartFile> multipartFiles);
     // 등급 생성
     GradeResponse createGrade(Long goodsId, GradeRequest gradeRequest);
+
+
+    ZoneGradeResponse createZoneGrade(ZoneGradeRequest zoneGradeRequest);
 }

@@ -5,11 +5,15 @@ import me.kimgunwoo.auctionseats.domain.admin.dto.ZoneInfo;
 import me.kimgunwoo.auctionseats.domain.admin.dto.request.GradeRequest;
 import me.kimgunwoo.auctionseats.domain.admin.dto.request.PlacesRequest;
 import me.kimgunwoo.auctionseats.domain.admin.dto.request.ShowsRequest;
+import me.kimgunwoo.auctionseats.domain.admin.dto.request.ZoneGradeRequest;
 import me.kimgunwoo.auctionseats.domain.admin.dto.response.GradeResponse;
 import me.kimgunwoo.auctionseats.domain.admin.dto.response.PlacesResponse;
 import me.kimgunwoo.auctionseats.domain.admin.dto.response.ShowsResponse;
+import me.kimgunwoo.auctionseats.domain.admin.dto.response.ZoneGradeResponse;
 import me.kimgunwoo.auctionseats.domain.grade.entity.Grade;
+import me.kimgunwoo.auctionseats.domain.grade.entity.ZoneGrade;
 import me.kimgunwoo.auctionseats.domain.grade.service.GradeService;
+import me.kimgunwoo.auctionseats.domain.grade.service.ZoneGradeService;
 import me.kimgunwoo.auctionseats.domain.place.entity.Places;
 import me.kimgunwoo.auctionseats.domain.place.entity.Zone;
 import me.kimgunwoo.auctionseats.domain.place.service.PlaceService;
@@ -48,6 +52,8 @@ public class AdminServiceImpl implements AdminService {
     public static final String GENERAL = "general/";
 
     private final GradeService gradeService;
+
+    private final ZoneGradeService zoneGradeService;
 
     // 공연장 및 구역 생성
     @Override
@@ -108,5 +114,17 @@ public class AdminServiceImpl implements AdminService {
         Shows shows = showsService.findById(showsId);
         Grade grade = gradeService.createGrade(gradeRequest, shows);
         return new GradeResponse(shows.getPlaces().getId(),grade.getId());
+    }
+
+    // 구역 등급 생성
+    @Override
+    @Transactional
+    public ZoneGradeResponse createZoneGrade(ZoneGradeRequest zoneGradeRequest) {
+        Zone zone = zoneService.getReferenceById(zoneGradeRequest.getZoneId());
+        Grade grade = gradeService.getReferenceById(zoneGradeRequest.getGradeId());
+
+        ZoneGrade zoneGrade = zoneGradeService.createZoneGrade(zoneGradeRequest, zone, grade);
+
+        return new ZoneGradeResponse(zoneGrade.getGrade().getName(), zoneGrade.getGrade().getAuctionPrice());
     }
 }
