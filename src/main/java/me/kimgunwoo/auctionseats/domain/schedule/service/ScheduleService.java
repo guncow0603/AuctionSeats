@@ -9,7 +9,7 @@ import java.util.List;
 
 @Service
 public interface ScheduleService {
-    // 회차 탐색
+    // 회차 조회
     Schedule findSchedule(Long ScheduleId);
 
     //회차 생성

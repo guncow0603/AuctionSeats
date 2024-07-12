@@ -8,6 +8,6 @@ public interface GradeService {
     // 등급 생성
     Grade createGrade(GradeRequest gradeRequest, Shows shows);
 
-    // 등급 프록시 객체 탐색
+    // 등급 프록시 객체 조회
     Grade getReferenceById(Long gradeId);
 }

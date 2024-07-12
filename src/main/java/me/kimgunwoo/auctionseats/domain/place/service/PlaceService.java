@@ -13,6 +13,6 @@ public interface PlaceService {
     // 공연장 총 좌석 개수 계산
     Integer calculateSeats(List<ZoneInfo> seats);
 
-    // 공연장 프록시 객체 탐색 생성
+    // 공연장 프록시 객체 조회
     Places getReferenceById(Long placeId);
 }
