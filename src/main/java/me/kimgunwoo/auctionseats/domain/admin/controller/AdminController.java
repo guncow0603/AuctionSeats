@@ -12,6 +12,8 @@ import me.kimgunwoo.auctionseats.domain.admin.dto.response.GradeResponse;
 import me.kimgunwoo.auctionseats.domain.admin.dto.response.PlacesResponse;
 import me.kimgunwoo.auctionseats.domain.admin.dto.response.ShowsResponse;
 import me.kimgunwoo.auctionseats.domain.admin.dto.response.ZoneGradeResponse;
+import me.kimgunwoo.auctionseats.domain.auction.dto.request.AuctionCreateRequest;
+import me.kimgunwoo.auctionseats.global.dto.EmptyObject;
 import me.kimgunwoo.auctionseats.global.response.ApiResponse;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -101,6 +103,24 @@ public class AdminController {
                                 SUCCESS_ZONE_GRADE_CREATE.getCode(),
                                 SUCCESS_ZONE_GRADE_CREATE.getMessage(),
                                 zoneGradeResponse
+                        )
+                );
+    }
+
+    // 경매 생성
+    @PostMapping("/admin/schedules/{scheduleId}/auctions")
+    public ResponseEntity<ApiResponse<EmptyObject>> createAuction(
+            @PathVariable Long scheduleId,
+            @RequestParam Long zoneGradeId,
+            @RequestBody AuctionCreateRequest auctionCreateRequest
+    ) {
+        adminService.createAuction(scheduleId, zoneGradeId, auctionCreateRequest);
+        return ResponseEntity
+                .status(SUCCESS_AUCTION_CREATE.getHttpStatus())
+                .body(
+                        ApiResponse.of(
+                                SUCCESS_AUCTION_CREATE.getCode(),
+                                SUCCESS_AUCTION_CREATE.getMessage()
                         )
                 );
     }
