@@ -364,7 +364,6 @@ public class ReservationServiceImpl implements ReservationService {
      * @param clientPrice 프론트가 보낸 가격
      */
     private void checkReservationSeats(List<ReservationSeatCreateRequest> requests, Long clientPrice) {
-        // TODO: 성능 개선하기 - ZoneGradeId 리스트로 한번에 조회하면 쿼리 호출을 줄일 수 있을 것으로 예상
         Long totalPrice = requests.stream().map(request -> {
             ZoneGrade zoneGrade = zoneGradeService.findZoneGradeWithFetch(
                     request.getZoneGradeId(),
