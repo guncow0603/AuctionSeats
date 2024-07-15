@@ -1,6 +1,9 @@
 package me.kimgunwoo.auctionseats.domain.reservation.service;
 
 
+import jakarta.servlet.http.HttpServletRequest;
+import me.kimgunwoo.auctionseats.domain.auction.entity.Auction;
+import me.kimgunwoo.auctionseats.domain.bid.entity.Bid;
 import me.kimgunwoo.auctionseats.domain.reservation.dto.request.ReservationCreateRequest;
 import me.kimgunwoo.auctionseats.domain.reservation.dto.response.ReservationDetailResponse;
 import me.kimgunwoo.auctionseats.domain.reservation.dto.response.ReservationResponse;
@@ -21,11 +24,11 @@ public interface ReservationService {
 
     /**
      * 공연 좌석 경매 기록으로 예매 기록을 생성한다.
-     * @param user 경매 낙찰 유저
+     * @param bid 경매 낙찰한 입찰
      * @param auction 경매 정보
      * @return 예매 정보를 반환한다.
      */
-    ReservationDetailResponse reserve(User user, Auction auction);
+    ReservationDetailResponse reserve(Bid bid, Auction auction);
 
     /**
      * 예매 상세 정보를 가져온다.
@@ -55,9 +58,10 @@ public interface ReservationService {
      * 인증용 QR Code 이미지를 Base64로 인코딩하여 생성한다.
      * @param user 실행 유저
      * @param reservationId 인증할 예매 id
+     * @param request HttpServletRequest
      * @return Base64로 인코딩한 QR Code 이미지를 반환한다.
      */
-    String createQRCode(User user, Long reservationId);
+    String createQRCode(User user, Long reservationId, HttpServletRequest request);
 
     /**
      * 예매 티켓 입장용 QR코드를 검사한다.

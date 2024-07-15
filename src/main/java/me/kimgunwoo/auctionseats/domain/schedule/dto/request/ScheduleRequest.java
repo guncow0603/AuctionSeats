@@ -17,9 +17,10 @@ public record ScheduleRequest (
     public Schedule toEntity(Shows shows) {
         return Schedule
                 .builder()
-                .schedule(this.schedule)
+                .sequence(this.schedule)
                 .startDateTime(startDateTime)
                 .shows(shows)
                 .build();
     }
+
 }

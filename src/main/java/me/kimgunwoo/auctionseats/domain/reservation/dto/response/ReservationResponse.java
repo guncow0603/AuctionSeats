@@ -1,9 +1,10 @@
 package me.kimgunwoo.auctionseats.domain.reservation.dto.response;
 
+import lombok.Builder;
 import me.kimgunwoo.auctionseats.domain.reservation.entity.ReservationStatus;
 
 import java.time.LocalDateTime;
-
+@Builder
 public record ReservationResponse (
         Long reservationId, // 예약번호
 

@@ -6,6 +6,8 @@ import me.kimgunwoo.auctionseats.domain.grade.entity.Grade;
 import me.kimgunwoo.auctionseats.domain.grade.entity.ZoneGrade;
 import me.kimgunwoo.auctionseats.domain.grade.repository.ZoneGradeRepository;
 import me.kimgunwoo.auctionseats.domain.place.entity.Zone;
+import me.kimgunwoo.auctionseats.global.exception.ApiException;
+import me.kimgunwoo.auctionseats.global.exception.ErrorCode;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,4 +23,9 @@ public class ZoneGradeServiceImpl implements ZoneGradeService {
         return zoneGradeRepository.save(zoneGrade);
     }
 
+    @Override
+    public ZoneGrade findZoneGradeWithFetch(Long id, boolean fetchZone, boolean fetchGrade) {
+        return zoneGradeRepository.findZoneGrade(id, fetchZone, fetchGrade)
+                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_ZONE_GRADE));
+    }
 }
