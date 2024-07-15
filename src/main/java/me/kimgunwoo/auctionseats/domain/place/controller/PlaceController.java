@@ -15,7 +15,7 @@ import static me.kimgunwoo.auctionseats.global.exception.SuccessCode.SUCCESS_GET
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/vi")
+@RequestMapping("/api/v1")
 public class PlaceController {
     private final PlaceService placeService;
 
