@@ -8,6 +8,7 @@ import me.kimgunwoo.auctionseats.domain.admin.dto.response.GradeResponse;
 import me.kimgunwoo.auctionseats.domain.admin.dto.response.PlacesResponse;
 import me.kimgunwoo.auctionseats.domain.admin.dto.response.ShowsResponse;
 import me.kimgunwoo.auctionseats.domain.admin.dto.response.ZoneGradeResponse;
+import me.kimgunwoo.auctionseats.domain.auction.dto.request.AuctionCreateRequest;
 import me.kimgunwoo.auctionseats.domain.place.entity.Zone;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,4 +29,7 @@ public interface AdminService {
 
     // 구역 등급 생성
     ZoneGradeResponse createZoneGrade(ZoneGradeRequest zoneGradeRequest);
+
+    // 경매 생성
+    void createAuction(Long scheduleId, Long zoneGradeId, AuctionCreateRequest auctionCreateRequest);
 }

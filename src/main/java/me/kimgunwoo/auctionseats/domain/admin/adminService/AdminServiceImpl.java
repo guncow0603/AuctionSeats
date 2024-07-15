@@ -10,6 +10,8 @@ import me.kimgunwoo.auctionseats.domain.admin.dto.response.GradeResponse;
 import me.kimgunwoo.auctionseats.domain.admin.dto.response.PlacesResponse;
 import me.kimgunwoo.auctionseats.domain.admin.dto.response.ShowsResponse;
 import me.kimgunwoo.auctionseats.domain.admin.dto.response.ZoneGradeResponse;
+import me.kimgunwoo.auctionseats.domain.auction.dto.request.AuctionCreateRequest;
+import me.kimgunwoo.auctionseats.domain.auction.service.AuctionService;
 import me.kimgunwoo.auctionseats.domain.grade.entity.Grade;
 import me.kimgunwoo.auctionseats.domain.grade.entity.ZoneGrade;
 import me.kimgunwoo.auctionseats.domain.grade.service.GradeService;
@@ -46,14 +48,18 @@ public class AdminServiceImpl implements AdminService {
     private final ShowsInfoService showsInfoService;
 
     private final ScheduleService scheduleService;
+
+    private final GradeService gradeService;
+
+    private final ZoneGradeService zoneGradeService;
+
+    private final AuctionService auctionService;
+
     public static final String S3_PATH = "https://auction-ticket.s3.ap-northeast-2.amazonaws.com/";
     public static final String FILE_PATH = "shows/";
     public static final String THUMBNAIL = "thumbnail/";
     public static final String GENERAL = "general/";
 
-    private final GradeService gradeService;
-
-    private final ZoneGradeService zoneGradeService;
 
     // 공연장 및 구역 생성
     @Override
@@ -125,6 +131,13 @@ public class AdminServiceImpl implements AdminService {
 
         ZoneGrade zoneGrade = zoneGradeService.createZoneGrade(zoneGradeRequest, zone, grade);
 
-        return new ZoneGradeResponse(zoneGrade.getGrade().getName(), zoneGrade.getGrade().getAuctionPrice());
+        return new ZoneGradeResponse(zoneGrade);
+    }
+
+    // 경매 생성
+    @Override
+    @Transactional
+    public void createAuction(Long scheduleId, Long zoneGradeId, AuctionCreateRequest auctionCreateRequest) {
+        auctionService.createAuction(scheduleId, zoneGradeId, auctionCreateRequest);
     }
 }
