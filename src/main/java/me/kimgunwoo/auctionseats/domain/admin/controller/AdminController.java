@@ -108,10 +108,10 @@ public class AdminController {
     }
 
     // 경매 생성
-    @PostMapping("/admin/schedules/{scheduleId}/zone-grades/{zoneGradeId}/auctions")
+    @PostMapping("/admin/schedules/{scheduleId}/auctions")
     public ResponseEntity<ApiResponse<EmptyObject>> createAuction(
             @PathVariable Long scheduleId,
-            @PathVariable Long zoneGradeId,
+            @RequestParam Long zoneGradeId,
             @RequestBody AuctionCreateRequest auctionCreateRequest
     ) {
         adminService.createAuction(scheduleId, zoneGradeId, auctionCreateRequest);
