@@ -26,7 +26,7 @@ public class PointServiceImpl implements PointService {
         }
 
         Point usePoint = Point.builder()
-                .point(point)
+                .changePoint(point)
                 .user(user)
                 .type(PointType.USE)
                 .build();
@@ -37,14 +37,27 @@ public class PointServiceImpl implements PointService {
 
     @Override
     @Transactional
+    public void refundPoint(User user, Long point) {
+        Point refundPoint = Point.builder()
+                .changePoint(point)
+                .user(user)
+                .type(PointType.REFUND)
+                .build();
+
+        user.addPoint(point);
+        pointRepository.save(refundPoint);
+    }
+
+    @Override
+    @Transactional
     public void chargePoint(User user, Long point) {
         Point chargePoint = Point.builder()
-                .point(point)
+                .changePoint(point)
                 .user(user)
                 .type(PointType.CHARGE)
                 .build();
 
-        user.chargePoint(point);
+        user.addPoint(point);
         pointRepository.save(chargePoint);
     }
 }

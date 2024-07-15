@@ -82,7 +82,7 @@ public class User extends BaseEntity {
         this.role = role;
     }
 
-    public void chargePoint(Long point) {
+    public void addPoint(Long point) {
         this.point += point;
     }
 
@@ -97,9 +97,11 @@ public class User extends BaseEntity {
     public void updatePhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
     public void updatePassword(String password) {
         this.password = password;
     }
+
     public void delete() {
         this.isDeleted = true;
     }

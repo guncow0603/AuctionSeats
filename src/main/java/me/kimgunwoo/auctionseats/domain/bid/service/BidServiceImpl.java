@@ -8,6 +8,7 @@ import me.kimgunwoo.auctionseats.domain.bid.dto.request.BidRequest;
 import me.kimgunwoo.auctionseats.domain.bid.entity.Bid;
 import me.kimgunwoo.auctionseats.domain.bid.repository.BidRepository;
 import me.kimgunwoo.auctionseats.domain.user.entity.User;
+import me.kimgunwoo.auctionseats.domain.user.service.PointService;
 import me.kimgunwoo.auctionseats.global.annotaion.DistributedLock;
 import me.kimgunwoo.auctionseats.global.exception.ApiException;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,7 @@ public class BidServiceImpl implements BidService {
     private final AuctionRepository auctionRepository;
     private final BidRepository bidRepository;
     private final BidRedisService bidRedisService;
+    private final PointService pointService;
 
     @Override
     @DistributedLock(key = "T(com.sparta.ticketauction.domain.auction.constant.AuctionConstant).AUCTION_BID_KEY_PREFIX.concat(#auctionId)")
@@ -52,13 +54,12 @@ public class BidServiceImpl implements BidService {
         Optional<Bid> currentBid = getCurrentBid(auction);
         if (currentBid.isPresent()) {
             User currentBidder = currentBid.get().getUser();
-            currentBidder.chargePoint(currentBidPrice);
+            pointService.chargePoint(currentBidder, currentBidPrice);
         }
 
         //새 입찰자 포인트 차감 및 경매 입찰가 갱신
-        bidder.usePoint(newBidPrice);
+        pointService.usePoint(bidder, newBidPrice);
     }
-
     public void saveBid(User bidder, long newBidPrice, Auction auction) {
         Bid newBid = Bid.builder()
                 .price(newBidPrice)

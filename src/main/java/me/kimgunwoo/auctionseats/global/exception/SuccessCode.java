@@ -1,8 +1,8 @@
 package me.kimgunwoo.auctionseats.global.exception;
-import org.springframework.http.HttpStatus;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
 
 @Getter
 @AllArgsConstructor
@@ -42,7 +42,11 @@ public enum SuccessCode {
 
     /* RESERVATION */
     SUCCESS_RESERVE(HttpStatus.CREATED, "R00000", "예매 성공했습니다."),
-
+    SUCCESS_SEARCH_RESERVATION(HttpStatus.OK, "R00001", "예매 조회 성공"),
+    SUCCESS_SEARCH_RESERVATIONS(HttpStatus.OK, "R00002", "예매 목록 조회 성공"),
+    SUCCESS_CANCEL_RESERVATION(HttpStatus.OK, "R00003", "예매 취소 성공"),
+    SUCCESS_CREATE_RESERVATION_AUTHENTICATION_QRCODE(HttpStatus.OK, "R00004", "예매 인증 QR코드 생성 성공"),
+    SUCCESS_AUTHENTICATE_RESERVATION(HttpStatus.OK, "R00005", "예매 인증 성공"),
 
     /* GLOBAL */
     OK(HttpStatus.OK, "", "성공");
