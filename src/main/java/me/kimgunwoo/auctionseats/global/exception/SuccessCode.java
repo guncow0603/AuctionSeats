@@ -23,6 +23,7 @@ public enum SuccessCode {
 
 
     /* PLACE */
+    SUCCESS_GET_ALL_PLACE(HttpStatus.OK, "P00000", "공연장 전체 조회 성공"),
 
 
     /* TOKEN */
