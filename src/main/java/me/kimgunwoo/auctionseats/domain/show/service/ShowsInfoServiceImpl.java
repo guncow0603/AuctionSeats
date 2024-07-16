@@ -11,6 +11,8 @@ import me.kimgunwoo.auctionseats.domain.show.repository.ShowsImageRepository;
 import me.kimgunwoo.auctionseats.domain.show.repository.ShowsInfoRepository;
 import me.kimgunwoo.auctionseats.global.exception.ApiException;
 import me.kimgunwoo.auctionseats.global.util.S3Uploader;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -117,6 +119,13 @@ public class ShowsInfoServiceImpl implements ShowsInfoService {
                 .orElseThrow(() -> new ApiException(NOT_FOUND_SHOWS_INFO)
                 );
         return new ShowsInfoGetResponse(showsInfo);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ShowsInfoGetSliceResponse getSliceShowsInfo(Pageable pageable, String categoryName) {
+        Slice<ShowsInfo> showsInfoSlice = showsInfoRepository.findByCategoryName(pageable, categoryName);
+        return new ShowsInfoGetSliceResponse(showsInfoSlice);
     }
 
 }

@@ -5,6 +5,7 @@ import me.kimgunwoo.auctionseats.domain.show.dto.response.ShowsInfoGetResponse;
 import me.kimgunwoo.auctionseats.domain.show.entity.ShowsCategory;
 import me.kimgunwoo.auctionseats.domain.show.entity.ShowsImage;
 import me.kimgunwoo.auctionseats.domain.show.entity.ShowsInfo;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -32,4 +33,5 @@ public interface ShowsInfoService {
     // 공연 정보 단건 조회
     ShowsInfoGetResponse getShowsInfo(Long showsInfoId);
 
+    ShowsInfoGetSliceResponse getSliceShowsInfo(Pageable pageable, String categoryName);
 }
