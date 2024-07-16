@@ -29,7 +29,8 @@ public enum SuccessCode {
     /* TOKEN */
     SUCCESS_REISSUE_TOKEN(HttpStatus.CREATED, "T00000", "토큰 재발급에 성공했습니다."),
 
-
+    /* ZONE */
+    SUCCESS_GET_ALL_ZONE(HttpStatus.OK, "Z00000", "구역 전체 조회 성공"),
 
 
     /* AUCTION */
