@@ -20,7 +20,7 @@ public class ShowsController {
     private final ShowsInfoService showsInfoService;
 
     // 공연 정보 단건 조회
-    @GetMapping("/shows-info/{showsInfoId}")
+    @GetMapping("/shows-infos/{showsInfoId}")
     public ResponseEntity<ApiResponse<ShowsInfoGetResponse>> getShowsInfo(@PathVariable Long showsInfoId) {
         ShowsInfoGetResponse showsInfoGetResponse = showsInfoService.getShowsInfo(showsInfoId);
         return ResponseEntity
@@ -33,7 +33,7 @@ public class ShowsController {
                 );
     }
 
-    @GetMapping("/shows-info/slice")
+    @GetMapping("/shows-infos/slices")
     public ResponseEntity<ApiResponse<ShowsInfoGetSliceResponse>> getSliceShowsInfo(Pageable pageable,
                                                                                     @RequestParam(value = "categoryName", required = false) String categoryName) {
         ShowsInfoGetSliceResponse showsInfoGetSliceResponse = showsInfoService.getSliceShowsInfo(pageable,
