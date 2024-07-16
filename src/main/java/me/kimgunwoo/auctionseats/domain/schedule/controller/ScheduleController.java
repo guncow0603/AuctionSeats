@@ -6,6 +6,7 @@ import me.kimgunwoo.auctionseats.domain.schedule.service.ScheduleService;
 import me.kimgunwoo.auctionseats.global.response.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,7 +23,7 @@ public class ScheduleController {
 
     // 해당 공연에 대한 전 회차 조회
     @GetMapping("/shows/{showsId}/schedules")
-    public ResponseEntity<ApiResponse<List<ScheduleGetResponse>>> getAllSequence(Long showsId) {
+    public ResponseEntity<ApiResponse<List<ScheduleGetResponse>>> getAllSequence(@PathVariable Long showsId) {
         List<ScheduleGetResponse> scheduleGetResponses = scheduleService.getAllSchedule(showsId);
 
         return ResponseEntity
