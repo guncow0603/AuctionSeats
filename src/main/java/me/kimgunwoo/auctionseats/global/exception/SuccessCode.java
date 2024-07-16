@@ -21,6 +21,7 @@ public enum SuccessCode {
 
     /* SHOWS */
     SUCCESS_GET_SHOWS_INFO(HttpStatus.OK, "S00000", "공연 정보 조회 성공"),
+    SUCCESS_GET_SLICE_SHOWS_INFO(HttpStatus.OK, "G00001", "공연 페이징 조회 성공"),
 
 
     /* PLACE */
