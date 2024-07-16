@@ -9,7 +9,6 @@ import me.kimgunwoo.auctionseats.domain.show.entity.ShowsInfo;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
 
 
 public record ShowsRequest (
@@ -41,7 +40,6 @@ public record ShowsRequest (
                         .description(this.description)
                         .ageGrade(this.ageGrade)
                         .runningTime(this.runningTime)
-                        .showsImage(new ArrayList<>())
                         .build();}
         public Shows toShowsEntity(Places places, ShowsInfo showsInfo) {
                 return Shows
