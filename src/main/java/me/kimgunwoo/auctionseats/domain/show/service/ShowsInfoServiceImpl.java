@@ -125,7 +125,7 @@ public class ShowsInfoServiceImpl implements ShowsInfoService {
     @Override
     @Transactional(readOnly = true)
     public ShowsInfoGetSliceResponse getSliceShowsInfo(Pageable pageable, String categoryName) {
-        Slice<ShowsInfo> showsInfoSlice = showsInfoRepository.findByCategoryName(pageable, categoryName);
+        Slice<ShowsInfo> showsInfoSlice = showsInfoRepository.findAllByCategoryName(pageable, categoryName);
         return new ShowsInfoGetSliceResponse(showsInfoSlice);
     }
 
