@@ -28,4 +28,7 @@ public interface ShowsInfoService {
     // 공연 이미지 타입 체크
     String checkShowsType(String type);
 
+    // 공연 정보 단건 조회
+    ShowsInfoGetResponse getShowsInfo(Long showsInfoId);
+
 }
