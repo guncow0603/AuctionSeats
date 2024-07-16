@@ -52,16 +52,12 @@ public class ShowsInfo extends BaseEntity {
             String name,
             String description,
             Integer runningTime,
-            Integer ageGrade,
-            ShowsCategory showsCategory,
-            List<ShowsImage> showsImage
+            Integer ageGrade
     ) {
         this.name = name;
         this.description = description;
         this.runningTime = runningTime;
         this.ageGrade = AgeGrade.of(ageGrade);
-        this.showsCategory = showsCategory;
-        this.showsImage = showsImage;
     }
 
     public void addShowsImage(List<ShowsImage> showsImages) {
