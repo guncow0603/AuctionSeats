@@ -43,3 +43,10 @@ cloud: # S3
       static: ap-northeast-2
     stack:
       auto: false
+
+payment:
+  toss:
+    client-key: ${TOSS_CLIENT_KEY}
+    secret-key: ${TOSS_SECRET_KEY}
+    success-url: ${SUCCESS_URL}
+    fail-url: ${FAIL_URL}
