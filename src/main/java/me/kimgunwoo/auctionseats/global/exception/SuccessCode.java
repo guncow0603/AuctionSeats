@@ -20,30 +20,31 @@ public enum SuccessCode {
     SUCCESS_UPDATE_USER_PASSWORD(HttpStatus.OK, "U00401", "비밀 번호 변경에 성공했습니다."),
 
     /* SHOWS */
-    SUCCESS_GET_SHOWS_INFO(HttpStatus.OK, "S00000", "공연 정보 조회 성공"),
-    SUCCESS_GET_SLICE_SHOWS_INFO(HttpStatus.OK, "G00001", "공연 페이징 조회 성공"),
-
+    SUCCESS_GET_SHOWS_INFO(HttpStatus.OK, "S00000", "공연 정보 조회 성공했습니다."),
+    SUCCESS_GET_SLICE_SHOWS_INFO(HttpStatus.OK, "S00001", "공연 페이징 조회 성공했습니다."),
 
     /* PLACE */
-    SUCCESS_GET_ALL_PLACE(HttpStatus.OK, "P00000", "공연장 전체 조회 성공"),
-
-
-    /* TOKEN */
-    SUCCESS_REISSUE_TOKEN(HttpStatus.CREATED, "T00000", "토큰 재발급에 성공했습니다."),
+    SUCCESS_GET_ALL_PLACE(HttpStatus.OK, "P00000", "공연장 전체 조회 성공했습니다."),
 
     /* ZONE */
-    SUCCESS_GET_ALL_ZONE(HttpStatus.OK, "Z00000", "구역 전체 조회 성공"),
+    SUCCESS_GET_ALL_ZONE(HttpStatus.OK, "Z00000", "구역 전체 조회 성공했습니다."),
 
-
+    /* SCHEDULE */
+    SUCCESS_GET_ALL_SCHEDULE(HttpStatus.OK, "S00000", "전 회차 조회 성공했습니다."),
+    
+    /* TOKEN */
+    SUCCESS_REISSUE_TOKEN(HttpStatus.CREATED, "T00000", "토큰 재발급에 성공했습니다."),
+    
     /* AUCTION */
     SUCCESS_BID(HttpStatus.CREATED, "A00100", "입찰에 성공했습니다."),
 
     /* ADMIN */
     SUCCESS_SHOWS_AND_SCHEDULE_CREATE(HttpStatus.CREATED, "M09900", "공연정보, 공연 및 회차 생성을 성공했습니다."),
     SUCCESS_PLACE_AND_ZONE_CREATE(HttpStatus.CREATED, "M09901", "공연장 및 구역 생성을 성공했습니다."),
-    SUCCESS_GRADE_CREATE(HttpStatus.CREATED, "M09902", "등급 생성 성공"),
-    SUCCESS_ZONE_GRADE_CREATE(HttpStatus.CREATED, "M09903", "구역 등급 생성 성공"),
-    SUCCESS_AUCTION_CREATE(HttpStatus.CREATED, "M09904", "경매 생성 성공"),
+    SUCCESS_GRADE_CREATE(HttpStatus.CREATED, "M09902", "등급 생성 성공했습니다."),
+    SUCCESS_ZONE_GRADE_CREATE(HttpStatus.CREATED, "M09903", "구역 등급 생성 성공했습니다."),
+    SUCCESS_AUCTION_CREATE(HttpStatus.CREATED, "M09904", "경매 생성 성공했습니다."),
+
     /* RESERVATION */
     SUCCESS_RESERVE(HttpStatus.CREATED, "R00000", "예매 성공했습니다."),
     SUCCESS_SEARCH_RESERVATION(HttpStatus.OK, "R00001", "예매 조회 성공"),
