@@ -64,7 +64,8 @@ public class WebSecurityConfig {
                                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                                 .requestMatchers("/api/v1/").permitAll()
                                 .requestMatchers("/api/v1/users/login").permitAll()
-                                .requestMatchers("/api/v1/auth/status").permitAll()
+                                .requestMatchers("/api/v1/auth/status", "/api/v1/payments/getKey").permitAll()
+                                .requestMatchers("/*.html").permitAll()
                                 .requestMatchers("/api/v1/users/signup", "/api/v1/auth/login").permitAll()
                                 .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
                                 .anyRequest().authenticated()
@@ -72,8 +73,9 @@ public class WebSecurityConfig {
 
         http.formLogin((formLogin) ->
                 formLogin
-                        .loginPage("/api/v1/users/login")
-                        .defaultSuccessUrl("/api/v1/")
+                        .loginPage("/login.html")
+                        .defaultSuccessUrl("/index.html")
+                        .permitAll()
         );
 
         http
