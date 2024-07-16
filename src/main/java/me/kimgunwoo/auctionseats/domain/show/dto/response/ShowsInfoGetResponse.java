@@ -1,9 +1,6 @@
 package me.kimgunwoo.auctionseats.domain.show.dto.response;
 
 import lombok.Getter;
-import me.kimgunwoo.auctionseats.domain.show.entity.AgeGrade;
-import me.kimgunwoo.auctionseats.domain.show.entity.ShowsCategory;
-import me.kimgunwoo.auctionseats.domain.show.entity.ShowsImage;
 import me.kimgunwoo.auctionseats.domain.show.entity.ShowsInfo;
 
 import java.util.List;
@@ -16,18 +13,18 @@ public class ShowsInfoGetResponse {
 
     private final Integer runningTime;
 
-    private final AgeGrade ageGrade;
+    private final String ageGrade;
 
-    private final ShowsCategory showsCategory;
+    private final String showsCategory;
 
-    private final List<ShowsImage> showsImages;
+    private final List<ShowsImageResponse> showsImages;
 
     public ShowsInfoGetResponse(ShowsInfo showsInfo) {
         this.name = showsInfo.getName();
         this.description = showsInfo.getDescription();
         this.runningTime = showsInfo.getRunningTime();
-        this.ageGrade = showsInfo.getAgeGrade();
-        this.showsCategory = showsInfo.getShowsCategory();
-        this.showsImages = showsInfo.getShowsImage();
+        this.ageGrade = showsInfo.getAgeGrade().getKorea();
+        this.showsCategory = showsInfo.getShowsCategory().getName();
+        this.showsImages = showsInfo.getShowsImage().stream().map(ShowsImageResponse::new).toList();
     }
 }
