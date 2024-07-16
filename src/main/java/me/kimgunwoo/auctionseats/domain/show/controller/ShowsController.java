@@ -32,7 +32,7 @@ public class ShowsController {
                                 showsInfoGetResponse)
                 );
     }
-
+    // 공연 정보 카테고리별 페이징 페이징 조회
     @GetMapping("/shows-infos/slices")
     public ResponseEntity<ApiResponse<ShowsInfoGetSliceResponse>> getSliceShowsInfo(Pageable pageable,
                                                                                     @RequestParam(value = "categoryName", required = false) String categoryName) {

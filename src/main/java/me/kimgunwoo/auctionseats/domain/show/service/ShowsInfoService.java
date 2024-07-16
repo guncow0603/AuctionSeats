@@ -34,5 +34,6 @@ public interface ShowsInfoService {
     // 공연 정보 단건 조회
     ShowsInfoGetResponse getShowsInfo(Long showsInfoId);
 
+    // 공연 정보 카테고리별 페이징 페이징 조회
     ShowsInfoGetSliceResponse getSliceShowsInfo(Pageable pageable, String categoryName);
 }

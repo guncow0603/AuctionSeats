@@ -122,6 +122,7 @@ public class ShowsInfoServiceImpl implements ShowsInfoService {
         return new ShowsInfoGetResponse(showsInfo);
     }
 
+    // 공연 정보 카테고리별 페이징 페이징 조회
     @Override
     @Transactional(readOnly = true)
     public ShowsInfoGetSliceResponse getSliceShowsInfo(Pageable pageable, String categoryName) {
