@@ -2,20 +2,24 @@ package me.kimgunwoo.auctionseats.domain.show.service;
 
 import lombok.RequiredArgsConstructor;
 import me.kimgunwoo.auctionseats.domain.admin.dto.request.ShowsRequest;
+import me.kimgunwoo.auctionseats.domain.show.dto.response.ShowsInfoGetResponse;
 import me.kimgunwoo.auctionseats.domain.show.entity.ShowsCategory;
 import me.kimgunwoo.auctionseats.domain.show.entity.ShowsImage;
 import me.kimgunwoo.auctionseats.domain.show.entity.ShowsInfo;
 import me.kimgunwoo.auctionseats.domain.show.repository.ShowsCategoryRepository;
 import me.kimgunwoo.auctionseats.domain.show.repository.ShowsImageRepository;
 import me.kimgunwoo.auctionseats.domain.show.repository.ShowsInfoRepository;
+import me.kimgunwoo.auctionseats.global.exception.ApiException;
 import me.kimgunwoo.auctionseats.global.util.S3Uploader;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static me.kimgunwoo.auctionseats.domain.admin.adminService.AdminServiceImpl.*;
+import static me.kimgunwoo.auctionseats.global.exception.ErrorCode.NOT_FOUND_SHOWS_INFO;
 
 @Service
 @RequiredArgsConstructor
@@ -103,6 +107,16 @@ public class ShowsInfoServiceImpl implements ShowsInfoService {
                             .build());
 
         return showsCategoryRepository.save(showsCategory);
+    }
+
+    // 공연 정보 단건 조회
+    @Override
+    @Transactional(readOnly = true)
+    public ShowsInfoGetResponse getShowsInfo(Long showsInfoId) {
+        ShowsInfo showsInfo = showsInfoRepository.findById(showsInfoId)
+                .orElseThrow(() -> new ApiException(NOT_FOUND_SHOWS_INFO)
+                );
+        return new ShowsInfoGetResponse(showsInfo);
     }
 
 }

@@ -20,6 +20,7 @@ public enum SuccessCode {
     SUCCESS_UPDATE_USER_PASSWORD(HttpStatus.OK, "U00401", "비밀 번호 변경에 성공했습니다."),
 
     /* SHOWS */
+    SUCCESS_GET_SHOWS_INFO(HttpStatus.OK, "S00000", "공연 정보 조회 성공"),
 
 
     /* PLACE */
