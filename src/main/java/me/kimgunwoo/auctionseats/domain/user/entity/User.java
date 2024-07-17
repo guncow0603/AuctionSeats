@@ -69,6 +69,7 @@ public class User extends BaseEntity {
             String name,
             String nickname,
             String phoneNumber,
+            Long point,
             LocalDate birth,
             Role role
     ) {
@@ -78,6 +79,7 @@ public class User extends BaseEntity {
         this.name = name;
         this.nickname = nickname;
         this.phoneNumber = phoneNumber;
+        this.point = point;
         this.birth = birth;
         this.role = role;
     }
