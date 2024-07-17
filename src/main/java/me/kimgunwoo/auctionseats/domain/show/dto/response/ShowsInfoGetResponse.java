@@ -10,9 +10,7 @@ import java.util.List;
 @Getter
 public class ShowsInfoGetResponse {
     private final List<ShowsGetResponse> showsGetResponse;
-    
-    private final Long showsId;
-    
+
     private final String name;
 
     private final String description;

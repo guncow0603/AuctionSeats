@@ -2,14 +2,8 @@ package me.kimgunwoo.auctionseats.domain.admin.adminService;
 
 import lombok.RequiredArgsConstructor;
 import me.kimgunwoo.auctionseats.domain.admin.dto.ZoneInfo;
-import me.kimgunwoo.auctionseats.domain.admin.dto.request.GradeCreateRequest;
-import me.kimgunwoo.auctionseats.domain.admin.dto.request.PlaceCreateRequest;
-import me.kimgunwoo.auctionseats.domain.admin.dto.request.ShowsCreateRequest;
-import me.kimgunwoo.auctionseats.domain.admin.dto.request.ZoneGradeCreateRequest;
-import me.kimgunwoo.auctionseats.domain.admin.dto.response.GradeCreateResponse;
-import me.kimgunwoo.auctionseats.domain.admin.dto.response.PlaceCreateResponse;
-import me.kimgunwoo.auctionseats.domain.admin.dto.response.ShowsCreateResponse;
-import me.kimgunwoo.auctionseats.domain.admin.dto.response.ZoneGradeCreateResponse;
+import me.kimgunwoo.auctionseats.domain.admin.dto.request.*;
+import me.kimgunwoo.auctionseats.domain.admin.dto.response.*;
 import me.kimgunwoo.auctionseats.domain.auction.dto.request.AuctionCreateRequest;
 import me.kimgunwoo.auctionseats.domain.auction.service.AuctionService;
 import me.kimgunwoo.auctionseats.domain.grade.entity.Grade;
@@ -38,100 +32,104 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class AdminServiceImpl implements AdminService {
-
     private final PlaceService placeService;
-
-    private final ZoneService zoneService;
-
     private final ShowsService showsService;
-
+    private final ZoneService zoneService;
     private final ShowsInfoService showsInfoService;
-
     private final ScheduleService scheduleService;
-
     private final GradeService gradeService;
-
     private final ZoneGradeService zoneGradeService;
-
     private final AuctionService auctionService;
-
     public static final String S3_PATH = "https://auction-ticket.s3.ap-northeast-2.amazonaws.com/";
     public static final String FILE_PATH = "shows/";
     public static final String THUMBNAIL = "thumbnail/";
     public static final String GENERAL = "general/";
-
-
     // 공연장 및 구역 생성
     @Override
     @Transactional
-    public List<PlaceCreateResponse> createPlaceAndZone(PlaceCreateRequest placesRequest) {
-        List<ZoneInfo> zoneInfos = placesRequest.zoneInfos();
-        Places places = placeService.createPlace(placesRequest);
+    public List<PlaceCreateResponse> createPlaceAndZone(PlaceCreateRequest placeCreateRequest) {
+        List<ZoneInfo> zoneInfos = placeCreateRequest.zoneInfos();
+        Places places = placeService.createPlace(placeCreateRequest);
         List<Zone> zoneList = zoneService.createZone(zoneInfos);
         places.updateZone(zoneList);
 
         return createPlaceResponse(zoneList);
-
     }
 
     // 공연장 및 구역 응답 생성
     @Override
     public List<PlaceCreateResponse> createPlaceResponse(List<Zone> zoneList) {
-        List<PlaceCreateResponse> placesResponseList = new ArrayList<>();
+        List<PlaceCreateResponse> placeCreateResponseList = new ArrayList<>();
 
         for (Zone zone : zoneList) {
-            placesResponseList.add(new PlaceCreateResponse(zone.getName(), zone.getSeatNumber(), zone.getPlaces().getId()));
+            placeCreateResponseList.add(
+                    new PlaceCreateResponse(zone.getName(), zone.getSeatNumber(), zone.getPlaces().getId()));
         }
 
-        return placesResponseList;
+        return placeCreateResponseList;
     }
 
     //  공연과 관련된 공연 정보, 공연 카테고리, 공연 이미지, 공연 및 회차 생성
     @Override
     @Transactional
-    public ShowsCreateResponse createShowsBundleAndSchedule(
+    public ShowsInfoCreateResponse createShowsBundle(
             Long placeId,
-            ShowsCreateRequest showsRequest,
+            ShowsInfoCreateRequest showsInfoCreateRequest,
             List<MultipartFile> multipartFiles) {
 
-        Places places = placeService.getReferenceById(placeId);
-
-        ShowsInfo showsInfo = showsInfoService.createShowsInfo(showsRequest);
+        ShowsInfo showsInfo = showsInfoService.createShowsInfo(showsInfoCreateRequest);
 
         List<ShowsImage> showsImages = showsInfoService.createShowsImage(multipartFiles, showsInfo);
         showsInfo.addShowsImage(showsImages);
 
-        ShowsCategory showsCategory = showsInfoService.createShowsCategory(showsRequest.categoryName());
+        ShowsCategory showsCategory = showsInfoService.createShowsCategory(showsInfoCreateRequest.getCategoryName());
         showsInfo.updateShowsCategory(showsCategory);
 
-        Shows shows = showsService.createShows(showsRequest, places, showsInfo);
+        return new ShowsInfoCreateResponse(showsInfo.getId());
 
+    }
+
+    // 공연 및 회차 생성
+    @Override
+    @Transactional
+    public ShowsCreateResponse createShowsAndSchedule(
+            ShowsCreateRequest showsCreateRequest,
+            Long showsInfoId,
+            Long placeId) {
+
+        Places places = placeService.getReferenceById(placeId);
+
+        ShowsInfo showsInfo = showsInfoService.findByShowsInfoId(showsInfoId);
+
+        Shows shows = showsService.createShows(showsCreateRequest, places, showsInfo);
         showsInfo.addShows(shows);
 
-        LocalTime startTime = showsRequest.startTime();
+        LocalTime startTime = showsCreateRequest.startTime();
+
         scheduleService.createSchedule(shows, startTime);
 
         return new ShowsCreateResponse(shows.getId());
-
     }
 
     // 구역 생성
     @Override
     @Transactional
-    public GradeCreateResponse createGrade(Long showsId, GradeCreateRequest gradeRequest) {
+    public GradeCreateResponse createGrade(Long showsId, GradeCreateRequest gradeCreateRequest) {
         Shows shows = showsService.findById(showsId);
-        Grade grade = gradeService.createGrade(gradeRequest, shows);
-        return new GradeCreateResponse(shows.getPlaces().getId(),grade.getId());
+
+        Grade grade = gradeService.createGrade(gradeCreateRequest, shows);
+
+        return new GradeCreateResponse(shows.getPlaces().getId(), grade.getId());
     }
 
     // 구역 등급 생성
     @Override
     @Transactional
-    public ZoneGradeCreateResponse createZoneGrade(ZoneGradeCreateRequest zoneGradeRequest) {
-        Zone zone = zoneService.getReferenceById(zoneGradeRequest.getZoneId());
-        Grade grade = gradeService.getReferenceById(zoneGradeRequest.getGradeId());
+    public ZoneGradeCreateResponse createZoneGrade(ZoneGradeCreateRequest zoneGradeCreateRequest) {
+        Zone zone = zoneService.getReferenceById(zoneGradeCreateRequest.getZoneId());
+        Grade grade = gradeService.getReferenceById(zoneGradeCreateRequest.getGradeId());
 
-        ZoneGrade zoneGrade = zoneGradeService.createZoneGrade(zoneGradeRequest, zone, grade);
+        ZoneGrade zoneGrade = zoneGradeService.createZoneGrade(zoneGradeCreateRequest, zone, grade);
 
         return new ZoneGradeCreateResponse(zoneGrade);
     }
