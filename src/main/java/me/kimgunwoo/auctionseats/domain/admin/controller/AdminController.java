@@ -4,14 +4,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.kimgunwoo.auctionseats.domain.admin.adminService.AdminServiceImpl;
-import me.kimgunwoo.auctionseats.domain.admin.dto.request.GradeCreateRequest;
-import me.kimgunwoo.auctionseats.domain.admin.dto.request.PlaceCreateRequest;
-import me.kimgunwoo.auctionseats.domain.admin.dto.request.ShowsCreateRequest;
-import me.kimgunwoo.auctionseats.domain.admin.dto.request.ZoneGradeCreateRequest;
-import me.kimgunwoo.auctionseats.domain.admin.dto.response.GradeCreateResponse;
-import me.kimgunwoo.auctionseats.domain.admin.dto.response.PlaceCreateResponse;
-import me.kimgunwoo.auctionseats.domain.admin.dto.response.ShowsCreateResponse;
-import me.kimgunwoo.auctionseats.domain.admin.dto.response.ZoneGradeCreateResponse;
+import me.kimgunwoo.auctionseats.domain.admin.dto.request.*;
+import me.kimgunwoo.auctionseats.domain.admin.dto.response.*;
 import me.kimgunwoo.auctionseats.domain.auction.dto.request.AuctionCreateRequest;
 import me.kimgunwoo.auctionseats.global.dto.EmptyObject;
 import me.kimgunwoo.auctionseats.global.response.ApiResponse;
@@ -30,37 +24,63 @@ import static me.kimgunwoo.auctionseats.global.exception.SuccessCode.*;
 @Slf4j
 public class AdminController {
     private final AdminServiceImpl adminService;
+
     // 공연장 및 구역 생성
     @PostMapping("/admin/places")
     public ResponseEntity<ApiResponse<List<PlaceCreateResponse>>> createPlaceAndZone(
-            @Valid @RequestBody PlaceCreateRequest placeRequest
+            @Valid @RequestBody PlaceCreateRequest placeCreateRequest
     ) {
-        List<PlaceCreateResponse> placeResponseList = adminService.createPlaceAndZone(placeRequest);
+        List<PlaceCreateResponse> placeCreateResponseList = adminService.createPlaceAndZone(placeCreateRequest);
         return ResponseEntity
                 .status(SUCCESS_PLACE_AND_ZONE_CREATE.getHttpStatus())
                 .body(
                         ApiResponse.of(
                                 SUCCESS_PLACE_AND_ZONE_CREATE.getCode(),
                                 SUCCESS_PLACE_AND_ZONE_CREATE.getMessage(),
-                                placeResponseList)
+                                placeCreateResponseList)
                 );
     }
-    //  공연과 관련된 공연 정보, 공연 카테고리, 공연 이미지, 공연 및 회차 생성
-    @PostMapping(value = "/admin/places/{placeId}/shows",
+
+    //  공연과 관련된 공연 정보, 공연 카테고리, 공연 이미지 생성
+    @PostMapping(value = "/admin/showsInfos",
             consumes = {
                     MediaType.APPLICATION_JSON_VALUE,
                     MediaType.MULTIPART_FORM_DATA_VALUE
             })
-    public ResponseEntity<ApiResponse<ShowsCreateResponse>> createShowsBundleAndSchedule(
-            @Valid @RequestPart ShowsCreateRequest showsRequest,
+    public ResponseEntity<ApiResponse<ShowsInfoCreateResponse>> createShowsInfo(
+            @Valid @RequestPart ShowsInfoCreateRequest showsInfoCreateRequest,
             @RequestPart(value = "files", required = false) List<MultipartFile> multipartFiles,
             @PathVariable Long placeId
     ) {
-        ShowsCreateResponse showsResponse =
-                adminService.createShowsBundleAndSchedule(
+        ShowsInfoCreateResponse showsInfoCreateResponse =
+                adminService.createShowsBundle(
                         placeId,
-                        showsRequest,
+                        showsInfoCreateRequest,
                         multipartFiles
+                );
+        return ResponseEntity
+                .status(SUCCESS_SHOWS_INFO_CREATE.getHttpStatus())
+                .body(
+                        ApiResponse.of(
+                                SUCCESS_SHOWS_INFO_CREATE.getCode(),
+                                SUCCESS_SHOWS_INFO_CREATE.getMessage(),
+                                showsInfoCreateResponse
+                        )
+                );
+    }
+
+    // 공연 및 회차 생성
+    @PostMapping("/admin/shows-infos/{showsInfoId}/shows")
+    public ResponseEntity<ApiResponse<ShowsCreateResponse>> createShowsAndSchedule(
+            @Valid @RequestBody ShowsCreateRequest showsCreateRequest,
+            @PathVariable Long showsInfoId,
+            @RequestParam Long placeId
+    ) {
+        ShowsCreateResponse showsCreateResponse =
+                adminService.createShowsAndSchedule(
+                        showsCreateRequest,
+                        showsInfoId,
+                        placeId
                 );
         return ResponseEntity
                 .status(SUCCESS_SHOWS_AND_SCHEDULE_CREATE.getHttpStatus())
@@ -68,17 +88,18 @@ public class AdminController {
                         ApiResponse.of(
                                 SUCCESS_SHOWS_AND_SCHEDULE_CREATE.getCode(),
                                 SUCCESS_SHOWS_AND_SCHEDULE_CREATE.getMessage(),
-                                showsResponse
+                                showsCreateResponse
                         )
                 );
     }
+
     // 등급 생성
     @PostMapping("/admin/shows/{showsId}/grades")
     public ResponseEntity<ApiResponse<GradeCreateResponse>> createGrade(
             @PathVariable Long showsId,
-            @Valid @RequestBody GradeCreateRequest gradeRequest) {
+            @Valid @RequestBody GradeCreateRequest gradeCreateRequest) {
 
-        GradeCreateResponse gradeResponse = adminService.createGrade(showsId, gradeRequest);
+        GradeCreateResponse gradeCreateResponse = adminService.createGrade(showsId, gradeCreateRequest);
 
         return ResponseEntity
                 .status(SUCCESS_GRADE_CREATE.getHttpStatus())
@@ -86,27 +107,26 @@ public class AdminController {
                         ApiResponse.of(
                                 SUCCESS_GRADE_CREATE.getCode(),
                                 SUCCESS_GRADE_CREATE.getMessage(),
-                                gradeResponse)
+                                gradeCreateResponse)
                 );
     }
 
     // 구역 등급 생성
     @PostMapping("/admin/zone-grades")
     public ResponseEntity<ApiResponse<ZoneGradeCreateResponse>> createZoneGrade(
-            @RequestBody ZoneGradeCreateRequest zoneGradeRequest
+            @RequestBody ZoneGradeCreateRequest zoneGradeCreateRequest
     ) {
-        ZoneGradeCreateResponse zoneGradeResponse = adminService.createZoneGrade(zoneGradeRequest);
+        ZoneGradeCreateResponse zoneGradeCreateResponse = adminService.createZoneGrade(zoneGradeCreateRequest);
         return ResponseEntity
                 .status(SUCCESS_ZONE_GRADE_CREATE.getHttpStatus())
                 .body(
                         ApiResponse.of(
                                 SUCCESS_ZONE_GRADE_CREATE.getCode(),
                                 SUCCESS_ZONE_GRADE_CREATE.getMessage(),
-                                zoneGradeResponse
+                                zoneGradeCreateResponse
                         )
                 );
     }
-
     // 경매 생성
     @PostMapping("/admin/schedules/{scheduleId}/auctions")
     public ResponseEntity<ApiResponse<EmptyObject>> createAuction(
