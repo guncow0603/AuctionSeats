@@ -2,14 +2,14 @@ package me.kimgunwoo.auctionseats.domain.admin.adminService;
 
 import lombok.RequiredArgsConstructor;
 import me.kimgunwoo.auctionseats.domain.admin.dto.ZoneInfo;
-import me.kimgunwoo.auctionseats.domain.admin.dto.request.GradeRequest;
-import me.kimgunwoo.auctionseats.domain.admin.dto.request.PlacesRequest;
-import me.kimgunwoo.auctionseats.domain.admin.dto.request.ShowsRequest;
-import me.kimgunwoo.auctionseats.domain.admin.dto.request.ZoneGradeRequest;
-import me.kimgunwoo.auctionseats.domain.admin.dto.response.GradeResponse;
-import me.kimgunwoo.auctionseats.domain.admin.dto.response.PlacesResponse;
-import me.kimgunwoo.auctionseats.domain.admin.dto.response.ShowsResponse;
-import me.kimgunwoo.auctionseats.domain.admin.dto.response.ZoneGradeResponse;
+import me.kimgunwoo.auctionseats.domain.admin.dto.request.GradeCreateRequest;
+import me.kimgunwoo.auctionseats.domain.admin.dto.request.PlaceCreateRequest;
+import me.kimgunwoo.auctionseats.domain.admin.dto.request.ShowsCreateRequest;
+import me.kimgunwoo.auctionseats.domain.admin.dto.request.ZoneGradeCreateRequest;
+import me.kimgunwoo.auctionseats.domain.admin.dto.response.GradeCreateResponse;
+import me.kimgunwoo.auctionseats.domain.admin.dto.response.PlaceCreateResponse;
+import me.kimgunwoo.auctionseats.domain.admin.dto.response.ShowsCreateResponse;
+import me.kimgunwoo.auctionseats.domain.admin.dto.response.ZoneGradeCreateResponse;
 import me.kimgunwoo.auctionseats.domain.auction.dto.request.AuctionCreateRequest;
 import me.kimgunwoo.auctionseats.domain.auction.service.AuctionService;
 import me.kimgunwoo.auctionseats.domain.grade.entity.Grade;
@@ -64,7 +64,7 @@ public class AdminServiceImpl implements AdminService {
     // 공연장 및 구역 생성
     @Override
     @Transactional
-    public List<PlacesResponse> createPlaceAndZone(PlacesRequest placesRequest) {
+    public List<PlaceCreateResponse> createPlaceAndZone(PlaceCreateRequest placesRequest) {
         List<ZoneInfo> zoneInfos = placesRequest.zoneInfos();
         Places places = placeService.createPlace(placesRequest);
         List<Zone> zoneList = zoneService.createZone(zoneInfos);
@@ -76,11 +76,11 @@ public class AdminServiceImpl implements AdminService {
 
     // 공연장 및 구역 응답 생성
     @Override
-    public List<PlacesResponse> createPlaceResponse(List<Zone> zoneList) {
-        List<PlacesResponse> placesResponseList = new ArrayList<>();
+    public List<PlaceCreateResponse> createPlaceResponse(List<Zone> zoneList) {
+        List<PlaceCreateResponse> placesResponseList = new ArrayList<>();
 
         for (Zone zone : zoneList) {
-            placesResponseList.add(new PlacesResponse(zone.getName(), zone.getSeatNumber(), zone.getPlaces().getId()));
+            placesResponseList.add(new PlaceCreateResponse(zone.getName(), zone.getSeatNumber(), zone.getPlaces().getId()));
         }
 
         return placesResponseList;
@@ -89,9 +89,9 @@ public class AdminServiceImpl implements AdminService {
     //  공연과 관련된 공연 정보, 공연 카테고리, 공연 이미지, 공연 및 회차 생성
     @Override
     @Transactional
-    public ShowsResponse createShowsBundleAndSchedule(
+    public ShowsCreateResponse createShowsBundleAndSchedule(
             Long placeId,
-            ShowsRequest showsRequest,
+            ShowsCreateRequest showsRequest,
             List<MultipartFile> multipartFiles) {
 
         Places places = placeService.getReferenceById(placeId);
@@ -111,29 +111,29 @@ public class AdminServiceImpl implements AdminService {
         LocalTime startTime = showsRequest.startTime();
         scheduleService.createSchedule(shows, startTime);
 
-        return new ShowsResponse(shows.getId());
+        return new ShowsCreateResponse(shows.getId());
 
     }
 
     // 구역 생성
     @Override
     @Transactional
-    public GradeResponse createGrade(Long showsId, GradeRequest gradeRequest) {
+    public GradeCreateResponse createGrade(Long showsId, GradeCreateRequest gradeRequest) {
         Shows shows = showsService.findById(showsId);
         Grade grade = gradeService.createGrade(gradeRequest, shows);
-        return new GradeResponse(shows.getPlaces().getId(),grade.getId());
+        return new GradeCreateResponse(shows.getPlaces().getId(),grade.getId());
     }
 
     // 구역 등급 생성
     @Override
     @Transactional
-    public ZoneGradeResponse createZoneGrade(ZoneGradeRequest zoneGradeRequest) {
+    public ZoneGradeCreateResponse createZoneGrade(ZoneGradeCreateRequest zoneGradeRequest) {
         Zone zone = zoneService.getReferenceById(zoneGradeRequest.getZoneId());
         Grade grade = gradeService.getReferenceById(zoneGradeRequest.getGradeId());
 
         ZoneGrade zoneGrade = zoneGradeService.createZoneGrade(zoneGradeRequest, zone, grade);
 
-        return new ZoneGradeResponse(zoneGrade);
+        return new ZoneGradeCreateResponse(zoneGrade);
     }
 
     // 경매 생성

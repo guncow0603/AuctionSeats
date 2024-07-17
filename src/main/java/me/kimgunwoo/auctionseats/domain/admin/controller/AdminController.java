@@ -4,14 +4,14 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.kimgunwoo.auctionseats.domain.admin.adminService.AdminServiceImpl;
-import me.kimgunwoo.auctionseats.domain.admin.dto.request.GradeRequest;
-import me.kimgunwoo.auctionseats.domain.admin.dto.request.PlacesRequest;
-import me.kimgunwoo.auctionseats.domain.admin.dto.request.ShowsRequest;
-import me.kimgunwoo.auctionseats.domain.admin.dto.request.ZoneGradeRequest;
-import me.kimgunwoo.auctionseats.domain.admin.dto.response.GradeResponse;
-import me.kimgunwoo.auctionseats.domain.admin.dto.response.PlacesResponse;
-import me.kimgunwoo.auctionseats.domain.admin.dto.response.ShowsResponse;
-import me.kimgunwoo.auctionseats.domain.admin.dto.response.ZoneGradeResponse;
+import me.kimgunwoo.auctionseats.domain.admin.dto.request.GradeCreateRequest;
+import me.kimgunwoo.auctionseats.domain.admin.dto.request.PlaceCreateRequest;
+import me.kimgunwoo.auctionseats.domain.admin.dto.request.ShowsCreateRequest;
+import me.kimgunwoo.auctionseats.domain.admin.dto.request.ZoneGradeCreateRequest;
+import me.kimgunwoo.auctionseats.domain.admin.dto.response.GradeCreateResponse;
+import me.kimgunwoo.auctionseats.domain.admin.dto.response.PlaceCreateResponse;
+import me.kimgunwoo.auctionseats.domain.admin.dto.response.ShowsCreateResponse;
+import me.kimgunwoo.auctionseats.domain.admin.dto.response.ZoneGradeCreateResponse;
 import me.kimgunwoo.auctionseats.domain.auction.dto.request.AuctionCreateRequest;
 import me.kimgunwoo.auctionseats.global.dto.EmptyObject;
 import me.kimgunwoo.auctionseats.global.response.ApiResponse;
@@ -32,10 +32,10 @@ public class AdminController {
     private final AdminServiceImpl adminService;
     // 공연장 및 구역 생성
     @PostMapping("/admin/places")
-    public ResponseEntity<ApiResponse<List<PlacesResponse>>> createPlaceAndZone(
-            @Valid @RequestBody PlacesRequest placeRequest
+    public ResponseEntity<ApiResponse<List<PlaceCreateResponse>>> createPlaceAndZone(
+            @Valid @RequestBody PlaceCreateRequest placeRequest
     ) {
-        List<PlacesResponse> placeResponseList = adminService.createPlaceAndZone(placeRequest);
+        List<PlaceCreateResponse> placeResponseList = adminService.createPlaceAndZone(placeRequest);
         return ResponseEntity
                 .status(SUCCESS_PLACE_AND_ZONE_CREATE.getHttpStatus())
                 .body(
@@ -51,12 +51,12 @@ public class AdminController {
                     MediaType.APPLICATION_JSON_VALUE,
                     MediaType.MULTIPART_FORM_DATA_VALUE
             })
-    public ResponseEntity<ApiResponse<ShowsResponse>> createShowsBundleAndSchedule(
-            @Valid @RequestPart ShowsRequest showsRequest,
+    public ResponseEntity<ApiResponse<ShowsCreateResponse>> createShowsBundleAndSchedule(
+            @Valid @RequestPart ShowsCreateRequest showsRequest,
             @RequestPart(value = "files", required = false) List<MultipartFile> multipartFiles,
             @PathVariable Long placeId
     ) {
-        ShowsResponse showsResponse =
+        ShowsCreateResponse showsResponse =
                 adminService.createShowsBundleAndSchedule(
                         placeId,
                         showsRequest,
@@ -74,11 +74,11 @@ public class AdminController {
     }
     // 등급 생성
     @PostMapping("/admin/shows/{showsId}/grades")
-    public ResponseEntity<ApiResponse<GradeResponse>> createGrade(
+    public ResponseEntity<ApiResponse<GradeCreateResponse>> createGrade(
             @PathVariable Long showsId,
-            @Valid @RequestBody GradeRequest gradeRequest) {
+            @Valid @RequestBody GradeCreateRequest gradeRequest) {
 
-        GradeResponse gradeResponse = adminService.createGrade(showsId, gradeRequest);
+        GradeCreateResponse gradeResponse = adminService.createGrade(showsId, gradeRequest);
 
         return ResponseEntity
                 .status(SUCCESS_GRADE_CREATE.getHttpStatus())
@@ -92,10 +92,10 @@ public class AdminController {
 
     // 구역 등급 생성
     @PostMapping("/admin/zone-grades")
-    public ResponseEntity<ApiResponse<ZoneGradeResponse>> createZoneGrade(
-            @RequestBody ZoneGradeRequest zoneGradeRequest
+    public ResponseEntity<ApiResponse<ZoneGradeCreateResponse>> createZoneGrade(
+            @RequestBody ZoneGradeCreateRequest zoneGradeRequest
     ) {
-        ZoneGradeResponse zoneGradeResponse = adminService.createZoneGrade(zoneGradeRequest);
+        ZoneGradeCreateResponse zoneGradeResponse = adminService.createZoneGrade(zoneGradeRequest);
         return ResponseEntity
                 .status(SUCCESS_ZONE_GRADE_CREATE.getHttpStatus())
                 .body(

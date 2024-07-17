@@ -8,7 +8,7 @@ import me.kimgunwoo.auctionseats.domain.place.entity.Places;
 import java.util.List;
 
 
-public record PlacesRequest(
+public record PlaceCreateRequest(
         @Size(min = 1, max = 30, message = "공연장 이름은 필수입니다.")
         String name,
 

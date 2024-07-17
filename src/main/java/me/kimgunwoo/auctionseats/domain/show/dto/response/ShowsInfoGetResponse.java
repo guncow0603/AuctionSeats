@@ -1,12 +1,16 @@
 package me.kimgunwoo.auctionseats.domain.show.dto.response;
 
 import lombok.Getter;
+import me.kimgunwoo.auctionseats.domain.admin.dto.response.ShowsGetResponse;
+import me.kimgunwoo.auctionseats.domain.show.entity.Shows;
 import me.kimgunwoo.auctionseats.domain.show.entity.ShowsInfo;
 
 import java.util.List;
 
 @Getter
 public class ShowsInfoGetResponse {
+    private final List<ShowsGetResponse> showsGetResponse;
+    
     private final Long showsId;
     
     private final String name;
@@ -21,8 +25,8 @@ public class ShowsInfoGetResponse {
 
     private final List<ShowsImageResponse> showsImages;
 
-    public ShowsInfoGetResponse(ShowsInfo showsInfo) {
-        this.showsId = showsInfo.getShows().get(0).getId();
+    public ShowsInfoGetResponse(ShowsInfo showsInfo, List<Shows> showsList) {
+        this.showsGetResponse = showsList.stream().map(ShowsGetResponse::new).toList();
         this.name = showsInfo.getName();
         this.description = showsInfo.getDescription();
         this.runningTime = showsInfo.getRunningTime();

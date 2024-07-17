@@ -2,7 +2,7 @@ package me.kimgunwoo.auctionseats.domain.place.service;
 
 import lombok.RequiredArgsConstructor;
 import me.kimgunwoo.auctionseats.domain.admin.dto.ZoneInfo;
-import me.kimgunwoo.auctionseats.domain.admin.dto.request.PlacesRequest;
+import me.kimgunwoo.auctionseats.domain.admin.dto.request.PlaceCreateRequest;
 import me.kimgunwoo.auctionseats.domain.place.dto.response.PlaceGetResponse;
 import me.kimgunwoo.auctionseats.domain.place.entity.Places;
 import me.kimgunwoo.auctionseats.domain.place.repository.PlaceRepository;
@@ -18,7 +18,7 @@ public class PlaceServiceImpl implements PlaceService {
     private final PlaceRepository placeRepository;
     // 공연장 생성
     @Override
-    public Places createPlace(PlacesRequest placesRequest) {
+    public Places createPlace(PlaceCreateRequest placesRequest) {
         List<ZoneInfo> zoneInfos = placesRequest.zoneInfos();
         Integer totalSeat = calculateSeats(zoneInfos);
         Places places = placesRequest.toEntity(totalSeat);

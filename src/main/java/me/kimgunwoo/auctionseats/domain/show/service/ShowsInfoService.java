@@ -1,8 +1,10 @@
 package me.kimgunwoo.auctionseats.domain.show.service;
 
-import me.kimgunwoo.auctionseats.domain.admin.dto.request.ShowsRequest;
+import me.kimgunwoo.auctionseats.domain.admin.dto.request.ShowsCreateRequest;
+import me.kimgunwoo.auctionseats.domain.admin.dto.request.ShowsInfoCreateRequest;
 import me.kimgunwoo.auctionseats.domain.show.dto.response.ShowsInfoGetResponse;
 import me.kimgunwoo.auctionseats.domain.show.dto.response.ShowsInfoGetSliceResponse;
+import me.kimgunwoo.auctionseats.domain.show.entity.Shows;
 import me.kimgunwoo.auctionseats.domain.show.entity.ShowsCategory;
 import me.kimgunwoo.auctionseats.domain.show.entity.ShowsImage;
 import me.kimgunwoo.auctionseats.domain.show.entity.ShowsInfo;
@@ -20,7 +22,7 @@ public interface ShowsInfoService {
     List<ShowsImage> createShowsImage(List<MultipartFile> multipartFiles, ShowsInfo showsInfo);
 
     // 공연 정보 생성
-    ShowsInfo createShowsInfo(ShowsRequest showsRequest);
+    ShowsInfo createShowsInfo(ShowsInfoCreateRequest showsInfoCreateRequest);
 
     // 공연 이미지 s3 업로드
     List<String> s3Upload(List<MultipartFile> multipartFiles, Long showsInfo);
@@ -36,4 +38,10 @@ public interface ShowsInfoService {
 
     // 공연 정보 카테고리별 페이징 페이징 조회
     ShowsInfoGetSliceResponse getSliceShowsInfo(Pageable pageable, String categoryName);
+
+
+    // 공연 체크 이미 끝난 공연은 제외
+    List<Shows> checkShows(ShowsInfo showsInfo);
+
+    ShowsInfo findByShowsInfoId(Long showsInfoId);
 }

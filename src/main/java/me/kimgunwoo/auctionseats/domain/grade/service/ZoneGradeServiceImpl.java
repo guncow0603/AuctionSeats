@@ -1,7 +1,7 @@
 package me.kimgunwoo.auctionseats.domain.grade.service;
 
 import lombok.RequiredArgsConstructor;
-import me.kimgunwoo.auctionseats.domain.admin.dto.request.ZoneGradeRequest;
+import me.kimgunwoo.auctionseats.domain.admin.dto.request.ZoneGradeCreateRequest;
 import me.kimgunwoo.auctionseats.domain.grade.entity.Grade;
 import me.kimgunwoo.auctionseats.domain.grade.entity.ZoneGrade;
 import me.kimgunwoo.auctionseats.domain.grade.repository.ZoneGradeRepository;
@@ -18,7 +18,7 @@ public class ZoneGradeServiceImpl implements ZoneGradeService {
 
     // 구역 등급 생성
     @Override
-    public ZoneGrade createZoneGrade(ZoneGradeRequest zoneGradeRequest, Zone zone, Grade grade) {
+    public ZoneGrade createZoneGrade(ZoneGradeCreateRequest zoneGradeRequest, Zone zone, Grade grade) {
         ZoneGrade zoneGrade = zoneGradeRequest.toEntity(zone, grade);
         return zoneGradeRepository.save(zoneGrade);
     }

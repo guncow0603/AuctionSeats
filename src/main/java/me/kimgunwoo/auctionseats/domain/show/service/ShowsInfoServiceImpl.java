@@ -1,9 +1,10 @@
 package me.kimgunwoo.auctionseats.domain.show.service;
 
 import lombok.RequiredArgsConstructor;
-import me.kimgunwoo.auctionseats.domain.admin.dto.request.ShowsRequest;
+import me.kimgunwoo.auctionseats.domain.admin.dto.request.ShowsInfoCreateRequest;
 import me.kimgunwoo.auctionseats.domain.show.dto.response.ShowsInfoGetResponse;
 import me.kimgunwoo.auctionseats.domain.show.dto.response.ShowsInfoGetSliceResponse;
+import me.kimgunwoo.auctionseats.domain.show.entity.Shows;
 import me.kimgunwoo.auctionseats.domain.show.entity.ShowsCategory;
 import me.kimgunwoo.auctionseats.domain.show.entity.ShowsImage;
 import me.kimgunwoo.auctionseats.domain.show.entity.ShowsInfo;
@@ -18,7 +19,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import static me.kimgunwoo.auctionseats.domain.admin.adminService.AdminServiceImpl.*;
@@ -37,8 +40,8 @@ public class ShowsInfoServiceImpl implements ShowsInfoService {
 
     // 공연 정보 생성
     @Override
-    public ShowsInfo createShowsInfo(ShowsRequest showsRequest) {
-        ShowsInfo showsInfo = showsRequest.toShowsInfoEntity();
+    public ShowsInfo createShowsInfo(ShowsInfoCreateRequest showsInfoCreateRequest) {
+        ShowsInfo showsInfo = showsInfoCreateRequest.toEntity();
 
         return showsInfoRepository.save(showsInfo);
     }
@@ -116,10 +119,18 @@ public class ShowsInfoServiceImpl implements ShowsInfoService {
     @Override
     @Transactional(readOnly = true)
     public ShowsInfoGetResponse getShowsInfo(Long showsInfoId) {
-        ShowsInfo showsInfo = showsInfoRepository.findById(showsInfoId)
-                .orElseThrow(() -> new ApiException(NOT_FOUND_SHOWS_INFO)
-                );
-        return new ShowsInfoGetResponse(showsInfo);
+        ShowsInfo showsInfo = findByShowsInfoId(showsInfoId);
+        List<Shows> filterShowsList = checkShows(showsInfo);
+        return new ShowsInfoGetResponse(showsInfo, filterShowsList);
+    }
+
+    // 공연 체크 이미 끝난 공연은 제외
+    @Override
+    public List<Shows> checkShows(ShowsInfo showsInfo) {
+        return showsInfo.getShows().stream()
+                .filter(shows -> shows.getEndDate().isAfter(LocalDate.now()))
+                .sorted(Comparator.comparing(Shows::getStartDate))
+                .toList();
     }
 
     // 공연 정보 카테고리별 페이징 페이징 조회
@@ -130,4 +141,10 @@ public class ShowsInfoServiceImpl implements ShowsInfoService {
         return new ShowsInfoGetSliceResponse(showsInfoSlice);
     }
 
+    @Override
+    public ShowsInfo findByShowsInfoId(Long showsInfoId) {
+        return showsInfoRepository.findById(showsInfoId)
+                .orElseThrow(() -> new ApiException(NOT_FOUND_SHOWS_INFO));
+
+    }
 }

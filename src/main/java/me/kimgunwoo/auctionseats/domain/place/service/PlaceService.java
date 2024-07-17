@@ -1,7 +1,7 @@
 package me.kimgunwoo.auctionseats.domain.place.service;
 
 import me.kimgunwoo.auctionseats.domain.admin.dto.ZoneInfo;
-import me.kimgunwoo.auctionseats.domain.admin.dto.request.PlacesRequest;
+import me.kimgunwoo.auctionseats.domain.admin.dto.request.PlaceCreateRequest;
 import me.kimgunwoo.auctionseats.domain.place.dto.response.PlaceGetResponse;
 import me.kimgunwoo.auctionseats.domain.place.entity.Places;
 
@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface PlaceService {
     // 공연장 생성
-    Places createPlace(PlacesRequest placesRequest);
+    Places createPlace(PlaceCreateRequest placesRequest);
 
     // 공연장 총 좌석 개수 계산
     Integer calculateSeats(List<ZoneInfo> seats);
