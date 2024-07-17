@@ -73,7 +73,6 @@ public class AdminServiceImpl implements AdminService {
     @Override
     @Transactional
     public ShowsInfoCreateResponse createShowsBundle(
-            Long placeId,
             ShowsInfoCreateRequest showsInfoCreateRequest,
             List<MultipartFile> multipartFiles) {
 
