@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import me.kimgunwoo.auctionseats.domain.user.entity.User;
 import me.kimgunwoo.auctionseats.domain.user.enums.Role;
 import me.kimgunwoo.auctionseats.global.exception.ApiException;
 import me.kimgunwoo.auctionseats.global.jwt.JwtUtil;
@@ -26,6 +27,7 @@ public class AuthServiceImpl implements AuthService {
     private static final String PREFIX_LOGOUT = "Logout: ";
     private final JwtUtil jwtUtil;
     private final LettuceUtils lettuceUtils;
+    private final UserService userService;
 
     @Override
     @Transactional
@@ -55,14 +57,13 @@ public class AuthServiceImpl implements AuthService {
         Role role = Role.valueOf(String.valueOf(claims.get("auth")));
         Long id = Long.parseLong(String.valueOf(claims.get("identify")));
         String nickname = String.valueOf(claims.get("nickname"));
-        Long point = Long.parseLong(String.valueOf(claims.get("point")));
 
         if (!lettuceUtils.get(REFRESH_TOKEN_HEADER + " " + username).equals(refreshToken)) {
             throw new ApiException(INVALID_JWT_TOKEN);
         }
 
-        String newAccessToken = jwtUtil.createAccessToken(id, username, role, nickname, point);
-        String newRefreshToken = jwtUtil.createRefreshToken(id, username, role, nickname, point);
+        String newAccessToken = jwtUtil.createAccessToken(id, username, role, nickname);
+        String newRefreshToken = jwtUtil.createRefreshToken(id, username, role, nickname);
 
         jwtUtil.setAccessTokenInHeader(response, newAccessToken);
         jwtUtil.setRefreshTokenInCookie(response, newRefreshToken);
@@ -72,5 +73,10 @@ public class AuthServiceImpl implements AuthService {
                 jwtUtil.substringToken(newRefreshToken),
                 REFRESH_TOKEN_TIME
         );
+    }
+
+    @Override
+    public Long findPoint(User user) {
+        return userService.findUserPoint(user.getId());
     }
 }
