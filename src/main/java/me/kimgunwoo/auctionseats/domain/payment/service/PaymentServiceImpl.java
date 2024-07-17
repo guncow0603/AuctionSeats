@@ -1,9 +1,5 @@
 package me.kimgunwoo.auctionseats.domain.payment.service;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
-import java.util.Collections;
-
 import lombok.RequiredArgsConstructor;
 import me.kimgunwoo.auctionseats.domain.payment.dto.request.PaymentFromUserRequest;
 import me.kimgunwoo.auctionseats.domain.payment.dto.request.PaymentToApiRequest;
@@ -11,6 +7,7 @@ import me.kimgunwoo.auctionseats.domain.payment.dto.response.PaymentSuccessRespo
 import me.kimgunwoo.auctionseats.domain.payment.entity.Payment;
 import me.kimgunwoo.auctionseats.domain.payment.repository.PaymentRepository;
 import me.kimgunwoo.auctionseats.domain.user.entity.User;
+import me.kimgunwoo.auctionseats.domain.user.service.PointService;
 import me.kimgunwoo.auctionseats.domain.user.service.UserService;
 import me.kimgunwoo.auctionseats.global.exception.ApiException;
 import me.kimgunwoo.auctionseats.global.exception.ErrorCode;
@@ -25,11 +22,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+import java.util.Collections;
+
 @Service
 @RequiredArgsConstructor
 public class PaymentServiceImpl implements PaymentService {
 
     private final UserService userService;
+    private final PointService pointService;
     private final PaymentRepository paymentRepository;
 
     @Value("${TOSS_SECRET_KEY}")
@@ -74,6 +76,9 @@ public class PaymentServiceImpl implements PaymentService {
         Payment payment = verifyPayment(orderId, amountLong);
         payment.addPaymentKey(paymentKey);
 
+        User user = userService.findByUserId(payment.getUser().getId());
+        pointService.chargePoint(user, amountLong);
+
         return requestPaymentAccept(paymentKey, orderId, amountLong);
 
     }
@@ -115,11 +120,11 @@ public class PaymentServiceImpl implements PaymentService {
 
     private Payment verifyPayment(String orderId, Long amount) {
         Payment payment = paymentRepository.findByOrderId(orderId).orElseThrow(
-                () -> new ApiException(ErrorCode.INTERNAL_SERVER_ERROR)
+                () -> new ApiException(ErrorCode.NOT_FOUND_ORDER_ID)
         );
 
         if (!payment.getAmount().equals(amount)) {
-            throw new ApiException(ErrorCode.INTERNAL_SERVER_ERROR);
+            throw new ApiException(ErrorCode.NOT_EQUALS_AMOUNT);
         }
 
         return payment;
