@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface PlaceService {
     // 공연장 생성
-    Places createPlace(PlaceCreateRequest placesRequest);
+    Places createPlace(PlaceCreateRequest placeCreateRequest);
 
     // 공연장 총 좌석 개수 계산
     Integer calculateSeats(List<ZoneInfo> seats);

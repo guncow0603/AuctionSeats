@@ -18,11 +18,14 @@ public class PlaceServiceImpl implements PlaceService {
     private final PlaceRepository placeRepository;
     // 공연장 생성
     @Override
-    public Places createPlace(PlaceCreateRequest placesRequest) {
-        List<ZoneInfo> zoneInfos = placesRequest.zoneInfos();
+    public Places createPlace(PlaceCreateRequest placeCreateRequest) {
+        List<ZoneInfo> zoneInfos = placeCreateRequest.zoneInfos();
+
         Integer totalSeat = calculateSeats(zoneInfos);
-        Places places = placesRequest.toEntity(totalSeat);
-        return placeRepository.save(places);
+
+        Places place = placeCreateRequest.toEntity(totalSeat);
+
+        return placeRepository.save(place);
     }
     // 공연장 총 좌석 개수 계산
     @Override

@@ -8,7 +8,7 @@ import me.kimgunwoo.auctionseats.domain.place.entity.Zone;
 public interface ZoneGradeService {
 
     // 구역 등급 생성
-    ZoneGrade createZoneGrade(ZoneGradeCreateRequest zoneGradeRequest, Zone zone, Grade grade);
+    ZoneGrade createZoneGrade(ZoneGradeCreateRequest zoneGradeCreateRequest, Zone zone, Grade grade);
 
 
     /**
