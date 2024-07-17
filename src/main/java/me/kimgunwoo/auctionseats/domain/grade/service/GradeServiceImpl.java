@@ -1,7 +1,7 @@
 package me.kimgunwoo.auctionseats.domain.grade.service;
 
 import lombok.RequiredArgsConstructor;
-import me.kimgunwoo.auctionseats.domain.admin.dto.request.GradeRequest;
+import me.kimgunwoo.auctionseats.domain.admin.dto.request.GradeCreateRequest;
 import me.kimgunwoo.auctionseats.domain.grade.entity.Grade;
 import me.kimgunwoo.auctionseats.domain.grade.repository.GradeRepository;
 import me.kimgunwoo.auctionseats.domain.show.entity.Shows;
@@ -15,8 +15,8 @@ public class GradeServiceImpl implements GradeService {
 
     // 등급 생성
     @Override
-    public Grade createGrade(GradeRequest gradeRequest, Shows shows) {
-        Grade grade = gradeRequest.toEntity(shows);
+    public Grade createGrade(GradeCreateRequest gradeCreateRequest, Shows shows) {
+        Grade grade = gradeCreateRequest.toEntity(shows);
         return gradeRepository.save(grade);
     }
 

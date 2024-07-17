@@ -6,7 +6,7 @@ import me.kimgunwoo.auctionseats.domain.grade.entity.Grade;
 import me.kimgunwoo.auctionseats.domain.show.entity.Shows;
 
 
-public record GradeRequest(
+public record GradeCreateRequest(
         @Size(min = 1, max = 30, message = "1~30자 사이로 입력해주세요.")
         String name,
 

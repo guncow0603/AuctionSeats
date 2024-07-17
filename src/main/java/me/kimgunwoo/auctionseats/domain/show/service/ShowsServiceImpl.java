@@ -1,7 +1,7 @@
 package me.kimgunwoo.auctionseats.domain.show.service;
 
 import lombok.RequiredArgsConstructor;
-import me.kimgunwoo.auctionseats.domain.admin.dto.request.ShowsRequest;
+import me.kimgunwoo.auctionseats.domain.admin.dto.request.ShowsCreateRequest;
 import me.kimgunwoo.auctionseats.domain.place.entity.Places;
 import me.kimgunwoo.auctionseats.domain.show.entity.Shows;
 import me.kimgunwoo.auctionseats.domain.show.entity.ShowsInfo;
@@ -17,8 +17,9 @@ public class ShowsServiceImpl implements ShowsService {
 
     public final ShowsRepository showsRepository;
 
-    public Shows createShows(ShowsRequest showsRequest, Places places, ShowsInfo showsInfo) {
-        Shows shows = showsRequest.toShowsEntity(places, showsInfo);
+    @Override
+    public Shows createShows(ShowsCreateRequest showsCreateRequest, Places places, ShowsInfo showsInfo) {
+        Shows shows = showsCreateRequest.toEntity(places, showsInfo);
 
         return showsRepository.save(shows);
     }
