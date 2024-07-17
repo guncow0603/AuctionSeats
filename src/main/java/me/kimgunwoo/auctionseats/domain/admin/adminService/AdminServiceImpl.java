@@ -106,6 +106,8 @@ public class AdminServiceImpl implements AdminService {
 
         Shows shows = showsService.createShows(showsRequest, places, showsInfo);
 
+        showsInfo.addShows(shows);
+
         LocalTime startTime = showsRequest.startTime();
         scheduleService.createSchedule(shows, startTime);
 

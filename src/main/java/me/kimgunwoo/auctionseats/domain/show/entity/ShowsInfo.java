@@ -47,6 +47,10 @@ public class ShowsInfo extends BaseEntity {
     @OneToMany(mappedBy = "showsInfo", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ShowsImage> showsImage = new ArrayList<>();
 
+    @Comment("공연")
+    @OneToMany(mappedBy = "showsInfo", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Shows> shows = new ArrayList<>();
+
     @Builder
     private ShowsInfo(
             String name,
@@ -67,5 +71,8 @@ public class ShowsInfo extends BaseEntity {
     public void updateShowsCategory(ShowsCategory showsCategory) {
         this.showsCategory = showsCategory;
     }
-
+    
+    public void addShows(Shows shows) {
+        this.shows.add(shows);
+    }
 }

@@ -7,6 +7,8 @@ import java.util.List;
 
 @Getter
 public class ShowsInfoGetResponse {
+    private final Long showsId;
+    
     private final String name;
 
     private final String description;
@@ -20,6 +22,7 @@ public class ShowsInfoGetResponse {
     private final List<ShowsImageResponse> showsImages;
 
     public ShowsInfoGetResponse(ShowsInfo showsInfo) {
+        this.showsId = showsInfo.getShows().get(0).getId();
         this.name = showsInfo.getName();
         this.description = showsInfo.getDescription();
         this.runningTime = showsInfo.getRunningTime();
