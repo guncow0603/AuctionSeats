@@ -14,8 +14,9 @@ import java.time.LocalTime;
 
 
 public record ShowsCreateRequest(
-        @NotBlank(message = "공연제목 기입은 필수 입니다.")
-        @Pattern(regexp = "(\\S+)-(\\S+)", message = "입력 양식: (공연제목)-(지역 및 목표) 입니다.")
+        @NotNull(message = "공연제목 기입은 필수 입니다.")
+        @Pattern(regexp = "([^\\s-]+(?:\\s+[^\\s-]+)*)\\s*-\\s*([^\\s-]+(?:\\s+[^\\s-]+)*)",
+                message = "입력 양식: (공연제목) - (지역 및 목표) 입니다.")
         String title,
 
         @NotNull(message = "공연 시작일 기입은 필수입니다.")
