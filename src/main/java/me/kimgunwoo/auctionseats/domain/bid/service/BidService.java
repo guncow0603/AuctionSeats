@@ -4,6 +4,7 @@ import me.kimgunwoo.auctionseats.domain.auction.entity.Auction;
 import me.kimgunwoo.auctionseats.domain.bid.dto.request.BidRequest;
 import me.kimgunwoo.auctionseats.domain.bid.entity.Bid;
 import me.kimgunwoo.auctionseats.domain.user.entity.User;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.util.Optional;
 
@@ -24,4 +25,6 @@ public interface BidService {
      * @return 최근 입찰
      */
     Optional<Bid> getCurrentBid(Auction auction);
+
+    SseEmitter subscribe(Long auctionId);
 }
