@@ -10,7 +10,9 @@ import me.kimgunwoo.auctionseats.global.dto.EmptyObject;
 import me.kimgunwoo.auctionseats.global.response.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import static me.kimgunwoo.auctionseats.domain.bid.constant.BidConstant.AUCTION_SSE_PREFIX;
 import static me.kimgunwoo.auctionseats.global.exception.SuccessCode.SUCCESS_BID;
 
 @RequiredArgsConstructor
@@ -18,6 +20,7 @@ import static me.kimgunwoo.auctionseats.global.exception.SuccessCode.SUCCESS_BID
 @RestController
 public class BidController {
     private final BidService bidService;
+    private final RedisPublisher redisPublisher;
 
     /*입찰하기*/
     @PostMapping
@@ -27,7 +30,16 @@ public class BidController {
             @CurrentUser User loginUser
     ) {
         bidService.bid(auctionId, bidRequest, loginUser);
+
+        //입찰 갱신 sse
+        redisPublisher.publish(AUCTION_SSE_PREFIX + auctionId, bidRequest.getPrice());
         return ResponseEntity.status(SUCCESS_BID.getHttpStatus())
                 .body(ApiResponse.of(SUCCESS_BID.getCode(), SUCCESS_BID.getMessage()));
+    }
+
+
+    @GetMapping("/sse")
+    public SseEmitter subscribe(@PathVariable Long auctionId) {
+        return bidService.subscribe(auctionId);
     }
 }

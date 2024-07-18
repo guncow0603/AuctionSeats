@@ -3,6 +3,7 @@ package me.kimgunwoo.auctionseats.domain.auction.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.kimgunwoo.auctionseats.domain.auction.dto.request.AuctionCreateRequest;
+import me.kimgunwoo.auctionseats.domain.auction.dto.response.AuctionInfoResponse;
 import me.kimgunwoo.auctionseats.domain.auction.entity.Auction;
 import me.kimgunwoo.auctionseats.domain.auction.repository.AuctionRepository;
 import me.kimgunwoo.auctionseats.domain.bid.service.BidRedisService;
@@ -50,15 +51,23 @@ public class AuctionServiceImpl implements AuctionService {
         log.info("예매 성공! id: {]", auctionId);
     }
 
+    @Override
+    public AuctionInfoResponse getAuctionInfo(Long auctionId) {
+        Auction auction = getAuction(auctionId);
+        Long remainTimeMilli = bidRedisService.getRemainTimeMilli(auctionId);
+        return AuctionInfoResponse.from(auction, remainTimeMilli);
+    }
+
+    @Override
+    public Auction getAuction(Long auctionId) {
+        return auctionRepository.findById(auctionId)
+                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_AUCTION));
+    }
+
     public User getBidWinner(Auction auction) {
         return bidService.getCurrentBid(auction)
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_WIN_BID))
                 .getUser();
-    }
-
-    public Auction getAuction(Long auctionId) {
-        return auctionRepository.findById(auctionId)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_AUCTION));
     }
 
     private long genRemainSeconds(Auction auction) {
