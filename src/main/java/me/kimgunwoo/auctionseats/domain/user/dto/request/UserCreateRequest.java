@@ -5,9 +5,11 @@ import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import me.kimgunwoo.auctionseats.domain.user.entity.User;
+import me.kimgunwoo.auctionseats.domain.user.enums.Role;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @Getter
 @RequiredArgsConstructor
@@ -37,17 +39,22 @@ public class UserCreateRequest {
         private final String phoneNumber;
 
         @NotNull(message = "필수 입력입니다.")
-        @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-        private final LocalDate birth;
+        @Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2}$", message = "형식에 맞춰 입력해주세요.")
+        // @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+        private final String birth;
 
         public User toEntity(PasswordEncoder encoder) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                LocalDate localDate = LocalDate.parse(birth, formatter);
+
                 return User.builder()
                         .email(email)
                         .password(encoder.encode(password))
                         .name(name)
                         .nickname(nickname)
                         .phoneNumber(phoneNumber)
-                        .birth(birth)
+                        .birth(localDate)
+                        .role(Role.USER)
                         .build();
         }
 
