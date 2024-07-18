@@ -1,16 +1,17 @@
 package me.kimgunwoo.auctionseats.domain.bid.redis;
 
-import com.amazonaws.services.s3.internal.eventstreaming.Message;
-import lombok.RequiredArgsConstructor;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import me.kimgunwoo.auctionseats.domain.bid.service.SseService;
 import me.kimgunwoo.auctionseats.global.util.LettuceUtils;
-import org.redisson.api.listener.MessageListener;
+import org.springframework.data.redis.connection.Message;
+import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
+import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Component
 public class RedisSubscriber implements MessageListener {

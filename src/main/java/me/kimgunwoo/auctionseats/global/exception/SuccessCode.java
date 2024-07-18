@@ -36,6 +36,9 @@ public enum SuccessCode {
     SUCCESS_REISSUE_TOKEN(HttpStatus.CREATED, "T00000", "토큰 재발급에 성공했습니다."),
     
     /* AUCTION */
+    SUCCESS_GET_AUCTION_INFO(HttpStatus.OK, "B00500", "경매 정보 조회에 성공했습니다."),
+
+    /* BID */
     SUCCESS_BID(HttpStatus.CREATED, "A00100", "입찰에 성공했습니다."),
 
     /* ADMIN */

@@ -8,6 +8,7 @@ import me.kimgunwoo.auctionseats.domain.bid.dto.request.BidRequest;
 import me.kimgunwoo.auctionseats.domain.bid.entity.Bid;
 import me.kimgunwoo.auctionseats.domain.bid.redis.RedisSubscriber;
 import me.kimgunwoo.auctionseats.domain.bid.repository.BidRepository;
+import me.kimgunwoo.auctionseats.domain.bid.repository.SseRepository;
 import me.kimgunwoo.auctionseats.domain.user.entity.User;
 import me.kimgunwoo.auctionseats.domain.user.service.PointService;
 import me.kimgunwoo.auctionseats.global.annotaion.DistributedLock;

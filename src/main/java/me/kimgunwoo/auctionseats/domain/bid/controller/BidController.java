@@ -3,6 +3,7 @@ package me.kimgunwoo.auctionseats.domain.bid.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.kimgunwoo.auctionseats.domain.bid.dto.request.BidRequest;
+import me.kimgunwoo.auctionseats.domain.bid.redis.RedisPublisher;
 import me.kimgunwoo.auctionseats.domain.bid.service.BidService;
 import me.kimgunwoo.auctionseats.domain.user.entity.User;
 import me.kimgunwoo.auctionseats.global.annotaion.CurrentUser;

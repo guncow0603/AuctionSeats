@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static me.kimgunwoo.auctionseats.global.exception.SuccessCode.SUCCESS_GET_AUCTION_INFO;
+
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/auctions")
 @RestController
