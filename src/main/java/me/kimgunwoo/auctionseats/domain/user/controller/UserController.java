@@ -13,9 +13,6 @@ import me.kimgunwoo.auctionseats.global.response.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import static me.kimgunwoo.auctionseats.global.exception.SuccessCode.*;
 
 @RestController
@@ -70,7 +67,7 @@ public class UserController {
     public ResponseEntity<ApiResponse> updateUserPassword(
             @CurrentUser User user,
             @PathVariable Long userId,
-            @RequestBody @Valid UserPasswordUpdateRequest request
+            @RequestBody UserPasswordUpdateRequest request
     ) {
         userService.updateUserPassword(user, userId, request);
         return ResponseEntity.status(SUCCESS_UPDATE_USER_PASSWORD.getHttpStatus())

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 import static me.kimgunwoo.auctionseats.global.exception.ErrorCode.*;
 
@@ -65,11 +66,24 @@ public class UserServiceImpl implements UserService {
     public UserResponse updateUserInfo(User loginUser, Long userId, UserUpdateRequest request) {
         User user = checkAndGetUser(loginUser, userId);
 
-        if (!Objects.requireNonNullElse(request.nickname(), "").isBlank()) {
+        if (!request.nickname().isBlank()) {
+            if (request.nickname().length() < 2 || request.nickname().length() > 10) {
+                throw new ApiException(INVALID_NICKNAME_LENGTH);
+            }
+            String nicknameRegexp = "^[가-힣]+$";
+            if (!Pattern.matches(nicknameRegexp, request.nickname())) {
+                throw new ApiException(INVALID_NICKNAME_PATTERN);
+            }
             checkNickname(request.nickname());
             user.updateUserNickName(request.nickname());
         }
 
+        if (!request.phoneNumber().isBlank()) {
+            String phoneRegexp = "^01([0|1|6|7|8|9])?([0-9]{3,4})?([0-9]{4})$";
+            if (!Pattern.matches(phoneRegexp, request.phoneNumber())) {
+                throw new ApiException(INVALID_PHONE_NUMBER_PATTERN);
+            }
+        }
         return UserResponse.from(user);
     }
 
