@@ -8,8 +8,8 @@ select * from(
                         "admin@gmail.com" as email,
                         false as is_deleted,
                         "관리자" as name,
-                        "일번관리자" as nickname,
-                        "$2a$10$70/DaQHbxaRQqYIqPHtLfujXSJAtgV2e2H7DUAzfA8xPgo2YoTK1u" as password,
+                        "일반관리자" as nickname,
+                        "$2a$10$lNdW7CaSUD4N46XoAwXbX.rB3EmWyobNbkyccKHmt/o2zn.NgOVKW" as password,
                         "01012345678" as phone_number,
                         "ADMIN" as role
              ) as init
