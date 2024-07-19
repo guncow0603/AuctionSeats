@@ -2,23 +2,23 @@ package me.kimgunwoo.auctionseats.domain.show.dto.response;
 
 import lombok.Getter;
 import me.kimgunwoo.auctionseats.domain.show.entity.ImageType;
+import me.kimgunwoo.auctionseats.domain.show.entity.Shows;
 import me.kimgunwoo.auctionseats.domain.show.entity.ShowsImage;
-import me.kimgunwoo.auctionseats.domain.show.entity.ShowsInfo;
 
 import static me.kimgunwoo.auctionseats.domain.admin.adminService.AdminServiceImpl.S3_PATH;
 
 @Getter
-public class ShowsInfoGetResponse {
-    private final Long showsInfoId;
+public class ShowsResponse {
+    private final Long showsId;
 
-    private final String name;
+    private final String title;
 
     private final String s3Url;
 
-    public ShowsInfoGetResponse(ShowsInfo showsInfo) {
-        this.showsInfoId = showsInfo.getId();
-        this.name = showsInfo.getName();
-        this.s3Url = S3_PATH + showsInfo.getShowsImage().stream()
+    public ShowsResponse(Shows shows) {
+        this.showsId = shows.getId();
+        this.title = shows.getTitle();
+        this.s3Url = S3_PATH + shows.getShowsInfo().getShowsImage().stream()
                 .filter(image -> ImageType.POSTER_IMG.equals(image.getType()))
                 .map(ShowsImage::getS3Key)
                 .findFirst()
