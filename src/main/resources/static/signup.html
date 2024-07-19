@@ -136,36 +136,6 @@
         // 입력란 값이 변경될 때마다 비밀번호 일치 여부 확인
         $("#password, #password-check").on("input", checkPasswordMatch);
 
-        $("#verification-btn").on("click", function () {
-            resetValidationMessages();
-            let phoneNumber = $("#signup-phone").val();
-            $.ajax({
-                type: "POST",
-                url: `/api/v1/auth/signup/sms`,
-                contentType: "application/json",
-                data: JSON.stringify({
-                    to: phoneNumber
-                }),
-                success: function (data) {
-                    alert("인증 번호를 발송했습니다.");
-                },
-                error: function (jqXHR, textStatus) {
-
-                    let response = jqXHR.responseJSON;
-                    if (response.data) {
-                        let data = response.data;
-                        if (data.to) {
-                            $("#phoneNumber-span").text(data.to);
-                        }
-                    }
-                    if (response.message) {
-                        if (response.message === '사용 중인 전화 번호 입니다.') {
-                            $("#phoneNumber-span").text(response.message);
-                        }
-                    }
-                },
-            });
-        });
 
         $("#sign-up-btn").on("click", function () {
             let email = $("#email-name-input").val() + "@" + $("#email-domain-input").val();

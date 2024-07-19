@@ -19,3 +19,15 @@
 .page-name {
     margin-bottom: 20px;
 }
+
+.form-control {
+    margin-top: 10px;
+}
+
+input {
+    height: 50px;
+}
+
+.custom-btn {
+    height: 50px;
+}
