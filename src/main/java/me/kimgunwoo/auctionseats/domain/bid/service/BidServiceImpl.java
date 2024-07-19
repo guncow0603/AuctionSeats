@@ -5,19 +5,23 @@ import lombok.extern.slf4j.Slf4j;
 import me.kimgunwoo.auctionseats.domain.auction.entity.Auction;
 import me.kimgunwoo.auctionseats.domain.auction.repository.AuctionRepository;
 import me.kimgunwoo.auctionseats.domain.bid.dto.request.BidRequest;
+import me.kimgunwoo.auctionseats.domain.bid.dto.response.BidInfoResponse;
 import me.kimgunwoo.auctionseats.domain.bid.entity.Bid;
 import me.kimgunwoo.auctionseats.domain.bid.redis.RedisSubscriber;
 import me.kimgunwoo.auctionseats.domain.bid.repository.BidRepository;
 import me.kimgunwoo.auctionseats.domain.bid.repository.SseRepository;
 import me.kimgunwoo.auctionseats.domain.user.entity.User;
 import me.kimgunwoo.auctionseats.domain.user.service.PointService;
+import me.kimgunwoo.auctionseats.domain.user.service.UserService;
 import me.kimgunwoo.auctionseats.global.annotaion.DistributedLock;
 import me.kimgunwoo.auctionseats.global.exception.ApiException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
-import java.util.Comparator;
 import java.util.Optional;
 
 import static me.kimgunwoo.auctionseats.domain.bid.constant.BidConstant.AUCTION_SSE_PREFIX;
@@ -35,6 +39,7 @@ public class BidServiceImpl implements BidService {
     private final BidRepository bidRepository;
     private final BidRedisService bidRedisService;
     private final PointService pointService;
+    private final UserService userService;
 
     //Sse
     private final SseRepository sseRepository;
@@ -42,13 +47,14 @@ public class BidServiceImpl implements BidService {
 
     @Override
     @DistributedLock(key = "T(com.me.auctionseats.domain.auction.constant.AuctionConstant).AUCTION_BID_KEY_PREFIX.concat(#auctionId)")
-    public void bid(Long auctionId, BidRequest bidRequest, User bidder) {
+    public void bid(Long auctionId, BidRequest bidRequest, User loginUser) {
         //redis에 경매 정보 확인
         if (bidRedisService.isExpired(auctionId)) {
             throw new ApiException(ENDED_AUCTION);
         }
 
         //입찰 검증
+        User bidder = userService.findByUserId(loginUser.getId());
         long newBidPrice = bidRequest.getPrice();
         long currentBidPrice = bidRedisService.getBidPrice(auctionId);
         validateBid(currentBidPrice, newBidPrice);
@@ -58,6 +64,12 @@ public class BidServiceImpl implements BidService {
         updateBidderPoints(bidder, newBidPrice, currentBidPrice, auction);
         //새 입찰 등록
         saveBid(bidder, newBidPrice, auction);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<BidInfoResponse> getMyBids(Long auctionId, User loginUser, Pageable pageable) {
+        return bidRepository.getMyBids(auctionId, loginUser, pageable);
     }
 
     @Override
