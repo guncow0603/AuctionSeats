@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface BidRepository extends JpaRepository<Bid, Long> {
+public interface BidRepository extends JpaRepository<Bid, Long>, BidRepositoryCustom {
     Optional<Bid> findTopByAuctionOrderByIdDesc(Auction auction);
 }
