@@ -1,4 +1,4 @@
-package me.kimgunwoo.auctionseats.domain.grade.dto;
+package me.kimgunwoo.auctionseats.domain.grade.dto.response;
 
 import lombok.Getter;
 import me.kimgunwoo.auctionseats.domain.grade.entity.Grade;

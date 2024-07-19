@@ -3,7 +3,7 @@ package me.kimgunwoo.auctionseats.domain.grade.service;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import me.kimgunwoo.auctionseats.domain.admin.dto.request.GradeCreateRequest;
-import me.kimgunwoo.auctionseats.domain.grade.dto.GradeGetResponse;
+import me.kimgunwoo.auctionseats.domain.grade.dto.response.GradeGetResponse;
 import me.kimgunwoo.auctionseats.domain.grade.entity.Grade;
 import me.kimgunwoo.auctionseats.domain.grade.repository.GradeRepository;
 import me.kimgunwoo.auctionseats.domain.show.entity.Shows;
