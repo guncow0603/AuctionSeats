@@ -19,7 +19,6 @@ import me.kimgunwoo.auctionseats.domain.show.entity.Shows;
 import me.kimgunwoo.auctionseats.domain.show.entity.ShowsCategory;
 import me.kimgunwoo.auctionseats.domain.show.entity.ShowsImage;
 import me.kimgunwoo.auctionseats.domain.show.entity.ShowsInfo;
-import me.kimgunwoo.auctionseats.domain.show.service.ShowsInfoService;
 import me.kimgunwoo.auctionseats.domain.show.service.ShowsService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,9 +1,6 @@
 package me.kimgunwoo.auctionseats.domain.show.controller;
 
 import lombok.RequiredArgsConstructor;
-import me.kimgunwoo.auctionseats.domain.show.dto.response.ShowsInfoGetResponse;
-import me.kimgunwoo.auctionseats.domain.show.dto.response.ShowsInfoGetSliceResponse;
-import me.kimgunwoo.auctionseats.domain.show.service.ShowsInfoService;
 import me.kimgunwoo.auctionseats.global.response.ApiResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
