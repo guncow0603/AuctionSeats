@@ -3,6 +3,7 @@ package me.kimgunwoo.auctionseats.domain.auction.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.kimgunwoo.auctionseats.domain.auction.dto.request.AuctionCreateRequest;
+import me.kimgunwoo.auctionseats.domain.auction.dto.response.AuctionDetailResponse;
 import me.kimgunwoo.auctionseats.domain.auction.dto.response.AuctionInfoResponse;
 import me.kimgunwoo.auctionseats.domain.auction.entity.Auction;
 import me.kimgunwoo.auctionseats.domain.auction.repository.AuctionRepository;
@@ -15,8 +16,10 @@ import me.kimgunwoo.auctionseats.domain.schedule.repository.ScheduleRepository;
 import me.kimgunwoo.auctionseats.domain.user.entity.User;
 import me.kimgunwoo.auctionseats.global.exception.ApiException;
 import me.kimgunwoo.auctionseats.global.exception.ErrorCode;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Pageable;
 
 import java.time.Duration;
 
@@ -52,16 +55,21 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
     @Override
-    public AuctionInfoResponse getAuctionInfo(Long auctionId) {
+    public AuctionDetailResponse getAuctionInfo(Long auctionId) {
         Auction auction = getAuction(auctionId);
         Long remainTimeMilli = bidRedisService.getRemainTimeMilli(auctionId);
-        return AuctionInfoResponse.from(auction, remainTimeMilli);
+        return AuctionDetailResponse.from(auction, remainTimeMilli);
     }
 
     @Override
     public Auction getAuction(Long auctionId) {
         return auctionRepository.findById(auctionId)
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_AUCTION));
+    }
+
+    @Override
+    public Page<AuctionInfoResponse> getMyJoinedAuctions(User loginUser, Pageable pageable) {
+        return auctionRepository.getJoinedMyAuctions(loginUser, pageable);
     }
 
     public User getBidWinner(Auction auction) {
