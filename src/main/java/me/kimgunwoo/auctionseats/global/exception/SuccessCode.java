@@ -47,6 +47,9 @@ public enum SuccessCode {
     SUCCESS_GET_ALL_BID(HttpStatus.OK, "B00000", "입찰 내역 조회에 성공했습니다."),
     SUCCESS_BID(HttpStatus.CREATED, "B00100", "입찰에 성공했습니다."),
 
+    /* POINT */
+    SUCCESS_GET_CHARGE_POINT_LOG_LIST(HttpStatus.OK, "P00000", "포인트 충전 내역 조회에 성공했습니다."),
+
     /* ADMIN */
     SUCCESS_SHOWS_AND_SCHEDULE_CREATE(HttpStatus.CREATED, "M09900", "공연 및 회차 생성을 성공했습니다."),
     SUCCESS_PLACE_AND_ZONE_CREATE(HttpStatus.CREATED, "M09901", "공연장 및 구역 생성을 성공했습니다."),
