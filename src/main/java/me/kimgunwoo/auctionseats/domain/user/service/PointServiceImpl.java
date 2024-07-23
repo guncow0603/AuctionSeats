@@ -2,6 +2,7 @@ package me.kimgunwoo.auctionseats.domain.user.service;
 
 import lombok.RequiredArgsConstructor;
 import me.kimgunwoo.auctionseats.domain.user.dto.response.PointChargeResponse;
+import me.kimgunwoo.auctionseats.domain.user.dto.response.PointUseResponse;
 import me.kimgunwoo.auctionseats.domain.user.entity.Point;
 import me.kimgunwoo.auctionseats.domain.user.entity.User;
 import me.kimgunwoo.auctionseats.domain.user.enums.PointType;
@@ -13,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import static me.kimgunwoo.auctionseats.global.exception.ErrorCode.NOT_ENOUGH_POINT;
-
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -55,5 +55,10 @@ public class PointServiceImpl implements PointService {
     @Override
     public Page<PointChargeResponse> getChargePointLogList(User loginUser, Pageable pageable) {
         return pointRepository.findChargePointListByPage(loginUser.getId(), pageable);
+    }
+
+    @Override
+    public Page<PointUseResponse> getUsePointLogList(User user, Pageable pageable) {
+        return pointRepository.findUsePointListByPage(user.getId(), pageable);
     }
 }

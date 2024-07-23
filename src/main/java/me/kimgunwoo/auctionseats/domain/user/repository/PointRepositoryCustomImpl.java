@@ -1,6 +1,7 @@
 package me.kimgunwoo.auctionseats.domain.user.repository;
 
 import me.kimgunwoo.auctionseats.domain.user.dto.response.PointChargeResponse;
+import me.kimgunwoo.auctionseats.domain.user.dto.response.PointUseResponse;
 import me.kimgunwoo.auctionseats.domain.user.enums.PointType;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
