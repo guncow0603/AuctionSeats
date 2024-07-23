@@ -22,7 +22,7 @@ import static me.kimgunwoo.auctionseats.global.exception.SuccessCode.SUCCESS_GET
 @RequestMapping("/api/v1/points")
 public class PointController {
 
-    private PointService pointService;
+    private final PointService pointService;
 
     @GetMapping("/charge")
     public ResponseEntity<ApiResponse> getChargePointLogList(
