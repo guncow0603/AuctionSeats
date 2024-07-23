@@ -33,7 +33,7 @@ public interface PointService {
     void chargePoint(User user, Long point, String orderId);
 
     /*
-     * 해당 유저의 포인트 사용 내역 페이징 리스트 조회
+     * 해당 유저의 포인트 충전 내역 페이징 리스트 조회
      *
      * @param user			로그인 인증 유저
      * @param pageable    	페이징 조건
@@ -41,4 +41,14 @@ public interface PointService {
      * @return 				페이징 된 포인트 충전 내역
      * */
     Page<PointChargeResponse> getChargePointLogList(User user, Pageable pageable);
+
+    /*
+     * 해당 유저의 포인트 사용 내역 페이징 리스트 조회
+     *
+     * @param user			로그인 인증 유저
+     * @param pageable    	페이징 조건
+     *
+     * @return 				페이징 된 포인트 사용 내역
+     * */
+    Page<PointUseResponse> getUsePointLogList(User user, Pageable pageable);
 }

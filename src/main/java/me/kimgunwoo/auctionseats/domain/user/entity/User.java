@@ -82,7 +82,7 @@ public class User extends BaseEntity {
         this.role = role;
     }
 
-    public void addPoint(Long point) {
+    public void chargePoint(Long point) {
         this.point += point;
     }
 
