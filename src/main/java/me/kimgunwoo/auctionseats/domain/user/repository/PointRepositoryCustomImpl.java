@@ -1,7 +1,7 @@
 package me.kimgunwoo.auctionseats.domain.user.repository;
 
 import me.kimgunwoo.auctionseats.domain.user.dto.response.PointChargeResponse;
-import me.kimgunwoo.auctionseats.domain.user.dto.response.PointUseResponse;
+import me.kimgunwoo.auctionseats.domain.user.dto.response.PointResponse;
 import me.kimgunwoo.auctionseats.domain.user.enums.PointType;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
@@ -56,17 +56,18 @@ public class PointRepositoryCustomImpl implements PointRepositoryCustom {
 
 
     @Override
-    public Page<PointUseResponse> findUsePointListByPage(Long userId, Pageable pageable) {
-        List<PointUseResponse> list = jpaQueryFactory
-                .select(Projections.constructor(PointUseResponse.class,
+    public Page<PointResponse> findBidOrReservationPointListByPage(Long userId, Pageable pageable) {
+        List<PointResponse> list = jpaQueryFactory
+                .select(Projections.constructor(PointResponse.class,
                         point.id,
                         point.createdAt,
-                        point.changePoint
+                        point.changePoint,
+                        point.type
                 ))
                 .from(point)
                 .where(
                         point.user.id.eq(userId)
-                                .and(point.type.eq(PointType.USE))
+                                .and(point.type.ne(PointType.CHARGE))
                 )
                 .orderBy(sortPoint(pageable))
                 .offset(pageable.getOffset())

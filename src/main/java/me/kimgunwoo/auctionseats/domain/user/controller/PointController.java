@@ -14,8 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static me.kimgunwoo.auctionseats.global.exception.SuccessCode.SUCCESS_GET_CHARGE_POINT_LOG_LIST;
-import static me.kimgunwoo.auctionseats.global.exception.SuccessCode.SUCCESS_GET_USE_POINT_LOG_LIST;
+import static me.kimgunwoo.auctionseats.global.exception.SuccessCode.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -41,18 +40,18 @@ public class PointController {
                 );
     }
 
-    @GetMapping("/use")
-    public ResponseEntity<ApiResponse> getUsePointLogList(
+    @GetMapping("/change")
+    public ResponseEntity<ApiResponse> getBiddingAndPurchasingPointLogList(
             @CurrentUser User user,
             @PageableDefault(size = 15, sort = "createdAt", direction = Sort.Direction.DESC)
             Pageable pageable
     ) {
-        var response = pointService.getUsePointLogList(user, pageable);
-        return ResponseEntity.status(SUCCESS_GET_USE_POINT_LOG_LIST.getHttpStatus())
+        var response = pointService.getBidOrReservationPointLogList(user, pageable);
+        return ResponseEntity.status(SUCCESS_GET_CHANGING_POINT_LOG_LIST.getHttpStatus())
                 .body(
                         ApiResponse.of(
-                                SUCCESS_GET_USE_POINT_LOG_LIST.getCode(),
-                                SUCCESS_GET_USE_POINT_LOG_LIST.getMessage(),
+                                SUCCESS_GET_CHANGING_POINT_LOG_LIST.getCode(),
+                                SUCCESS_GET_CHANGING_POINT_LOG_LIST.getMessage(),
                                 response
                         )
                 );

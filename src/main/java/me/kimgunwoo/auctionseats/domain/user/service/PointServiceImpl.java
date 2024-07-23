@@ -2,7 +2,7 @@ package me.kimgunwoo.auctionseats.domain.user.service;
 
 import lombok.RequiredArgsConstructor;
 import me.kimgunwoo.auctionseats.domain.user.dto.response.PointChargeResponse;
-import me.kimgunwoo.auctionseats.domain.user.dto.response.PointUseResponse;
+import me.kimgunwoo.auctionseats.domain.user.dto.response.PointResponse;
 import me.kimgunwoo.auctionseats.domain.user.entity.Point;
 import me.kimgunwoo.auctionseats.domain.user.entity.User;
 import me.kimgunwoo.auctionseats.domain.user.enums.PointType;
@@ -23,7 +23,7 @@ public class PointServiceImpl implements PointService {
 
     @Override
     @Transactional
-    public void usePoint(User user, Long point) {
+    public void usePointForBid(User user, Long point) {
         if (user.getPoint() < point) {
             throw new ApiException(NOT_ENOUGH_POINT);
         }
@@ -31,7 +31,37 @@ public class PointServiceImpl implements PointService {
         Point usePoint = Point.builder()
                 .changePoint(point)
                 .user(user)
-                .type(PointType.USE)
+                .type(PointType.USE_BIDDING)
+                .build();
+
+        user.usePoint(point);
+        pointRepository.save(usePoint);
+    }
+
+    @Override
+    @Transactional
+    public void refundPoint(User user, Long point) {
+        Point refundPoint = Point.builder()
+                .changePoint(point)
+                .user(user)
+                .type(PointType.REFUND_BIDDING)
+                .build();
+
+        user.addPoint(point);
+        pointRepository.save(refundPoint);
+    }
+
+    @Override
+    @Transactional
+    public void usePointForGeneralPurchase(User user, Long point) {
+        if (user.getPoint() < point) {
+            throw new ApiException(NOT_ENOUGH_POINT);
+        }
+
+        Point usePoint = Point.builder()
+                .changePoint(point)
+                .user(user)
+                .type(PointType.USE_PURCHASE)
                 .build();
 
         user.usePoint(point);
@@ -48,7 +78,7 @@ public class PointServiceImpl implements PointService {
                 .orderId(orderId)
                 .build();
 
-        user.chargePoint(point);
+        user.addPoint(point);
         pointRepository.save(chargePoint);
     }
 
@@ -58,7 +88,7 @@ public class PointServiceImpl implements PointService {
     }
 
     @Override
-    public Page<PointUseResponse> getUsePointLogList(User user, Pageable pageable) {
-        return pointRepository.findUsePointListByPage(user.getId(), pageable);
+    public Page<PointResponse> getBidOrReservationPointLogList(User user, Pageable pageable) {
+        return pointRepository.findBidOrReservationPointListByPage(user.getId(), pageable);
     }
 }
