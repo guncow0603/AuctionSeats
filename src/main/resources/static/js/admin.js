@@ -86,6 +86,7 @@ function submitPlace(token) {
         alert('오류가 발생했습니다. 공연장을 추가하지 못했습니다. 오류: ' + error);
     }
 }
+// showsInfo
 function submitShowsInfo(token) {
     // 폼 데이터 가져오기
     var jsonPart = {
@@ -145,4 +146,102 @@ function submitShowsInfo(token) {
         //     $("#submitButton").prop('disabled', false).text('Add Performance Info');
         // }
     });
+
+    // shows
+// 페이지 로드시 상품 정보 가져오기
+    $(document).ready(function () {
+        // fetchShowsInfos 함수는 'shows' 클래스를 가진 페이지에서만 호출됩니다.
+        if ($('body').hasClass('shows')) {
+            reissueToken((token => {
+                fetchShowsInfos(token);
+            }));
+        }
+
+        // // 'shows-schedule-page' 클래스를 가진 페이지에서만 폼 제출 이벤트를 바인딩합니다.
+        // if ($('body').hasClass('shows-schedule-page')) {
+        //     $('#showsForm').on('submit', function (e) {
+        //         e.preventDefault();
+        //         submitShowsAndSchedule(token);
+        //     });
+        // }
+        // ... 기타 페이지별 스크립트 ...
+    });
+
+    function fetchShowsInfos(token) {
+        $.ajax({
+            url: '/api/v1/shows-infos',
+            type: 'GET',
+            beforeSend: function (xhr) {
+                if (token) {
+                    xhr.setRequestHeader('Authorization', token);
+                }
+            },
+            success: function (data) {
+                $('#showsInfo').empty(); // 셀렉트 박스 초기화
+                data.forEach(function (showsInfo) {
+                    var option = new Option(showsInfo.name, showsInfo.showsInfoId);
+                    $('#showsInfo').append(option);
+
+                    // s3Url이 있는 경우, 옵션에 해당 URL을 데이터 속성으로 저장합니다.
+                    if (showsInfo.s3Url) {
+                        $(option).data('s3url', showsInfo.s3Url);
+                    }
+                });
+            },
+            error: function (xhr, status, error) {
+                alert('상품 정보를 가져오는 데 실패했습니다: ' + error);
+            }
+        });
+    }
+
+// 상품 선택 시 이미지 변경
+    $('#showsInfo').change(function () {
+        var selectedOption = $(this).find('option:selected');
+        var s3Url = selectedOption.data('s3url');
+
+        // 이미지 URL이 있으면 이미지 업데이트
+        if (s3Url) {
+            $('#showsInfoImage').attr('src', s3Url);
+        } else {
+            $('#showsInfoImage').attr('src', '기본이미지URL'); // 기본 이미지나 플레이스홀더 이미지 설정
+        }
+    });
+
+// 공연 정보를 생성하고 스케줄을 추가하는 함수
+    function submitShowsAndSchedule(token) {
+        var showsInfoId = $('#showsInfo').val(); // 선택된 상품 정보 ID
+        var title = $('#title').val().trim(); // 공연 제목
+        var startDate = $('#startDate').val().trim(); // 시작 일자
+        var endDate = $('#endDate').val().trim(); // 종료 일자
+        var startTime = $('#startTime').val().trim(); // 상영 시작 시간
+
+        // 상품 생성 요청 데이터 구성
+        var showsCreateRequest = {
+            title: title,
+            startDate: startDate,
+            endDate: endDate,
+            startTime: startTime
+        };
+
+        // 상품 정보 생성 및 스케줄 추가 AJAX 요청
+        $.ajax({
+            url: `/api/v1/admin/shows-infos/${showsInfoId}/shows`,
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(showsCreateRequest),
+            beforeSend: function (xhr) {
+                if (token) {
+                    xhr.setRequestHeader('Authorization', token);
+                }
+            },
+            success: function (response) {
+                alert('공연 정보가 성공적으로 추가되었습니다.');
+                console.log(response);
+                // 여기에 성공 후 처리 로직을 추가할 수 있습니다.
+            },
+            error: function (xhr, status, error) {
+                alert('공연 정보를 추가하는 중 오류가 발생했습니다: ' + error);
+            }
+        });
+    }
 }
