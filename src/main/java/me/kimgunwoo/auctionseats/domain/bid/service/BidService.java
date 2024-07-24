@@ -20,7 +20,7 @@ public interface BidService {
      * @param bidRequest - 입찰 요청 DTO
      * @param loginUser - 인증된 로그인 유저
      */
-    void bid(Long auctionId, BidRequest bidRequest, User loginUser);
+    void handleBid(Long auctionId, BidRequest bidRequest, User loginUser);
 
     /**
      * 경매의 최근입찰 조회
@@ -28,10 +28,7 @@ public interface BidService {
      * @return 최근 입찰
      */
     Optional<Bid> getCurrentBid(Auction auction);
-
     SseEmitter subscribe(Long auctionId);
-
-
     /**
      * 내 입찰 내역 조회 기능
      *
