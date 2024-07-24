@@ -2,6 +2,7 @@ package me.kimgunwoo.auctionseats.domain.user.service;
 
 import lombok.RequiredArgsConstructor;
 import me.kimgunwoo.auctionseats.domain.user.dto.request.UserCreateRequest;
+import me.kimgunwoo.auctionseats.domain.user.dto.request.UserDeleteRequest;
 import me.kimgunwoo.auctionseats.domain.user.dto.request.UserPasswordUpdateRequest;
 import me.kimgunwoo.auctionseats.domain.user.dto.request.UserUpdateRequest;
 import me.kimgunwoo.auctionseats.domain.user.dto.response.UserResponse;
@@ -106,9 +107,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void deleteUser(User loginUser, Long userId) {
+    public void deleteUser(User loginUser, Long userId, UserDeleteRequest request) {
         User user = checkAndGetUser(loginUser, userId);
-
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new ApiException(NOT_MATCH_PASSWORD);
+        }
         user.delete();
     }
 

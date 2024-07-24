@@ -49,22 +49,20 @@
         </div>
 
     </form>
-    <button onclick="submitShowsInfo()" id="submitButton">공연 정보 추가</button>
-    <button onclick="movePageWithToken()" id="showsPage">다음 페이지</button>
+    <button id="submitShowsInfoButton">공연 정보 추가</button>
+    <button id="showsPage">다음 페이지</button>
 </div>
 <script>
     $("#headers").load("/header.html", function (response, status, xhr) {
         checkLoginStatus();
     });
-    $("#submitButton").on("click", function () {
+    $("#submitShowsInfoButton").on("click", function () {
         reissueToken((token => {
             submitShowsInfo(token);
         }));
     });
     $("#showsPage").on("click", function () {
-        reissueToken((token => {
-            submitShowsInfo(token);
-        }));
+        movePageWithToken("/shows.html");
     });
 </script>
 </body>

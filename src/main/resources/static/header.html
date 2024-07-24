@@ -72,16 +72,15 @@
         redirectToPage(`/login.html`);
     });
     $("#charge-point").on("click", function () {
-        movePageWithToken(`/paymentRequest.html`);
+        movePageWithToken(`/payment/request.html`);
     });
+
     $(".logout").on("click", function () {
         confirmFuncLogout();
     });
-    $("#signup").on('click', function () {
-        redirectToPage(`/signup.html`);
-    });
+
     $("#mypage").on("click", function () {
-        movePageWithToken(`/user-info.html`);
+        movePageWithToken(`/user/info.html`);
     });
 </script>
 </html>

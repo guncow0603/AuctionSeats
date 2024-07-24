@@ -156,3 +156,31 @@ function displayData(code, data) {
 
     }
 }
+
+function withdrawUser(token, id) {
+    let password = $("#delete-password").val();
+
+    $.ajax({
+        type: "DELETE",
+        url: `/api/v1/users/${id}`,
+        contentType: "application/json",
+        headers: {
+            "Authorization": token
+        },
+        data: JSON.stringify({
+            password: password
+        }),
+        success: function (data) {
+            alert('탈퇴가 완료되었습니다.');
+            requestLogout();
+        },
+        error: function (jqXHR, textStatus) {
+            let response = jqXHR.responseJSON;
+            if (response) {
+                if (response.code.substring(2, 4) === "02") {
+                    $("#delete-password-span").text(response.message);
+                }
+            }
+        }
+    });
+}

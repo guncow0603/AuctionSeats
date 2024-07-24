@@ -1,6 +1,7 @@
 package me.kimgunwoo.auctionseats.domain.user.service;
 
 import me.kimgunwoo.auctionseats.domain.user.dto.request.UserCreateRequest;
+import me.kimgunwoo.auctionseats.domain.user.dto.request.UserDeleteRequest;
 import me.kimgunwoo.auctionseats.domain.user.dto.request.UserPasswordUpdateRequest;
 import me.kimgunwoo.auctionseats.domain.user.dto.request.UserUpdateRequest;
 import me.kimgunwoo.auctionseats.domain.user.dto.response.UserResponse;
@@ -59,8 +60,9 @@ public interface UserService {
      *
      * @param user 		로그인 한 유저 정보
      * @param userId  	탈퇴할 유저의 id
+     * @param request	확인용 비밀번호
      * */
-    void deleteUser(User user, Long userId);
+    void deleteUser(User user, Long userId, UserDeleteRequest request);
 
 
     /*
