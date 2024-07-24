@@ -24,6 +24,7 @@ public class Point extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
+
     @Comment("변동된 포인트")
     @Column(name = "change_point", nullable = false)
     private Long changePoint;

@@ -28,7 +28,6 @@ import static me.kimgunwoo.auctionseats.global.exception.SuccessCode.SUCCESS_GET
 public class BidController {
     private final BidService bidService;
     private final RedisPublisher redisPublisher;
-
     /*입찰하기*/
     @PostMapping
     public ResponseEntity<ApiResponse<EmptyObject>> bid(
@@ -36,14 +35,13 @@ public class BidController {
             @Valid @RequestBody BidRequest bidRequest,
             @CurrentUser User loginUser
     ) {
-        bidService.bid(auctionId, bidRequest, loginUser);
+        bidService.handleBid(auctionId, bidRequest, loginUser);
 
         //입찰 갱신 sse
         redisPublisher.publish(AUCTION_SSE_PREFIX + auctionId, bidRequest.getPrice());
         return ResponseEntity.status(SUCCESS_BID.getHttpStatus())
                 .body(ApiResponse.of(SUCCESS_BID.getCode(), SUCCESS_BID.getMessage()));
     }
-
     @GetMapping
     public ResponseEntity<ApiResponse<Page<BidInfoResponse>>> getMyBids(
             @PathVariable Long auctionId,
@@ -61,7 +59,6 @@ public class BidController {
                         )
                 );
     }
-
     @GetMapping("/sse")
     public SseEmitter subscribe(@PathVariable Long auctionId) {
         return bidService.subscribe(auctionId);
