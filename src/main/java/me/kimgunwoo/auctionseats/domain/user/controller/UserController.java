@@ -3,6 +3,7 @@ package me.kimgunwoo.auctionseats.domain.user.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.kimgunwoo.auctionseats.domain.user.dto.request.UserCreateRequest;
+import me.kimgunwoo.auctionseats.domain.user.dto.request.UserDeleteRequest;
 import me.kimgunwoo.auctionseats.domain.user.dto.request.UserPasswordUpdateRequest;
 import me.kimgunwoo.auctionseats.domain.user.dto.request.UserUpdateRequest;
 import me.kimgunwoo.auctionseats.domain.user.dto.response.UserResponse;
@@ -82,9 +83,10 @@ public class UserController {
     @DeleteMapping("/{userId}")
     public ResponseEntity<ApiResponse> deleteUser(
             @CurrentUser User user,
-            @PathVariable Long userId
+            @PathVariable Long userId,
+            @RequestBody UserDeleteRequest request
     ) {
-        userService.deleteUser(user, userId);
+        userService.deleteUser(user, userId, request);
         return ResponseEntity.status(SUCCESS_DELETE_USER.getHttpStatus())
                 .body(
                         ApiResponse.of(
