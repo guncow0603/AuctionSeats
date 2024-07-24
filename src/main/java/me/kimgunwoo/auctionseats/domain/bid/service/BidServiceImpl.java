@@ -24,13 +24,14 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import java.io.IOException;
 import java.util.Optional;
 
+import static me.kimgunwoo.auctionseats.domain.auction.constant.AuctionConstant.BID_PRICE_INCREASE_PERCENT;
 import static me.kimgunwoo.auctionseats.domain.bid.constant.BidConstant.AUCTION_SSE_PREFIX;
-import static me.kimgunwoo.auctionseats.domain.bid.constant.BidConstant.BID_PRICE_INCREASE_PERCENT;
 import static me.kimgunwoo.auctionseats.global.exception.ErrorCode.*;
 
+
+@Slf4j
 @RequiredArgsConstructor
 @Service
-@Slf4j
 public class BidServiceImpl implements BidService {
     private static final Long DEFAULT_SSE_TIMEOUT = 30 * 60 * 1000L;
     private static final String CONNECTED = "CONNECTED";
@@ -46,7 +47,7 @@ public class BidServiceImpl implements BidService {
     private final RedisSubscriber redisSubscriber;
 
     @Override
-    @DistributedLock(key = "T(com.me.auctionseats.domain.auction.constant.AuctionConstant).AUCTION_BID_KEY_PREFIX.concat(#auctionId)")
+    @DistributedLock(key = "T(com.sparta.ticketauction.domain.bid.constant.BidConstant).AUCTION_BID_KEY_PREFIX.concat(#auctionId)")
     public void bid(Long auctionId, BidRequest bidRequest, User loginUser) {
         //redis에 경매 정보 확인
         if (bidRedisService.isExpired(auctionId)) {
@@ -97,6 +98,8 @@ public class BidServiceImpl implements BidService {
         return sseEmitter;
     }
 
+
+
     public void updateBidderPoints(User bidder, long newBidPrice, long currentBidPrice, Auction auction) {
         Optional<Bid> currentBid = getCurrentBid(auction);
         if (currentBid.isPresent()) {
@@ -107,6 +110,7 @@ public class BidServiceImpl implements BidService {
         //새 입찰자 포인트 차감 및 경매 입찰가 갱신
         pointService.usePoint(bidder, newBidPrice);
     }
+
     public void saveBid(User bidder, long newBidPrice, Auction auction) {
         Bid newBid = Bid.builder()
                 .price(newBidPrice)

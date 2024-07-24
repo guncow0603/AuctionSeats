@@ -23,7 +23,7 @@ public class PointServiceImpl implements PointService {
 
     @Override
     @Transactional
-    public void usePointForBid(User user, Long point) {
+    public void usePoint(User user, Long point) {
         if (user.getPoint() < point) {
             throw new ApiException(NOT_ENOUGH_POINT);
         }
@@ -31,7 +31,7 @@ public class PointServiceImpl implements PointService {
         Point usePoint = Point.builder()
                 .changePoint(point)
                 .user(user)
-                .type(PointType.USE_BIDDING)
+                .type(PointType.USE)
                 .build();
 
         user.usePoint(point);
@@ -44,28 +44,11 @@ public class PointServiceImpl implements PointService {
         Point refundPoint = Point.builder()
                 .changePoint(point)
                 .user(user)
-                .type(PointType.REFUND_BIDDING)
+                .type(PointType.REFUND)
                 .build();
 
         user.addPoint(point);
         pointRepository.save(refundPoint);
-    }
-
-    @Override
-    @Transactional
-    public void usePointForGeneralPurchase(User user, Long point) {
-        if (user.getPoint() < point) {
-            throw new ApiException(NOT_ENOUGH_POINT);
-        }
-
-        Point usePoint = Point.builder()
-                .changePoint(point)
-                .user(user)
-                .type(PointType.USE_PURCHASE)
-                .build();
-
-        user.usePoint(point);
-        pointRepository.save(usePoint);
     }
 
     @Override
@@ -82,13 +65,14 @@ public class PointServiceImpl implements PointService {
         pointRepository.save(chargePoint);
     }
 
+
     @Override
     public Page<PointChargeResponse> getChargePointLogList(User loginUser, Pageable pageable) {
         return pointRepository.findChargePointListByPage(loginUser.getId(), pageable);
     }
 
     @Override
-    public Page<PointResponse> getBidOrReservationPointLogList(User user, Pageable pageable) {
-        return pointRepository.findBidOrReservationPointListByPage(user.getId(), pageable);
+    public Page<PointResponse> getUseAndRefundPointLogList(User user, Pageable pageable) {
+        return pointRepository.findUseAndRefundpointListByPage(user.getId(), pageable);
     }
 }
