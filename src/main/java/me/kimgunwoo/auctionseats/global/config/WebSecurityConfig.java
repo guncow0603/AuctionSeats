@@ -1,5 +1,6 @@
 package me.kimgunwoo.auctionseats.global.config;
 
+import org.springframework.http.HttpMethod;
 import lombok.RequiredArgsConstructor;
 import me.kimgunwoo.auctionseats.global.jwt.ExceptionHandlerFilter;
 import me.kimgunwoo.auctionseats.global.jwt.JwtAuthenticationFilter;
@@ -65,6 +66,8 @@ public class WebSecurityConfig {
                                 .requestMatchers("/api/v1/auth/**", "/api/v1/payments/getKey").permitAll()
                                 .requestMatchers("/*.html").permitAll()
                                 .requestMatchers("/api/v1/users/signup").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/v1/shows/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/v1/place/**").permitAll()
                                 .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
                                 .anyRequest().authenticated()
         );

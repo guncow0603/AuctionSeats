@@ -5,6 +5,8 @@ import me.kimgunwoo.auctionseats.domain.admin.dto.response.ShowsGetResponse;
 import me.kimgunwoo.auctionseats.domain.show.dto.response.ShowsGetSliceResponse;
 import me.kimgunwoo.auctionseats.domain.show.dto.response.ShowsInfoGetResponse;
 import me.kimgunwoo.auctionseats.domain.show.service.ShowsService;
+import me.kimgunwoo.auctionseats.domain.user.entity.User;
+import me.kimgunwoo.auctionseats.global.annotaion.CurrentUser;
 import me.kimgunwoo.auctionseats.global.response.ApiResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +25,7 @@ public class ShowsController {
 
     // 공연 정보 전체 조회
     @GetMapping("shows-infos")
-    public ResponseEntity<ApiResponse<List<ShowsInfoGetResponse>>> getAllShowsInfo() {
+    public ResponseEntity<ApiResponse<List<ShowsInfoGetResponse>>> getAllShowsInfo(@CurrentUser User user) {
         List<ShowsInfoGetResponse> showsInfoGetResponseList = showsService.getAllShowsInfo();
         return ResponseEntity
                 .status(
