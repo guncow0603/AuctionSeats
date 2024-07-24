@@ -1,4 +1,28 @@
 let zones = [];
+
+$(document).ready(function () {
+    // fetchShowsInfos 함수는 'shows' 클래스를 가진 페이지에서만 호출됩니다.
+    if ($('body').hasClass('showsClass')) {
+        reissueToken((token => {
+            fetchShowsInfos(token);
+            fetchPlace();
+        }));
+    }
+
+    // 상품 선택 시 이미지 변경
+    $(document).on('change', '#showsInfoLabel', function () {
+        var selectedOption = $(this).find('option:selected');
+        var s3Url = selectedOption.data('s3Url');
+
+        if (s3Url) {
+            $('#showsInfoImage').attr('src', s3Url);
+        } else {
+            $('#showsInfoImage').attr('src', '기본이미지URL');
+        }
+    });
+
+});
+
 function addZone() {
     const zoneName = $('#zoneName').val().trim();
     const seatsCount = $('#zoneSeats').val().trim();
@@ -148,25 +172,7 @@ function submitShowsInfo(token) {
     });
 
     // shows
-// 페이지 로드시 상품 정보 가져오기
-    $(document).ready(function () {
-        // fetchShowsInfos 함수는 'shows' 클래스를 가진 페이지에서만 호출됩니다.
-        if ($('body').hasClass('shows')) {
-            reissueToken((token => {
-                fetchShowsInfos(token);
-            }));
-        }
-
-        // // 'shows-schedule-page' 클래스를 가진 페이지에서만 폼 제출 이벤트를 바인딩합니다.
-        // if ($('body').hasClass('shows-schedule-page')) {
-        //     $('#showsForm').on('submit', function (e) {
-        //         e.preventDefault();
-        //         submitShowsAndSchedule(token);
-        //     });
-        // }
-        // ... 기타 페이지별 스크립트 ...
-    });
-
+    // 페이지 로드시 공연정보 가져오기
     function fetchShowsInfos(token) {
         $.ajax({
             url: '/api/v1/shows-infos',
@@ -176,16 +182,17 @@ function submitShowsInfo(token) {
                     xhr.setRequestHeader('Authorization', token);
                 }
             },
-            success: function (data) {
-                $('#showsInfo').empty(); // 셀렉트 박스 초기화
-                data.forEach(function (showsInfo) {
+            success: function (response) {
+                console.log(response);
+                $('#showsInfoLabel').empty(); // 셀렉트 박스 초기화
+                response.data.forEach(function (showsInfo) {
                     var option = new Option(showsInfo.name, showsInfo.showsInfoId);
-                    $('#showsInfo').append(option);
 
                     // s3Url이 있는 경우, 옵션에 해당 URL을 데이터 속성으로 저장합니다.
                     if (showsInfo.s3Url) {
-                        $(option).data('s3url', showsInfo.s3Url);
+                        $(option).data('s3Url', showsInfo.s3Url);
                     }
+                    $('#showsInfoLabel').append(option);
                 });
             },
             error: function (xhr, status, error) {
@@ -194,22 +201,28 @@ function submitShowsInfo(token) {
         });
     }
 
-// 상품 선택 시 이미지 변경
-    $('#showsInfo').change(function () {
-        var selectedOption = $(this).find('option:selected');
-        var s3Url = selectedOption.data('s3url');
-
-        // 이미지 URL이 있으면 이미지 업데이트
-        if (s3Url) {
-            $('#showsInfoImage').attr('src', s3Url);
-        } else {
-            $('#showsInfoImage').attr('src', '기본이미지URL'); // 기본 이미지나 플레이스홀더 이미지 설정
-        }
-    });
-
+//페이지 로드시 공연장 조회 정보 가져오기
+    function fetchPlace() {
+        $.ajax({
+            url: '/api/v1/places',
+            type: 'GET',
+            success: function (response) {
+                console.log(response);
+                $('#placeLabel').empty(); // 셀렉트 박스 초기화
+                response.data.forEach(function (place) { // 'response.data'가 아닌 'response'를 순회
+                    var option = new Option(place.name, place.placeId);
+                    $('#placeLabel').append(option);
+                });
+            },
+            error: function (xhr, status, error) {
+                alert('공연장 정보를 가져오는 데 실패했습니다: ' + error);
+            }
+        });
+    }
 // 공연 정보를 생성하고 스케줄을 추가하는 함수
     function submitShowsAndSchedule(token) {
-        var showsInfoId = $('#showsInfo').val(); // 선택된 상품 정보 ID
+        var showsInfoId = $('#showsInfoLabel').val(); // 선택된 상품 정보 ID
+        var placeId = $('#placeLabel').val(); // 선택된 공연장 ID
         var title = $('#title').val().trim(); // 공연 제목
         var startDate = $('#startDate').val().trim(); // 시작 일자
         var endDate = $('#endDate').val().trim(); // 종료 일자
@@ -220,12 +233,12 @@ function submitShowsInfo(token) {
             title: title,
             startDate: startDate,
             endDate: endDate,
-            startTime: startTime
+            startTime: startTime,
         };
 
         // 상품 정보 생성 및 스케줄 추가 AJAX 요청
         $.ajax({
-            url: `/api/v1/admin/shows-infos/${showsInfoId}/shows`,
+            url: `/api/v1/admin/shows-infos/${showsInfoId}/shows?placeId=${placeId}`,
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(showsCreateRequest),
@@ -237,7 +250,10 @@ function submitShowsInfo(token) {
             success: function (response) {
                 alert('공연 정보가 성공적으로 추가되었습니다.');
                 console.log(response);
-                // 여기에 성공 후 처리 로직을 추가할 수 있습니다.
+                if (response && response.data.showsId) {
+                    localStorage.setItem('showsId', response.data.showsId);
+                }
+                movePageWithToken("/grade.html");
             },
             error: function (xhr, status, error) {
                 alert('공연 정보를 추가하는 중 오류가 발생했습니다: ' + error);
