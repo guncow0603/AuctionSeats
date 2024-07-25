@@ -1,9 +1,9 @@
-package me.kimgunwoo.auctionseats.domain.reservation_seat.dto;
+package me.kimgunwoo.auctionseats.domain.reservation.reservation_seat.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import me.kimgunwoo.auctionseats.domain.reservation_seat.entity.ReservationSeatId;
+import me.kimgunwoo.auctionseats.domain.reservation.reservation_seat.entity.ReservationSeatId;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor

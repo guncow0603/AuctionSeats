@@ -3,7 +3,7 @@ package me.kimgunwoo.auctionseats.domain.reservation.dto.request;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import me.kimgunwoo.auctionseats.domain.reservation_seat.dto.ReservationSeatCreateRequest;
+import me.kimgunwoo.auctionseats.domain.reservation.reservation_seat.dto.ReservationSeatCreateRequest;
 
 import java.util.List;
 

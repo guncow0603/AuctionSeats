@@ -5,7 +5,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import me.kimgunwoo.auctionseats.domain.reservation_seat.entity.ReservationSeat;
+import me.kimgunwoo.auctionseats.domain.reservation.reservation_seat.entity.ReservationSeat;
 import me.kimgunwoo.auctionseats.domain.schedule.entity.Schedule;
 import me.kimgunwoo.auctionseats.domain.user.entity.User;
 import me.kimgunwoo.auctionseats.global.entity.BaseEntity;
