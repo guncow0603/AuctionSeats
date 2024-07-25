@@ -8,7 +8,7 @@ import me.kimgunwoo.auctionseats.domain.reservation.dto.ReservationSeatInfo;
 import me.kimgunwoo.auctionseats.domain.reservation.dto.response.ReservationDetailResponse;
 import me.kimgunwoo.auctionseats.domain.reservation.dto.response.ReservationResponse;
 import me.kimgunwoo.auctionseats.domain.reservation.entity.Reservation;
-import me.kimgunwoo.auctionseats.domain.reservation_seat.entity.ReservationSeat;
+import me.kimgunwoo.auctionseats.domain.reservation.reservation_seat.entity.ReservationSeat;
 import me.kimgunwoo.auctionseats.domain.schedule.entity.Schedule;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,7 +21,7 @@ import java.util.Optional;
 
 import static me.kimgunwoo.auctionseats.domain.place.entity.QPlaces.places;
 import static me.kimgunwoo.auctionseats.domain.reservation.entity.QReservation.reservation;
-import static me.kimgunwoo.auctionseats.domain.reservation_seat.entity.QReservationSeat.reservationSeat;
+import static me.kimgunwoo.auctionseats.domain.reservation.reservation_seat.entity.QReservationSeat.reservationSeat;
 import static me.kimgunwoo.auctionseats.domain.schedule.entity.QSchedule.schedule;
 import static me.kimgunwoo.auctionseats.domain.show.entity.QShows.shows;
 import static me.kimgunwoo.auctionseats.domain.user.entity.QUser.user;

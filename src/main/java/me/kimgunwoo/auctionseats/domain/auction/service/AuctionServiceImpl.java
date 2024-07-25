@@ -7,21 +7,23 @@ import me.kimgunwoo.auctionseats.domain.auction.dto.response.AuctionDetailRespon
 import me.kimgunwoo.auctionseats.domain.auction.dto.response.AuctionInfoResponse;
 import me.kimgunwoo.auctionseats.domain.auction.entity.Auction;
 import me.kimgunwoo.auctionseats.domain.auction.repository.AuctionRepository;
+import me.kimgunwoo.auctionseats.domain.bid.entity.Bid;
 import me.kimgunwoo.auctionseats.domain.bid.service.BidRedisService;
 import me.kimgunwoo.auctionseats.domain.bid.service.BidService;
 import me.kimgunwoo.auctionseats.domain.grade.entity.ZoneGrade;
 import me.kimgunwoo.auctionseats.domain.grade.repository.ZoneGradeRepository;
+import me.kimgunwoo.auctionseats.domain.reservation.service.ReservationService;
 import me.kimgunwoo.auctionseats.domain.schedule.entity.Schedule;
 import me.kimgunwoo.auctionseats.domain.schedule.repository.ScheduleRepository;
 import me.kimgunwoo.auctionseats.domain.user.entity.User;
 import me.kimgunwoo.auctionseats.global.exception.ApiException;
 import me.kimgunwoo.auctionseats.global.exception.ErrorCode;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.data.domain.Pageable;
 
-import java.time.Duration;
+import java.util.Optional;
 
 @Slf4j(topic = "경매 서비스")
 @RequiredArgsConstructor
@@ -32,6 +34,8 @@ public class AuctionServiceImpl implements AuctionService {
     private final ZoneGradeRepository zoneGradeRepository;
     private final BidService bidService;
     private final BidRedisService bidRedisService;
+    private final ReservationService reservationService;
+
     @Override
     @Transactional
     public void createAuction(Long scheduleId, Long zoneGradeId, AuctionCreateRequest request) {
@@ -40,7 +44,7 @@ public class AuctionServiceImpl implements AuctionService {
 
         Auction auction = request.toEntity(schedule, zoneGrade);
         auctionRepository.save(auction);
-        bidRedisService.saveWithExpire(auction, genRemainSeconds(auction));
+        bidRedisService.saveWithExpire(auction);
     }
 
     @Override
@@ -49,16 +53,21 @@ public class AuctionServiceImpl implements AuctionService {
         Auction auction = getAuction(auctionId);
         auction.ended();
 
-        User bidWinner = getBidWinner(auction);
-
-        log.info("예매 성공! id: {]", auctionId);
+        //경매 종료 시 입찰자가 없으면 예매 x
+        Optional<Bid> bidOptional = bidService.getCurrentBid(auction);
+        bidOptional.ifPresent(bid -> reservationService.reserve(bid, auction));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public AuctionDetailResponse getAuctionInfo(Long auctionId) {
         Auction auction = getAuction(auctionId);
-        Long remainTimeMilli = bidRedisService.getRemainTimeMilli(auctionId);
-        return AuctionDetailResponse.from(auction, remainTimeMilli);
+        long remainTimeMilli = bidRedisService.getRemainTimeMilli(auctionId);
+        long bidPrice = bidRedisService.getBidPrice(auctionId)
+                .orElseGet(() ->
+                        bidService.getMaxBidPrice(auction).orElse(auction.getStartPrice())
+                );
+        return AuctionDetailResponse.from(auction, bidPrice, remainTimeMilli);
     }
 
     @Override
@@ -68,18 +77,8 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<AuctionInfoResponse> getMyJoinedAuctions(User loginUser, Pageable pageable) {
         return auctionRepository.getJoinedMyAuctions(loginUser, pageable);
-    }
-
-    public User getBidWinner(Auction auction) {
-        return bidService.getCurrentBid(auction)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_WIN_BID))
-                .getUser();
-    }
-
-    private long genRemainSeconds(Auction auction) {
-        Duration duration = Duration.between(auction.getStartDateTime(), auction.getEndDateTime());
-        return duration.getSeconds();
     }
 }

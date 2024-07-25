@@ -1,4 +1,4 @@
-package me.kimgunwoo.auctionseats.domain.reservation_seat.entity;
+package me.kimgunwoo.auctionseats.domain.reservation.reservation_seat.entity;
 
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;

@@ -12,6 +12,7 @@ import me.kimgunwoo.auctionseats.global.entity.BaseEntity;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -76,5 +77,13 @@ public class Auction extends BaseEntity {
 
     public void ended() {
         this.isEnded = true;
+    }
+
+    //경매 시작일이 오늘보다 이전이면 => 재처리하는 경우
+    public long genRemainSeconds() {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime effectiveStart = startDateTime.isBefore(now) ? now : startDateTime;
+        Duration duration = Duration.between(effectiveStart, endDateTime);
+        return duration.getSeconds();
     }
 }

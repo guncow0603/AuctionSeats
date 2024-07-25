@@ -1,7 +1,6 @@
-package me.kimgunwoo.auctionseats.domain.reservation_seat.repository;
+package me.kimgunwoo.auctionseats.domain.reservation.reservation_seat.repository;
 
-import me.kimgunwoo.auctionseats.domain.reservation_seat.entity.ReservationSeat;
-import me.kimgunwoo.auctionseats.domain.seat.dto.ReservedSeatResponse;
+import me.kimgunwoo.auctionseats.domain.reservation.reservation_seat.entity.ReservationSeat;
 
 import java.util.List;
 

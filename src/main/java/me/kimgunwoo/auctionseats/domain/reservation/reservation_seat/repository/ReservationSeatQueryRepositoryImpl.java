@@ -1,13 +1,13 @@
-package me.kimgunwoo.auctionseats.domain.reservation_seat.repository;
+package me.kimgunwoo.auctionseats.domain.reservation.reservation_seat.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import me.kimgunwoo.auctionseats.domain.reservation_seat.entity.ReservationSeat;
+import me.kimgunwoo.auctionseats.domain.reservation.reservation_seat.entity.ReservationSeat;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static me.kimgunwoo.auctionseats.domain.reservation_seat.entity.QReservationSeat.reservationSeat;
+import static me.kimgunwoo.auctionseats.domain.reservation.reservation_seat.entity.QReservationSeat.reservationSeat;
 
 
 @Repository
