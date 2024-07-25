@@ -2,6 +2,7 @@ package me.kimgunwoo.auctionseats.domain.show.controller;
 
 import lombok.RequiredArgsConstructor;
 import me.kimgunwoo.auctionseats.domain.admin.dto.response.ShowsGetResponse;
+import me.kimgunwoo.auctionseats.domain.show.dto.response.ShowsCategoryGetResponse;
 import me.kimgunwoo.auctionseats.domain.show.dto.response.ShowsGetSliceResponse;
 import me.kimgunwoo.auctionseats.domain.show.dto.response.ShowsInfoGetResponse;
 import me.kimgunwoo.auctionseats.domain.show.service.ShowsService;
@@ -66,5 +67,21 @@ public class ShowsController {
                                 SUCCESS_GET_SLICE_SHOWS.getMessage(),
                                 showsGetSliceResponse)
                 );
+    }
+
+    // 공연 카테고리 조회
+    @GetMapping("/shows-categorys")
+    public ResponseEntity<ApiResponse<List<ShowsCategoryGetResponse>>> getAllCategory() {
+        List<ShowsCategoryGetResponse> showsCategoryGetResponseList = showsService.getAllShowsCategory();
+
+        return ResponseEntity
+                .status(
+                        SUCCESS_GET_ALL_SHOWS_CATEGORY.getHttpStatus())
+                .body(
+                        ApiResponse.of(
+                                SUCCESS_GET_ALL_SHOWS_CATEGORY.getCode(),
+                                SUCCESS_GET_ALL_SHOWS_CATEGORY.getMessage(),
+                                showsCategoryGetResponseList));
+
     }
 }

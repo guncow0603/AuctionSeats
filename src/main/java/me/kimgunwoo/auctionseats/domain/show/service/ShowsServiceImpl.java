@@ -7,6 +7,7 @@ import me.kimgunwoo.auctionseats.domain.admin.dto.request.ShowsCreateRequest;
 import me.kimgunwoo.auctionseats.domain.admin.dto.request.ShowsInfoCreateRequest;
 import me.kimgunwoo.auctionseats.domain.admin.dto.response.ShowsGetResponse;
 import me.kimgunwoo.auctionseats.domain.place.entity.Places;
+import me.kimgunwoo.auctionseats.domain.show.dto.response.ShowsCategoryGetResponse;
 import me.kimgunwoo.auctionseats.domain.show.dto.response.ShowsGetSliceResponse;
 import me.kimgunwoo.auctionseats.domain.show.dto.response.ShowsInfoGetResponse;
 import me.kimgunwoo.auctionseats.domain.show.entity.Shows;
@@ -160,6 +161,13 @@ public class ShowsServiceImpl implements ShowsService {
 
     }
 
+    // 공연 카테고리 전체 조회
+    @Override
+    public List<ShowsCategoryGetResponse> getAllShowsCategory() {
+        List<ShowsCategory> showsCategorieList = showsCategoryRepository.findAll();
+        return showsCategorieList.stream().map(ShowsCategoryGetResponse::new).toList();
+    }
+    
     // 공연 정보 조회
     @Override
     public ShowsInfo findByShowsInfoId(Long showsInfoId) {
@@ -167,7 +175,7 @@ public class ShowsServiceImpl implements ShowsService {
                 .orElseThrow(() -> new ApiException(NOT_FOUND_SHOWS_INFO));
     }
 
-    // 공연 정보 조회
+    // 공연 조회
     public Shows findByShowsId(Long showsId) {
         return showsRepository.findById(showsId)
                 .orElseThrow(() -> new ApiException(NOT_FOUND_SHOWS));

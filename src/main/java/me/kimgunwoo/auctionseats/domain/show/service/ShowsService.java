@@ -4,6 +4,7 @@ import me.kimgunwoo.auctionseats.domain.admin.dto.request.ShowsCreateRequest;
 import me.kimgunwoo.auctionseats.domain.admin.dto.request.ShowsInfoCreateRequest;
 import me.kimgunwoo.auctionseats.domain.admin.dto.response.ShowsGetResponse;
 import me.kimgunwoo.auctionseats.domain.place.entity.Places;
+import me.kimgunwoo.auctionseats.domain.show.dto.response.ShowsCategoryGetResponse;
 import me.kimgunwoo.auctionseats.domain.show.dto.response.ShowsGetSliceResponse;
 import me.kimgunwoo.auctionseats.domain.show.dto.response.ShowsInfoGetResponse;
 import me.kimgunwoo.auctionseats.domain.show.entity.Shows;
@@ -46,9 +47,12 @@ public interface ShowsService {
     // 공연 단건 조회
     ShowsGetResponse getShows(Long showsId);
 
+    // 공연 카테고리 전체 조회
+    List<ShowsCategoryGetResponse> getAllShowsCategory();
+
     // 공연 정보 조회
     ShowsInfo findByShowsInfoId(Long showsInfoId);
 
-    // 공연 정보 조회
+    // 공연 조회
     Shows findByShowsId(Long showsId);
 }
