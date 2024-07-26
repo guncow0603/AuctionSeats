@@ -52,7 +52,7 @@
         </tbody>
     </table>
     <button id="createPlaceButton">공연장 추가하기</button>
-    <button id="goodsInfoPage">다음 페이지</button>
+    <button id="showsInfoPage">다음 페이지</button>
 </div>
 </body>
 <script>
@@ -66,8 +66,8 @@
     });
     $('#addZoneButton').on('click', addZone); // 구역 추가 이벤트 핸들러
 
-    $("#goodsInfoPage").on("click", function () {
-        movePageWithToken("/goodsInfo.html");
+    $("#showsInfoPage").on("click", function () {
+        movePageWithToken("/shows-info.html");
     });
 
 </script>
