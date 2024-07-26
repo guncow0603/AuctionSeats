@@ -7,13 +7,12 @@ $(document).ready(function () {
         }
     });
 });
-
 var token = Cookies.get('Authorization');
 let key;
 let tossPayments;
 // AJAX 요청이 완료된 후에 TossPayments 초기화
 $.ajax({
-    url: "/api/v1/payments/getKey",
+    url: getUrl() + "/api/v1/payments/getKey",
     type: "GET",
     headers: {
         "Authorization": token,
@@ -21,17 +20,14 @@ $.ajax({
     },
     success: function (data) {
         key = data;
-
         // TossPayments 초기화
         tossPayments = TossPayments(key);
-
         // getRequest 함수 등을 호출할 수 있음
     },
     error: function (jqXHR, textStatus) {
         console.error("Error checking login status:", textStatus);
     }
 });
-
 function getRequest(callback) {
     let amount;
     if ($('#customAmountRadio').is(':checked')) {
@@ -39,11 +35,10 @@ function getRequest(callback) {
     } else {
         amount = $('input[name="chargeAmount"]:checked').val();
     }
-
     let orderName = "포인트 충전";
 
     $.ajax({
-        url: "/api/v1/payments",
+        url: getUrl() + "/api/v1/payments",
         type: "POST",
         headers: {
             "Authorization": token,
@@ -80,7 +75,6 @@ function getRequest(callback) {
         }
     });
 }
-
 // pay 함수 수정
 function pay(method) {
     getRequest(function (json) {

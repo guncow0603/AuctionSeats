@@ -1,3 +1,17 @@
+let urlData;
+(function () {
+    const hostname = window.location.hostname;
+
+    // API 경로 설정
+    const apiPath = '/api/v1/users/signup';
+
+    // 도메인 설정
+    urlData = hostname === 'localhost' ? `http://${hostname}:8080` : ``;
+})();
+
+function getUrl() {
+    return urlData;
+}
 
 function checkLoginStatus() {
     let token = Cookies.get('Authorization');
@@ -9,7 +23,6 @@ function checkLoginStatus() {
         });
     }
 }
-
 function updateLoginStatus(token, stat) {
     // 로그인 상태 확인 API 호출
     if (!stat) {
@@ -19,7 +32,7 @@ function updateLoginStatus(token, stat) {
     }
 
     $.ajax({
-        url: "/api/v1/auth/status",
+        url: urlData + "/api/v1/auth/status",
         type: "GET",
         headers: {
             "Authorization": token
@@ -54,22 +67,19 @@ function updateLoginStatus(token, stat) {
         }
     });
 }
-
 function setTokenInCookie(data) {
     Cookies.set('Authorization', data, {path: '/'})
 }
-
 function confirmFuncLogout() {
     let result = confirm("로그아웃 하시겠습니까?");
     if (result) {
         requestLogout();
     }
 }
-
 function requestLogout() {
     let token = Cookies.get('Authorization');
     $.ajax({
-        url: "/api/v1/auth/logout",
+        url: urlData + "/api/v1/auth/logout",
         type: "POST",
         headers: {
             "Authorization": token
@@ -80,7 +90,7 @@ function requestLogout() {
             // 여기에서 로그아웃 후의 추가 동작을 수행할 수 있습니다.
             Cookies.remove('Authorization', {path: '/'})
 
-            window.location.href = `/index.html`
+            window.location.href = urlData + `/index.html`
         },
         error: function (jqXHR, textStatus) {
             // 로그아웃에 실패한 경우 처리
@@ -88,39 +98,36 @@ function requestLogout() {
         }
     });
 }
-
-
 function requestLogin() {
     let email = $('#email').val();
     let password = $('#password').val();
+
     $.ajax({
         type: "POST",
-        url: `/api/v1/auth/login`,
+        url: urlData + `/api/v1/auth/login`,
         contentType: "application/json",
         data: JSON.stringify({email: email, password: password}),
     })
         .done(function (res, status, xhr) {
             const token = xhr.getResponseHeader('Authorization');
+
             Cookies.set('Authorization', token, {path: '/'})
 
-            window.location.href = `/index.html`
+            window.location.href = urlData + `/index.html`
         })
         .fail(function (jqXHR, textStatus) {
             alert("fail");
         });
 }
-
 /* 토큰이 필요한 페이지로 이동 시 함수*/
 function movePageWithToken(pageUrl) {
     let token = Cookies.get('Authorization');
-
     if (token) {
         reissueToken((token) => {
-        redirectToPageWithToken(pageUrl, token);
+            redirectToPageWithToken(pageUrl, token);
         })
     }
 }
-
 function redirectToPageWithToken(pageUrl, token) {
     fetch(pageUrl, {
         method: 'GET',
@@ -132,7 +139,7 @@ function redirectToPageWithToken(pageUrl, token) {
             // 응답을 확인하고, 필요한 처리를 수행
             if (response.ok) {
                 // 페이지 이동 또는 다른 동작 수행
-                window.location.href = pageUrl;
+                window.location.href = urlData + pageUrl;
             } else {
                 console.error('페이지 이동 실패:', response.statusText);
             }
@@ -141,7 +148,6 @@ function redirectToPageWithToken(pageUrl, token) {
             console.error('페이지 이동 실패:', error);
         });
 }
-
 // 권한(토큰)이 필요 없는 페이지 이동 시 호출 함수
 function redirectToPage(pageUrl) {
     fetch(pageUrl, {
@@ -151,7 +157,7 @@ function redirectToPage(pageUrl) {
             // 응답을 확인하고, 필요한 처리를 수행
             if (response.ok) {
                 // 페이지 이동 또는 다른 동작 수행
-                window.location.href = pageUrl;
+                window.location.href = urlData + pageUrl;
             } else {
                 console.error('페이지 이동 실패:', response.statusText);
             }
