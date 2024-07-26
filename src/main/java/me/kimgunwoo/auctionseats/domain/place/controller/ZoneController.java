@@ -5,14 +5,12 @@ import me.kimgunwoo.auctionseats.domain.place.dto.response.ZoneGetResponse;
 import me.kimgunwoo.auctionseats.domain.place.service.ZoneService;
 import me.kimgunwoo.auctionseats.global.response.ApiResponse;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 import static me.kimgunwoo.auctionseats.global.exception.SuccessCode.SUCCESS_GET_ALL_ZONE;
+import static me.kimgunwoo.auctionseats.global.exception.SuccessCode.SUCCESS_GET_ALL_ZONE_FROM_SHOWS;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,6 +30,20 @@ public class ZoneController {
                                 SUCCESS_GET_ALL_ZONE.getCode(),
                                 SUCCESS_GET_ALL_ZONE.getMessage(),
                                 zoneGetResponses)
+                );
+    }
+
+    // 해당 공연의 공연장 구역 전체 조회
+    @GetMapping("/zones")
+    public ResponseEntity<ApiResponse<List<ZoneGetResponse>>> getAllZoneFromShows(@RequestParam Long showsId) {
+        List<ZoneGetResponse> zoneGetResponses = zoneService.getAllZoneFromShows(showsId);
+        return ResponseEntity
+                .status(
+                        SUCCESS_GET_ALL_ZONE_FROM_SHOWS.getHttpStatus())
+                .body(
+                        ApiResponse.of(
+                                SUCCESS_GET_ALL_ZONE_FROM_SHOWS.getCode(),
+                                SUCCESS_GET_ALL_ZONE_FROM_SHOWS.getMessage(), zoneGetResponses)
                 );
     }
 }
