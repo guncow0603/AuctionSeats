@@ -5,14 +5,96 @@
 
 a {
     color: black;
-    text-decoration: none;
 }
 
-.btn {
-    font-family: 'IBM Plex Sans KR', sans-serif;
+body {
+    background-color: white;
+}
+
+#headers {
+    background-color: whitesmoke;
+}
+
+.dropdown-item {
+    cursor: pointer;
 }
 
 .dropdown-item:hover {
-    background-color: black !important;
+    background-color: whitesmoke !important;
     color: white !important;
+}
+
+.shows-menu-ul {
+    padding-left: 20px;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.round-btn {
+    padding-right: 10px;
+    border-radius: 20px;
+    font-size: 20px;
+    border-color: wheat;
+    background-color: inherit;
+    color: black;
+    width: 150px;
+}
+
+.round-btn:hover {
+    background-color: whitesmoke;
+    color: white;
+    transition: 0.7s;
+}
+
+.btn-div {
+    padding-right: 20px;
+}
+
+.btn-div > .active {
+    color: white;
+    background-color: white !important;
+    border-color: whitesmoke;
+}
+
+.shows-poster-img {
+    width: 240px;
+}
+
+.shows-posters-row {
+    width: 100%;
+}
+
+.pd {
+    margin-left: 40px;
+    text-align: center;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.shows-poster-img {
+    width: 240px;
+    height: auto;
+    flex: 1;
+    border-radius: 10px;
+}
+
+.posters-div {
+    margin-top: 40px;
+}
+
+.shows-title {
+    padding-top: 10px;
+    margin-top: auto;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.category-a {
+    cursor: pointer;
+}
+
+.pd {
+    cursor: pointer;
 }

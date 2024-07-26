@@ -1,7 +1,7 @@
 /* 전체 페이지에 대한 기본 스타일 */
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #f5f5f5;
+    background-color: whitesmoke;
     margin: 0;
     padding: 0;
 }
@@ -10,7 +10,7 @@ body {
     max-width: 800px; /* 적절한 최대 너비 설정 */
     margin: 20px auto; /* 중앙 정렬 */
     padding: 20px;
-    background-color: #ffffff;
+    background-color: whitesmoke;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 /* 라벨과 인풋 필드 스타일 */
@@ -37,10 +37,10 @@ table {
 }
 th, td {
     padding: 10px;
-    border: 1px solid #ddd;
+    border: 1px solid whitesmoke;
 }
 th {
-    background-color: #f8f8f8;
+    background-color: whitesmoke;
 }
 /* 버튼 스타일 */
 .place-btn-div > .place-btn {
@@ -48,40 +48,40 @@ th {
     margin-top: 20px;
     border: none;
     border-radius: 4px;
-    background-color: #5cb85c;
-    color: white;
+    background-color: rosybrown;
+    color: whitesmoke;
     cursor: pointer;
     transition: background-color 0.3s;
 }
 .place-btn-div > .place-btn:hover {
-    background-color: #8637DF;
+    background-color: purple;
     color: white;
 }
 
 #createPlaceButton {
-    border: 1px solid #FADAD8;
-    background-color: #FADAD8;
+    border: 1px solid rosybrown;
+    background-color: wheat;
     color: white;
     padding: 10px 15px;
     cursor: pointer;
 }
 
 #createPlaceButton:hover {
-    background-color: #FADAD8;
+    background-color: whitesmoke;
     color: white;
 }
 
 #showsInfoPage {
-    background-color: #A593E0;
+    background-color: rosybrown;
     color: white;
     padding: 10px 15px;
-    border: 1px solid #A593E0;
+    border: 1px solid rosybrown;
     cursor: pointer;
     float: right;
 }
 
 #showsInfoPage:hover {
-    background-color: #A593E0;
+    background-color: purple;
     color: white;
 }
 
@@ -103,7 +103,7 @@ th {
 .place-btn-div >#showsInfoPageButton {
     float: right;
     padding: 10px 15px;
-    background-color: #337ab7; /* Bootstrap primary blue */
+    background-color: blue; /* Bootstrap primary blue */
     color: white;
     border: none;
     border-radius: 4px;
@@ -112,7 +112,7 @@ th {
 }
 
 .place-btn-div >#showsInfoPageButton:hover {
-    background-color: #286090;
+    background-color: blue;
 }
 
 .section {
@@ -120,7 +120,7 @@ th {
 }
 
 .zones-section {
-    background-color: #f8f8f8; /* 구역명 입력 섹션 배경색 변경 */
+    background-color: whitesmoke; /* 구역명 입력 섹션 배경색 변경 */
     padding: 10px; /* 패딩 추가 */
     border-radius: 4px; /* 모서리 둥글게 */
 }

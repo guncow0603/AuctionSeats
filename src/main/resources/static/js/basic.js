@@ -159,4 +159,4 @@ function redirectToPage(pageUrl) {
         .catch(error => {
             console.error('페이지 이동 실패:', error);
         });
-};
+}

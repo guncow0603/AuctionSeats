@@ -24,18 +24,6 @@ input, select, button {
     width: 50%; /* 폼 요소 너비 설정 */
 }
 
-button {
-    margin-top: 20px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-
-button:hover {
-    opacity: 0.8;
-}
-
 /* 이미지 스타일 */
 #showsInfoImage {
     max-width: 50%; /* 이미지가 컨테이너 너비를 초과하지 않도록 설정 */
@@ -44,6 +32,19 @@ button:hover {
     border-radius: 4px; /* 이미지 모서리 둥글게 */
     padding: 5px; /* 이미지 주변에 약간의 여백 추가 */
     margin-top: 20px; /* 이미지와 셀렉트 박스 사이의 여백 추가 */
+}
+
+
+#submitShowsButton {
+    border: 1px solid rosybrown;
+    background-color: gray;
+    color: white;
+}
+
+#submitShowsButton:hover {
+    background-color: rosybrown;
+    color: white;
+    opacity: 0.8;
 }
 
 /* 반응형 디자인을 위한 미디어 쿼리 */
