@@ -1,10 +1,13 @@
+var showsInfoFetched = false;
+
 $(document).ready(function () {
     // fetchShowsInfos 함수는 'shows' 클래스를 가진 페이지에서만 호출됩니다.
-    if ($('body').hasClass('showsClass')) {
+    if ($('body').hasClass('showsClass') && !showsInfoFetched) {
         reissueToken((token => {
             fetchShowsInfos(token);
             fetchPlace();
         }));
+        showsInfoFetched = true;
     }
 
     // 공연 추가 페이지 상품 선택 시 이미지 변경
@@ -18,25 +21,52 @@ $(document).ready(function () {
         }
     });
 
+    // zone-grade
+    if ($('body').hasClass('zoneGradeClass')) {
+        if (zonesData.length === 0 || gradesData.length === 0) {
+            var showsId = localStorage.getItem('showsId');
+            loadZoneAndGradeData(showsId);
+        }
+    }
+
+    $(document).on('change', '.grade-select', function () {
+        var selectedGradeId = $(this).val();
+        var selectedGrade = gradesData.find(grade => grade.gradeId.toString() === selectedGradeId);
+
+        if (selectedGrade) {
+            var auctionPrice = selectedGrade.auctionPrice;
+            $(this).closest('tr').find('.price-info').text(auctionPrice.toLocaleString() + ' 원');
+        }
+
+        // 저장 버튼 활성화
+        $(this).closest('tr').find('.save-btn').prop('disabled', false);
+    });
+
+    $(document).on('click', '.save-btn', function () {
+        var $row = $(this).closest('tr');
+        var zoneId = $row.find('.grade-select').data('zone-id');
+        var gradeId = $row.find('.grade-select').val();
+        reissueToken((token => {
+            sendCreateRequest(zoneId, gradeId, $row, token);
+        }));
+    });
+
+
 });
 
 let zones = [];
-
 // 구역 추가 함수
 function addZone() {
     let zoneName = $('#zoneName').val().trim();
     let zoneSeats = $('#zoneSeats').val().trim();
-
     // 입력 유효성 검사
     if (!zoneName || !zoneSeats || isNaN(parseInt(zoneSeats, 10))) {
         alert('유효한 구역명과 좌석 수를 입력해주세요.');
         return;
     }
-
     // 구역 정보 객체 생성
     let zoneInfo = {zoneName, zoneSeats: parseInt(zoneSeats, 10)};
     zones.push(zoneInfo);
-
     // 테이블에 구역 정보 행 추가
     let newRow = `<tr>
         <td>${zoneName}</td>
@@ -44,35 +74,28 @@ function addZone() {
         <td><button class="remove-zone" onclick="removeZone(this)">제거</button></td>
     </tr>`;
     $('#zonesTable tbody').append(newRow);
-
     // 입력 필드 초기화
     $('#zoneName').val('');
     $('#zoneSeats').val('');
 }
-
 function removeZone(button) {
     let row = $(button).closest('tr');
     let zoneNameToRemove = row.find('td').first().text();
-
     // zones 배열에서 해당 구역 정보 제거
     zones = zones.filter(zone => zone.zoneName !== zoneNameToRemove);
-
     // 테이블에서 해당 행 제거
     row.remove();
 }
-
 // place js
 function submitPlace(token) {
     const name = $('#placeName').val().trim();
     const address = $('#address').val().trim();
-
     // 입력 유효성 검사
     let validZones = zones.filter(zone => zone.zoneSeats && !isNaN(zone.zoneSeats));
     if (validZones.length !== zones.length) {
         alert('모든 구역에 유효한 좌석 수를 입력해야 합니다.');
         return;
     }
-
     const placeCreateRequest = {
         name: name,
         address: address,
@@ -81,7 +104,6 @@ function submitPlace(token) {
             seatNumber: parseInt(zone.zoneSeats, 10)
         }))
     };
-
     $.ajax({
         url: '/api/v1/admin/places',
         type: 'POST',
@@ -99,24 +121,18 @@ function submitPlace(token) {
             handleError(xhr.statusText);
         }
     });
-
-
     function handleSuccess(response) {
         console.log('Success:', response);
         alert('공연장이 성공적으로 추가되었습니다.');
         $('#zonesTable tbody').empty(); // 테이블 내용 초기화
         zones = []; // zones 배열 초기화
     }
-
 // 에러 핸들러
     function handleError(xhr, status, error) {
         console.error('Error:', error);
         alert('오류가 발생했습니다. 공연장을 추가하지 못했습니다. 오류: ' + error);
     }
-
 }
-
-
 /// showsInfo
 function submitShowsInfo(token) {
     // 폼 데이터 가져오기
@@ -271,18 +287,14 @@ function submitShowsAndSchedule(token) {
         }
     });
 }
-
-
 // 등급 생성 grade.html
-
 function goToNextPage() {
     var savedCount = $('#gradesTable .saveRowBtn[disabled]').length;
     var totalCount = $('#gradesTable .saveRowBtn').length;
-
     if (totalCount > 0 && savedCount !== totalCount) {
         alert('모든 좌석 정보가 저장되지 않았습니다. 저장을 완료해 주세요.');
     } else {
-        movePageWithToken("/zoneGrade.html");
+        movePageWithToken("/zone-grade.html");
     }
 }
 
@@ -290,14 +302,11 @@ function addRowToGradeTable() {
     var gradeName = $("#gradeName").val();
     var normalPrice = $("#normalPrice").val();
     var auctionPrice = $("#auctionPrice").val();
-
     $("#gradesTable tbody").append(newRow);
     if (!gradeName || !normalPrice || !auctionPrice) {
         alert("모든 필드를 채워주세요.");
         return;
     }
-
-
     var newRow = `<tr>
         <td>${gradeName}</td>
         <td>${normalPrice}</td>
@@ -306,23 +315,19 @@ function addRowToGradeTable() {
         <td><button class="deleteRowBtn">삭제</button></td>
     </tr>`;
     $("#gradesTable tbody").append(newRow);
-
     $("#gradeName").val('');
     $("#normalPrice").val('');
     $("#auctionPrice").val('');
 }
-
 function deleteGradeRow(button) {
     $(button).closest('tr').remove();
 }
-
 function saveGradeData(button, token) {
     var row = $(button).closest('tr');
     var gradeName = row.find('td:eq(0)').text();
     var normalPrice = row.find('td:eq(1)').text();
     var auctionPrice = row.find('td:eq(2)').text();
     var showsId = localStorage.getItem('showsId');
-
     // 서버로 데이터 전송
     $.ajax({
         url: `/api/v1/admin/shows/${showsId}/grades`,
@@ -344,4 +349,117 @@ function saveGradeData(button, token) {
             alert('저장 실패: ' + error);
         }
     });
+}
+
+//ZoneGrade
+var zonesData = []
+var gradesData = []
+
+function loadZoneAndGradeData(showsId) {
+    // Zones 데이터를 가져옵니다.
+    if (zonesData.length === 0) {
+        $.ajax({
+            url: `/api/v1/zones?showsId=${showsId}`,
+            type: 'GET',
+            success: function (response) {
+                zonesData = response.data;
+                console.log('Zones Data:', zonesData);
+                populateZones(zonesData);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log('Error fetching zones:', textStatus, errorThrown);
+            }
+        });
+    }
+
+    // Grades 데이터를 가져옵니다.
+    if (gradesData.length === 0) {
+        $.ajax({
+            url: `/api/v1/shows/${showsId}/grade`,
+            type: 'GET',
+            success: function (response) {
+                gradesData = response.data;
+                console.log('Grades Data:', gradesData);
+                populateGrades(gradesData);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log('Error fetching grades:', textStatus, errorThrown);
+            }
+        });
+    }
+}
+
+function populateZones(zones) {
+    zones.forEach(function (zone, index) {
+        $('#zone-grade-table tbody').append(`
+            <tr>
+                <td>${zone.name}</td>
+                <td>${zone.seatNumber}</td>
+                <td>
+                    <select class="grade-select" id="grade-select-${index}" data-zone-id="${zone.zoneId}">
+                        <option value="">선택</option>
+                        <!-- 등급 정보가 여기에 들어갈 것 -->
+                    </select>
+                </td>
+                <td class="price-info"></td>
+                <td><button class="save-btn" disabled>저장</button></td>
+            </tr>
+        `);
+    });
+
+    // Zones가 모두 추가된 후에 Grades를 채웁니다.
+    populateGrades(gradesData);
+}
+
+function populateGrades(grades) {
+    $('.grade-select').each(function () {
+        var $select = $(this);
+        grades.forEach(function (grade) {
+            $select.append(`
+                <option value="${grade.gradeId}" data-auction-price="${grade.auctionPrice}">${grade.name}</option>
+            `);
+        });
+    });
+}
+
+
+function sendCreateRequest(zoneId, gradeId, $row, token) {
+    $.ajax({
+        url: '/api/v1/admin/zone-grades',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({zoneId: zoneId, gradeId: gradeId}),
+        beforeSend: function (xhr) {
+            if (token) {
+                xhr.setRequestHeader('Authorization', token);
+            }
+        },
+        success: function (response) {
+            console.log('Zone-Grade created:', response);
+            $row.find('.save-btn').prop('disabled', true);
+            updateNextPageButtonState(); // 저장 버튼 상태 업데이트
+            saveResponse(response);
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log('Error creating zone-grade:', textStatus, errorThrown);
+        }
+    });
+}
+
+// 받은 응답 저장
+function saveResponse(newResponse) {
+    let responses = localStorage.getItem('zoneGardeResponses');
+    if (responses) {
+        responses = JSON.parse(responses);
+    } else {
+        responses = [];
+    }
+    responses.push(newResponse);
+    localStorage.setItem('zoneGardeResponses', JSON.stringify(responses));
+}
+
+// "다음 페이지" 버튼 상태를 업데이트하는 함수
+function updateNextPageButtonState() {
+    var allButtonsDisabled = $('.save-btn').length > 0 && $('.save-btn:enabled').length === 0;
+    $('#auction-page-button').prop('disabled', !allButtonsDisabled);
 }
