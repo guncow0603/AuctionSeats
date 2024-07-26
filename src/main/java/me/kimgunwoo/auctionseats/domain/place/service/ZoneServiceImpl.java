@@ -6,6 +6,8 @@ import me.kimgunwoo.auctionseats.domain.place.dto.response.ZoneGetResponse;
 import me.kimgunwoo.auctionseats.domain.place.entity.Places;
 import me.kimgunwoo.auctionseats.domain.place.entity.Zone;
 import me.kimgunwoo.auctionseats.domain.place.repository.ZoneRepository;
+import me.kimgunwoo.auctionseats.domain.show.entity.Shows;
+import me.kimgunwoo.auctionseats.domain.show.service.ShowsService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +19,8 @@ import java.util.List;
 public class ZoneServiceImpl implements ZoneService {
 
     private final ZoneRepository zoneRepository;
+
+    private final ShowsService showsService;
 
     // 공연장 구역 생성
     @Override
@@ -48,5 +52,11 @@ public class ZoneServiceImpl implements ZoneService {
     @Override
     public Zone getReferenceById(Long zoneId) {
         return zoneRepository.getReferenceById(zoneId);
+    }
+
+    @Override
+    public List<ZoneGetResponse> getAllZoneFromShows(Long showsId) {
+        Shows shows = showsService.findByShowsId(showsId);
+        return shows.getPlaces().getZones().stream().map(ZoneGetResponse::new).toList();
     }
 }
