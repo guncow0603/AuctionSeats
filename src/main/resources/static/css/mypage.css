@@ -72,3 +72,12 @@ th, td {
     font-weight: 900;
 }
 
+.user-input-div > .user-input-btn {
+    color: white;
+    cursor: pointer;
+}
+
+.user-input-div-2 > .user-input-btn-2 {
+    color: white;
+    cursor: pointer;
+}
