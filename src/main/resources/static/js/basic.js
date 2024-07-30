@@ -203,3 +203,14 @@ function getQueryParams() {
 
     return queryParams;
 }
+
+function movePage() {
+    let token = Cookies.get('Authorization');
+    if (token) {
+        reissueToken((token) => {
+            redirectToPageWithToken('/index.html', token);
+        });
+    } else {
+        redirectToPage(`/index.html`);
+    }
+}
