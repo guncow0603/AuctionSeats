@@ -40,3 +40,8 @@
     background-color: whitesmoke;
     cursor: not-allowed;
 }
+
+#zone-grade-table > tbody > tr > td > .saved-btn {
+    background-color: gray;
+    color: white;
+}

@@ -1,9 +1,9 @@
 $(document).ready(function () {
-    var showsId = localStorage.getItem('showsId'); // js-cookie 라이브러리를 사용하여 showsId 가져오기
-    if (showsId) {
-        fetchShowsInfo(showsId);
-        fetchGradesInfo(showsId);
-        fetchScheduleInfo(showsId);
+    var queryParams = getQueryParams();
+    if (queryParams["showsId"]) {
+        fetchShowsInfo(queryParams["showsId"]);
+        fetchGradesInfo(queryParams["showsId"]);
+        fetchScheduleInfo(queryParams["showsId"]);
     } else {
         // showsId가 없다면 에러 처리
         console.error('No showsId found');
@@ -25,12 +25,11 @@ function fetchShowsInfo(showsId) {
                     imagesList.append($('<img>').attr('src', url).attr('alt', '상세 이미지 ' + index));
                 }
             });
-            $('#placeFullName').text('장소: ' + response.placeName);
-            $('#placeLocationAddress').text('주소: ' + response.placeAddress);
-            $('#showsDate').text('공연 기간: ' + formatDate(response.startDate) + ' - ' + formatDate(response.endDate));
-            $('#showsTime').text('공연 시간: ' + response.runningTime + '분');
-            $('#showsAge').text('관람 연령: ' + response.ageGrade);
-            // 여기에 추가적인 처리를 할 수 있습니다.
+            $('#placeFullName').text(response.placeName);
+            $('#placeLocationAddress').text(response.placeAddress);
+            $('#showsDate').text(formatDate(response.startDate) + ' - ' + formatDate(response.endDate));
+            $('#showsTime').text(response.runningTime + '분');
+            $('#showsAge').text(response.ageGrade);
         },
         error: function (error) {
             console.error('Error fetching shows info:', error);

@@ -94,9 +94,8 @@ function submitPlace(token) {
             seatNumber: parseInt(zone.zoneSeats, 10)
         }))
     };
-
     $.ajax({
-        url: getUrl() + '/api/v1/admin/places',
+        url: '/api/v1/admin/places',
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(placeCreateRequest),
@@ -159,9 +158,8 @@ function submitShowsInfo(token) {
     formData.append('showsInfoCreateRequest', new Blob([JSON.stringify(jsonPart)], {
         type: 'application/json'
     }));
-
     $.ajax({
-        url: getUrl() + '/api/v1/admin/shows-infos',
+        url: '/api/v1/admin/shows-infos',
         type: 'POST',
         contentType: false, // multipart/form-data를 위해 false로 설정
         processData: false, // jQuery가 데이터를 처리하지 않도록 설정
@@ -194,7 +192,7 @@ function isValidPerformanceInput(title, content, time, age, category) {
 // 페이지 로드시 공연정보 가져오기
 function fetchShowsInfos(token) {
     $.ajax({
-        url: getUrl() + '/api/v1/shows-infos',
+        url: '/api/v1/shows-infos',
         type: 'GET',
         beforeSend: function (xhr) {
             if (token) {
@@ -223,7 +221,7 @@ function fetchShowsInfos(token) {
 //페이지 로드시 공연장 조회 정보 가져오기
 function fetchPlace() {
     $.ajax({
-        url: getUrl() + '/api/v1/places',
+        url: '/api/v1/places',
         type: 'GET',
         success: function (response) {
             console.log(response);
@@ -255,10 +253,9 @@ function submitShowsAndSchedule(token) {
         endDate: endDate,
         startTime: startTime,
     };
-
     // 상품 정보 생성 및 스케줄 추가 AJAX 요청
     $.ajax({
-        url: getUrl() + `/api/v1/admin/shows-infos/${showsInfoId}/shows?placeId=${placeId}`,
+        url: `/api/v1/admin/shows-infos/${showsInfoId}/shows?placeId=${placeId}`,
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(showsCreateRequest),
@@ -320,10 +317,9 @@ function saveGradeData(button, token) {
     var normalPrice = row.find('td:eq(1)').text();
     var auctionPrice = row.find('td:eq(2)').text();
     var showsId = localStorage.getItem('showsId');
-
     // 서버로 데이터 전송
     $.ajax({
-        url: getUrl() + `/api/v1/admin/shows/${showsId}/grades`,
+        url: `/api/v1/admin/shows/${showsId}/grades`,
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify({name: gradeName, normalPrice: normalPrice, auctionPrice: auctionPrice}),
@@ -350,7 +346,7 @@ function loadZoneAndGradeData(showsId) {
     // Zones 데이터를 가져옵니다.
     if (zonesData.length === 0) {
         $.ajax({
-            url: getUrl() + `/api/v1/zones?showsId=${showsId}`,
+            url: `/api/v1/zones?showsId=${showsId}`,
             type: 'GET',
             success: function (response) {
                 zonesData = response.data;
@@ -365,7 +361,7 @@ function loadZoneAndGradeData(showsId) {
     // Grades 데이터를 가져옵니다.
     if (gradesData.length === 0) {
         $.ajax({
-            url: getUrl() + `/api/v1/shows/${showsId}/grade`,
+            url: `/api/v1/shows/${showsId}/grade`,
             type: 'GET',
             success: function (response) {
                 gradesData = response.data;
@@ -391,7 +387,9 @@ function populateZones(zones) {
                     </select>
                 </td>
                 <td class="price-info"></td>
-                <td><button class="save-btn" disabled>저장</button></td>
+                <td>
+                    <button class="save-btn btn" style="background-color: #A9BCD0; color: white;" disabled>저장</button>
+                </td>
             </tr>
         `);
     });
@@ -408,10 +406,9 @@ function populateGrades(grades) {
         });
     });
 }
-
 function sendCreateRequest(zoneId, gradeId, $row, token) {
     $.ajax({
-        url: getUrl() + '/api/v1/admin/zone-grades',
+        url: '/api/v1/admin/zone-grades',
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify({zoneId: zoneId, gradeId: gradeId}),
