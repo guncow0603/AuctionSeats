@@ -8,8 +8,7 @@ import me.kimgunwoo.auctionseats.domain.reservation.dto.request.ReservationCreat
 import me.kimgunwoo.auctionseats.domain.reservation.dto.response.ReservationDetailResponse;
 import me.kimgunwoo.auctionseats.domain.reservation.dto.response.ReservationResponse;
 import me.kimgunwoo.auctionseats.domain.user.entity.User;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 public interface ReservationService {
 
@@ -45,7 +44,7 @@ public interface ReservationService {
      * @param size 조회 사이즈
      * @return 예매한 기록들을 반환한다.
      */
-    List<ReservationResponse> searchReservations(User user, Integer page, Integer size);
+    Page<ReservationResponse> searchReservations(User user, Integer page, Integer size);
 
     /**
      * 예매를 취소한다.
