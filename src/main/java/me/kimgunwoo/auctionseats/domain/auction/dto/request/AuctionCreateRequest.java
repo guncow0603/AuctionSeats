@@ -1,6 +1,7 @@
 package me.kimgunwoo.auctionseats.domain.auction.dto.request;
 
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import jakarta.validation.constraints.NotNull;
 import me.kimgunwoo.auctionseats.domain.auction.entity.Auction;
 import me.kimgunwoo.auctionseats.domain.grade.entity.ZoneGrade;
@@ -14,6 +15,10 @@ public record AuctionCreateRequest (
     @NotNull(message = "경매 좌석 번호를 입력해주세요.")
     Integer seatNumber
     ){
+    @JsonCreator
+    public AuctionCreateRequest(Integer seatNumber) {
+        this.seatNumber = seatNumber;
+    }
     public Auction toEntity(Schedule schedule, ZoneGrade zoneGrade) {
         DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH");
         String now = LocalDateTime.now().format(format);
