@@ -33,3 +33,15 @@ input {
     margin-bottom: 5px;
     margin-right: 10px;
 }
+
+.user-input-div > .user-input-btn {
+    background-color: rosybrown;
+    color: white;
+    cursor: pointer;
+}
+
+.user-input-div-2 > .user-input-btn-2 {
+    background-color: skyblue;
+    color: white;
+    cursor: pointer;
+}

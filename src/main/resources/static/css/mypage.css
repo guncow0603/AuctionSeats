@@ -40,7 +40,7 @@ input {
 
 table {
     width: 100%;
-    border-top: 1px solid #dddddd;
+    border-top: 1px solid whitesmoke;
     border-collapse: collapse;
 }
 
@@ -49,7 +49,7 @@ thead {
 }
 
 th, td {
-    border-bottom: 1px solid #dddddd;
+    border-bottom: 1px solid whitesmoke;
     padding: 10px;
 }
 
@@ -72,3 +72,12 @@ th, td {
     font-weight: 900;
 }
 
+.user-input-div > .user-input-btn {
+    color: white;
+    cursor: pointer;
+}
+
+.user-input-div-2 > .user-input-btn-2 {
+    color: white;
+    cursor: pointer;
+}

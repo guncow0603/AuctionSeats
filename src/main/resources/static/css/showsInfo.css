@@ -28,7 +28,7 @@ body {
 }
 
 #submitShowsInfoButton {
-    background-color: #4CAF50;
+    background-color: darkseagreen;
     color: white;
     padding: 10px 15px;
     border: none;
@@ -36,13 +36,13 @@ body {
 }
 
 #submitShowsInfoButton:disabled {
-    background-color: #cccccc;
+    background-color: whitesmoke;
     cursor: not-allowed;
 }
 
 
 #showsPage {
-    background-color: #4CAF50;
+    background-color: darkseagreen;
     color: white;
     padding: 10px 15px;
     border: none;

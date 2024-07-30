@@ -15,13 +15,13 @@
 }
 
 #zone-grade-table th, #zone-grade-table td {
-    border: 1px solid #ddd;
+    border: 1px solid whitesmoke;
     padding: 8px;
     text-align: center;
 }
 
 #zone-grade-table th {
-    background-color: #f2f2f2;
+    background-color: whitesmoke;
 }
 
 #auction-page-button {
@@ -29,7 +29,7 @@
     width: 200px;
     padding: 10px;
     margin: 20px auto;
-    background-color: #007bff;
+    background-color: blue;
     color: white;
     border: none;
     border-radius: 5px;
@@ -37,6 +37,6 @@
 }
 
 #auction-page-button:disabled {
-    background-color: #cccccc;
+    background-color: whitesmoke;
     cursor: not-allowed;
 }

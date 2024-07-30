@@ -1,5 +1,4 @@
 var showsInfoFetched = false;
-
 $(document).ready(function () {
     // fetchShowsInfos 함수는 'shows' 클래스를 가진 페이지에서만 호출됩니다.
     if ($('body').hasClass('showsClass') && !showsInfoFetched) {
@@ -9,7 +8,6 @@ $(document).ready(function () {
         }));
         showsInfoFetched = true;
     }
-
     // 공연 추가 페이지 상품 선택 시 이미지 변경
     $(document).on('change', '#showsInfoLabel', function () {
         var selectedOption = $(this).find('option:selected');
@@ -20,7 +18,6 @@ $(document).ready(function () {
             $('#showsInfoImage').attr('src', '기본이미지URL');
         }
     });
-
     // zone-grade
     if ($('body').hasClass('zoneGradeClass')) {
         if (zonesData.length === 0 || gradesData.length === 0) {
@@ -28,20 +25,16 @@ $(document).ready(function () {
             loadZoneAndGradeData(showsId);
         }
     }
-
     $(document).on('change', '.grade-select', function () {
         var selectedGradeId = $(this).val();
         var selectedGrade = gradesData.find(grade => grade.gradeId.toString() === selectedGradeId);
-
         if (selectedGrade) {
             var auctionPrice = selectedGrade.auctionPrice;
             $(this).closest('tr').find('.price-info').text(auctionPrice.toLocaleString() + ' 원');
         }
-
         // 저장 버튼 활성화
         $(this).closest('tr').find('.save-btn').prop('disabled', false);
     });
-
     $(document).on('click', '.save-btn', function () {
         var $row = $(this).closest('tr');
         var zoneId = $row.find('.grade-select').data('zone-id');
@@ -50,10 +43,7 @@ $(document).ready(function () {
             sendCreateRequest(zoneId, gradeId, $row, token);
         }));
     });
-
-
 });
-
 let zones = [];
 // 구역 추가 함수
 function addZone() {
@@ -71,7 +61,7 @@ function addZone() {
     let newRow = `<tr>
         <td>${zoneName}</td>
         <td>${zoneSeats}</td>
-        <td><button class="remove-zone" onclick="removeZone(this)">제거</button></td>
+        <td><button class="btn remove-zone" onclick="removeZone(this)">제거</button></td>
     </tr>`;
     $('#zonesTable tbody').append(newRow);
     // 입력 필드 초기화
@@ -104,8 +94,9 @@ function submitPlace(token) {
             seatNumber: parseInt(zone.zoneSeats, 10)
         }))
     };
+
     $.ajax({
-        url: '/api/v1/admin/places',
+        url: getUrl() + '/api/v1/admin/places',
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(placeCreateRequest),
@@ -168,8 +159,9 @@ function submitShowsInfo(token) {
     formData.append('showsInfoCreateRequest', new Blob([JSON.stringify(jsonPart)], {
         type: 'application/json'
     }));
+
     $.ajax({
-        url: '/api/v1/admin/shows-infos',
+        url: getUrl() + '/api/v1/admin/shows-infos',
         type: 'POST',
         contentType: false, // multipart/form-data를 위해 false로 설정
         processData: false, // jQuery가 데이터를 처리하지 않도록 설정
@@ -202,7 +194,7 @@ function isValidPerformanceInput(title, content, time, age, category) {
 // 페이지 로드시 공연정보 가져오기
 function fetchShowsInfos(token) {
     $.ajax({
-        url: '/api/v1/shows-infos',
+        url: getUrl() + '/api/v1/shows-infos',
         type: 'GET',
         beforeSend: function (xhr) {
             if (token) {
@@ -231,7 +223,7 @@ function fetchShowsInfos(token) {
 //페이지 로드시 공연장 조회 정보 가져오기
 function fetchPlace() {
     $.ajax({
-        url: '/api/v1/places',
+        url: getUrl() + '/api/v1/places',
         type: 'GET',
         success: function (response) {
             console.log(response);
@@ -263,9 +255,10 @@ function submitShowsAndSchedule(token) {
         endDate: endDate,
         startTime: startTime,
     };
+
     // 상품 정보 생성 및 스케줄 추가 AJAX 요청
     $.ajax({
-        url: `/api/v1/admin/shows-infos/${showsInfoId}/shows?placeId=${placeId}`,
+        url: getUrl() + `/api/v1/admin/shows-infos/${showsInfoId}/shows?placeId=${placeId}`,
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(showsCreateRequest),
@@ -297,7 +290,6 @@ function goToNextPage() {
         movePageWithToken("/zone-grade.html");
     }
 }
-
 function addRowToGradeTable() {
     var gradeName = $("#gradeName").val();
     var normalPrice = $("#normalPrice").val();
@@ -328,9 +320,10 @@ function saveGradeData(button, token) {
     var normalPrice = row.find('td:eq(1)').text();
     var auctionPrice = row.find('td:eq(2)').text();
     var showsId = localStorage.getItem('showsId');
+
     // 서버로 데이터 전송
     $.ajax({
-        url: `/api/v1/admin/shows/${showsId}/grades`,
+        url: getUrl() + `/api/v1/admin/shows/${showsId}/grades`,
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify({name: gradeName, normalPrice: normalPrice, auctionPrice: auctionPrice}),
@@ -350,16 +343,14 @@ function saveGradeData(button, token) {
         }
     });
 }
-
 //ZoneGrade
 var zonesData = []
 var gradesData = []
-
 function loadZoneAndGradeData(showsId) {
     // Zones 데이터를 가져옵니다.
     if (zonesData.length === 0) {
         $.ajax({
-            url: `/api/v1/zones?showsId=${showsId}`,
+            url: getUrl() + `/api/v1/zones?showsId=${showsId}`,
             type: 'GET',
             success: function (response) {
                 zonesData = response.data;
@@ -371,11 +362,10 @@ function loadZoneAndGradeData(showsId) {
             }
         });
     }
-
     // Grades 데이터를 가져옵니다.
     if (gradesData.length === 0) {
         $.ajax({
-            url: `/api/v1/shows/${showsId}/grade`,
+            url: getUrl() + `/api/v1/shows/${showsId}/grade`,
             type: 'GET',
             success: function (response) {
                 gradesData = response.data;
@@ -388,7 +378,6 @@ function loadZoneAndGradeData(showsId) {
         });
     }
 }
-
 function populateZones(zones) {
     zones.forEach(function (zone, index) {
         $('#zone-grade-table tbody').append(`
@@ -406,11 +395,9 @@ function populateZones(zones) {
             </tr>
         `);
     });
-
     // Zones가 모두 추가된 후에 Grades를 채웁니다.
     populateGrades(gradesData);
 }
-
 function populateGrades(grades) {
     $('.grade-select').each(function () {
         var $select = $(this);
@@ -422,10 +409,9 @@ function populateGrades(grades) {
     });
 }
 
-
 function sendCreateRequest(zoneId, gradeId, $row, token) {
     $.ajax({
-        url: '/api/v1/admin/zone-grades',
+        url: getUrl() + '/api/v1/admin/zone-grades',
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify({zoneId: zoneId, gradeId: gradeId}),
@@ -445,7 +431,6 @@ function sendCreateRequest(zoneId, gradeId, $row, token) {
         }
     });
 }
-
 // 받은 응답 저장
 function saveResponse(newResponse) {
     let responses = localStorage.getItem('zoneGardeResponses');
@@ -457,7 +442,6 @@ function saveResponse(newResponse) {
     responses.push(newResponse);
     localStorage.setItem('zoneGardeResponses', JSON.stringify(responses));
 }
-
 // "다음 페이지" 버튼 상태를 업데이트하는 함수
 function updateNextPageButtonState() {
     var allButtonsDisabled = $('.save-btn').length > 0 && $('.save-btn:enabled').length === 0;

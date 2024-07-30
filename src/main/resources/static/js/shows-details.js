@@ -8,33 +8,28 @@ $(document).ready(function () {
         // showsId가 없다면 에러 처리
         console.error('No showsId found');
     }
-
 });
 
 function fetchShowsInfo(showsId) {
     $.ajax({
-        url: `api/v1/shows/${showsId}`,
+        url: getUrl() + `api/v1/shows/${showsId}`,
         type: 'GET',
         success: function (data) {
             var response = data.data;
             $('#showsTitle').text(response.title);
             $('#main-image').attr('src', response.s3Urls[0]);
-
             var imagesList = $('#images-container .images-list');
             imagesList.empty(); // 기존 이미지들 제거
-
             response.s3Urls.forEach(function (url, index) {
                 if (index > 0) {
                     imagesList.append($('<img>').attr('src', url).attr('alt', '상세 이미지 ' + index));
                 }
             });
-
             $('#placeFullName').text('장소: ' + response.placeName);
             $('#placeLocationAddress').text('주소: ' + response.placeAddress);
             $('#showsDate').text('공연 기간: ' + formatDate(response.startDate) + ' - ' + formatDate(response.endDate));
             $('#showsTime').text('공연 시간: ' + response.runningTime + '분');
             $('#showsAge').text('관람 연령: ' + response.ageGrade);
-
             // 여기에 추가적인 처리를 할 수 있습니다.
         },
         error: function (error) {
@@ -45,7 +40,7 @@ function fetchShowsInfo(showsId) {
 
 function fetchGradesInfo(showsId) {
     $.ajax({
-        url: `/api/v1/shows/${showsId}/grade`,
+        url: getUrl() + `/api/v1/shows/${showsId}/grade`,
         type: 'GET',
         success: function (data) {
             var response = data.data; // 가정: 응답이 { data: List<GradeGetResponse> } 형태라고 가정
@@ -66,7 +61,7 @@ function fetchGradesInfo(showsId) {
 
 function fetchScheduleInfo(showsId) {
     $.ajax({
-        url: `/api/v1/shows/${showsId}/schedules`,
+        url: getUrl() + `/api/v1/shows/${showsId}/schedules`,
         type: 'GET',
         success: function (data) {
             var events = data.data.map(function (schedule) {
@@ -83,7 +78,6 @@ function fetchScheduleInfo(showsId) {
         }
     });
 }
-
 function initCalendar(events) {
     $('#calendar').fullCalendar({
         defaultView: 'month',
@@ -94,7 +88,6 @@ function initCalendar(events) {
         }
     });
 }
-
 $('#book-btn').click(function () {
     var selectedScheduleId = localStorage.getItem('selectedScheduleId');
     if (selectedScheduleId) {
@@ -104,21 +97,17 @@ $('#book-btn').click(function () {
         alert('No schedule selected.');
     }
 });
-
 function showGrades() {
     $('#grades-list').toggle(); // show와 hide를 toggle로 변경
 }
-
 $('#book-btn').click(function () {
     // 예매하기 버튼 클릭 이벤트
     bookTickets();
 });
-
 function bookTickets() {
     // 예매 로직 작성
     alert('예매가 완료되었습니다.'); // 여기에 실제 예매 처리 로직을 구현해야 합니다.
 }
-
 function formatDate(dateString) {
     var date = new Date(dateString);
     return date.getFullYear() + '년 ' + (date.getMonth() + 1) + '월 ' + date.getDate() + '일';
