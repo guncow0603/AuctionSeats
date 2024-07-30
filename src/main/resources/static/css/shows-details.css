@@ -1,9 +1,3 @@
-body {
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: whitesmoke;
-}
 
 header {
     /* 헤더 스타일링이 필요하다면 여기에 추가 */
@@ -11,44 +5,41 @@ header {
 
 .container-flex {
     display: flex;
-    width: 100%; /* 전체 너비를 사용 */
     margin: 20px auto;
 }
 
-#shows-container {
-    flex: 0 0 70%; /* 상품 정보 컨테이너의 너비를 70%로 고정 */
-    padding: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    background-color: whitesmoke;
-}
-
-
-.shows-info-box {
-    width: auto;
-    display: flex;
-}
-
 .image-container {
-    align-items: flex-start;
-    justify-content: flex-start;
-    padding-right: 20px;
+    margin-right: 20px;
+    width: 400px;
 }
 
-.shows-info, .image-container {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
 
 #showsTitle {
-    order: 1;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 }
 
 #main-image {
-    width: 100%;
+    /*width: 400px;*/
+    max-width: 100%;
     height: auto;
-    order: 2;
+    border-radius: 15px;
+    /*order: 2;*/
+}
+
+.shows-info > table {
+    border: none;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.shows-info > table > tbody > tr {
+    /*padding-bottom: 15px;*/
+}
+
+.shows-info > table > tbody > tr > .col-title {
+    width: 200px;
+    height: 50px;
+
 }
 
 #schedule-container {
@@ -63,7 +54,6 @@ header {
 #images-container {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
     gap: 10px;
     margin-top: 20px;
     padding-left: 20px;
@@ -71,8 +61,9 @@ header {
 
 .images-title {
     font-size: 20px;
-    font-weight: bold;
+    font-weight: bolder;
     margin-bottom: 10px;
+    border-bottom: 0.1rem solid gray;
 }
 
 .images-list {
@@ -82,9 +73,12 @@ header {
 }
 
 .images-list img {
-    width: 80px;
+    width: 750px;
     height: auto;
-    border: 1px solid whitesmoke;
+}
+
+.images-title {
+    border-bottom: 0.1rem solid black;
 }
 
 #book-btn {
@@ -95,6 +89,7 @@ header {
     border-radius: 5px;
     cursor: pointer;
     font-size: 1rem;
+    width: 200px;
 }
 
 #book-btn:hover {
@@ -119,6 +114,7 @@ header {
     border-radius: 4px;
     cursor: pointer;
     font-size: 1rem;
+    width: 200px;
 }
 
 .fc-button:hover {
