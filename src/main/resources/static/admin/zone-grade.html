@@ -18,42 +18,43 @@
     <script src="/js/token.js"></script>
     <script src="/js/basic.js"></script>
     <script src="/js/admin.js"></script>
-    <link rel="stylesheet" href="/css/auction.css">
+    <link href="/css/zone-grade.css" rel="stylesheet">
 </head>
-<body class="auctionClass">
+<body class="zoneGradeClass">
 <header id="headers"></header>
-<div id="auction-container">
-    <label for="sequence-select">회차 선택</label>
-    <select id="sequence-select" , name="sequence-select"></select>
-    <label for="zone-select">구역 선택</label>
-    <button id="add-zone-button">구역 추가</button>
-    <select id="zone-select" name="zone-select"></select>
-    <table id="auction-table">
+<div id="zone-grade-container">
+    <h2 class="text-center">좌석 등급 추가</h2>
+    <table id="zone-grade-table">
         <thead>
         <tr>
             <th>구역명</th>
-            <th>경매 좌석 번호</th>
-            <th>동작</th>
+            <th>총좌석수</th>
+            <th>좌석등급</th>
+            <th>가격</th>
+            <th>작업</th>
         </tr>
         </thead>
         <tbody>
-        <!-- 경매 좌석 번호 행이 여기에 추가됩니다 -->
+        <!-- JavaScript를 통해 동적으로 행 추가 -->
         </tbody>
     </table>
-    <button id="goToPlacePage">공연장 추가 페이지로 이동</button>
+    <button disabled id="auction-page-button">다음 페이지</button>
 </div>
 <script>
     $("#headers").load("/header.html", function (response, status, xhr) {
         checkLoginStatus();
     });
-    $("#goToPlacePage").on("click", function () {
-        var userConfirmed = confirm("공연장 추가 페이지로 이동하시겠습니까?");
 
-        // 사용자가 '확인'을 클릭했을 경우
-        if (userConfirmed) {
-            movePageWithToken("/place.html");
-        }
+    // '저장' 버튼 클릭 이벤트 핸들러에서 updateNextPageButtonState 함수 호출
+    $(document).on('click', '.save-btn', function () {
+        // 기존 로직 ...
+        updateNextPageButtonState();
     });
+    $("#auction-page-button").on("click", function () {
+        movePageWithToken("/admin/auction.html");
+    });
+    // 페이지 로드 시 '다음 페이지' 버튼 상태 초기화
+    updateNextPageButtonState();
 </script>
 </body>
 </html>
