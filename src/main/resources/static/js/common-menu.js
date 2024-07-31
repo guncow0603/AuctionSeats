@@ -199,7 +199,6 @@ function getPointList(token, page) {
             "page": page
         },
         success: function (data) {
-            console.log(data);
             $(".list-tb-body").empty();
             $(".pagination").empty();
             if (data.code === "P00001" && data.data.content) {

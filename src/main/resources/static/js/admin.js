@@ -65,8 +65,6 @@ $(document).ready(function () {
         const scheduleId = $('#sequence-select').val();
         const zoneGradeName = rowElement.data('zone-name');
         const zoneGradeId = rowElement.data('zone-id');
-        console.log(scheduleId)
-        console.log(zoneGradeId);
         reissueToken((token) => {
             if (validateZoneNameAndSeatNumber(zonesInfo, seatNumber, zoneGradeName) &&
                 !isSeatAlreadySaved(scheduleId, zoneGradeName, seatNumber)) {
@@ -135,7 +133,6 @@ function submitPlace(token) {
         alert('모든 구역에 유효한 좌석 수를 입력해야 합니다.');
         return;
     }
-    console.log(validZones)
     const placeCreateRequest = {
         name: name,
         address: address,
@@ -274,7 +271,6 @@ function fetchPlace() {
         url: getUrl() + '/api/v1/places',
         type: 'GET',
         success: function (response) {
-            console.log(response);
             $('#placeLabel').empty(); // 셀렉트 박스 초기화
             var option = new Option("공연장을 선택해 주세요");
             $('#placeLabel').append(option);
@@ -316,7 +312,6 @@ function submitShowsAndSchedule(token) {
         },
         success: function (response) {
             alert('공연 정보가 성공적으로 추가되었습니다.');
-            console.log(response);
             if (response && response.data.showsId) {
                 localStorage.setItem('showsId', response.data.showsId);
             }
@@ -401,7 +396,6 @@ function loadZoneAndGradeData(showsId) {
             type: 'GET',
             success: function (response) {
                 zonesData = response.data;
-                console.log('Zones Data:', zonesData);
                 populateZones(zonesData);
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -416,7 +410,6 @@ function loadZoneAndGradeData(showsId) {
             type: 'GET',
             success: function (response) {
                 gradesData = response.data;
-                console.log('Grades Data:', gradesData);
                 populateGrades(gradesData);
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -470,7 +463,6 @@ function sendCreateRequest(zoneId, gradeId, $row, token) {
             }
         },
         success: function (response) {
-            console.log('Zone-Grade created:', response);
             $row.find('.save-btn').prop('disabled', true);
             updateNextPageButtonState(); // 저장 버튼 상태 업데이트
             saveResponse(response);
