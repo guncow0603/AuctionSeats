@@ -223,6 +223,18 @@ function encode(input) {
 }
 
 function decode(input) {
+    if (isNumeric(input)) {
+        return input;
+    }
     let decodedString = atob(input);
+    if (!decodedString.includes("rOnIOuBneuCnOuLpC4uLi4u")) {
+        return input;
+    }
+
     return decodedString.replace("rOnIOuBneuCnOuLpC4uLi4u", "");
+}
+
+
+function isNumeric(input) {
+    return /^[0-9]+$/.test(input);
 }
