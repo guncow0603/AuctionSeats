@@ -65,7 +65,7 @@ function updateUserInfo(token, id) {
         }),
         success: function (data) {
             alert("회원 정보를 수정했습니다.")
-            movePageWithToken(`/user-info.html`);
+            movePageWithToken(`/user/user-info.html`);
         },
         error: function (jqXHR, textStatus) {
             resetValidationMessages();
@@ -120,7 +120,7 @@ function updatePassword(token, id) {
         }),
         success: function (data) {
             alert("비밀 번호 변경이 완료되었습니다.");
-            movePageWithToken(`/user-info.html`);
+            movePageWithToken(`/user/user-info.html`);
         },
         error: function (jqXHR, textStatus) {
             resetValidationMessages();

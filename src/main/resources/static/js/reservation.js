@@ -53,7 +53,7 @@ function displayReservation(data) {
         let btn = $('<button>').addClass("detail-btn btn").text("상세")
             .on("click", function () {
                 redirectToPageWithParameter(
-                    "/reservation-detail.html",
+                    "/reservation/reservation-detail.html",
                     "reservationId",
                     data.content[i].reservationId
                 );
@@ -139,7 +139,7 @@ if (queryParams["reservationId"]) {
             $(".reservation-seat").text(stext);
             $(".reservation-qr").append($('<button>').text("QR 생성").addClass("detail-btn btn"))
                 .on("click", function () {
-                    redirectToPageWithParameter("/qr.html", "reservationId", data.reservationId);
+                    redirectToPageWithParameter("/reservation/qr.html", "reservationId", data.reservationId);
                 });
         },
         error: function (jqXHR, textStatus) {
@@ -189,10 +189,10 @@ function displayQrCode(data, endTime) {
     // QR 코드를 표시할 div 요소를 가져옵니다.
     // QR 코드 이미지를 생성하고 div에 추가합니다.
     $("#qr-code").append($('<img>').attr("src", `data:image/png;base64, ${data}`));
-    displayRemainingTime(endTime);
+    displayRemainingTimeInQr(endTime);
 }
 
-function displayRemainingTime(endTime) {
+function displayRemainingTimeInQr(endTime) {
     let now = new Date();
     let timeDiff = endTime - now;
 
@@ -220,7 +220,7 @@ function displayRemainingTime(endTime) {
         $("#remaining-time").text(`  ${formattedTime}`);
 
         setTimeout(function () {
-            displayRemainingTime(endTime);
+            displayRemainingTimeInQr(endTime);
         }, 1000);
     }
 }

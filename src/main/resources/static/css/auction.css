@@ -32,17 +32,15 @@
 button {
     padding: 8px 12px; /* 버튼 패딩 설정 */
     border: none; /* 버튼 경계선 제거 */
-    background-color: skyblue; /* 버튼 배경색 설정 */
-    color: white; /* 버튼 글자색 설정 */
     border-radius: 4px; /* 버튼 테두리 둥글게 설정 */
     cursor: pointer; /* 마우스 오버 시 커서 변경 */
     font-size: 14px; /* 버튼 폰트 사이즈 설정 */
     transition: background-color 0.3s ease; /* 배경색 변경시 트랜지션 효과 추가 */
 }
 
-button:hover {
-    background-color: skyblue; /* 마우스 오버 시 버튼 배경색 변경 */
-}
+
+
+
 
 button:disabled {
     background-color: grey; /* 비활성화된 버튼의 배경색 설정 */
@@ -63,7 +61,7 @@ label {
 
 #add-zone-button {
     padding: 8px 12px;
-    background-color: skyblue;
+    background-color: plum;
     color: white;
     border: none;
     border-radius: 4px;
@@ -72,7 +70,7 @@ label {
 }
 
 #add-zone-button:hover {
-    background-color: skyblue;
+    background-color: plum;
 }
 
 #goToPlacePage {
@@ -80,4 +78,11 @@ label {
     font-weight: bold; /* 글자 두껍게 */
     margin-top: 20px; /* 상단 여백 추가 */
     /* 기타 필요한 스타일 */
+    background-color: grey;
+    color: white;
+}
+
+#auction-seat-save-btn {
+    background-color: whitesmoke;
+    color: white;
 }

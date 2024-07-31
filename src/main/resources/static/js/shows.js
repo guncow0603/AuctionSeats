@@ -55,7 +55,7 @@ function clickOnCategoryBtn(name) {
                         $('<img>').attr("src", `${d.s3Url}`).addClass("shows-poster-img")
                             .on("click", function () {
                                 redirectToPageWithParameter(
-                                    "/shows-details.html",
+                                    "/shows/shows-details.html",
                                     "showsId",
                                     d.showsId
                                 );
