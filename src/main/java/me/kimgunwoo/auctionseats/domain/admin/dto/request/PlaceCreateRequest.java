@@ -3,7 +3,7 @@ package me.kimgunwoo.auctionseats.domain.admin.dto.request;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import me.kimgunwoo.auctionseats.domain.admin.dto.ZoneInfo;
-import me.kimgunwoo.auctionseats.domain.place.entity.Places;
+import me.kimgunwoo.auctionseats.domain.place.entity.Place;
 
 import java.util.List;
 
@@ -18,8 +18,8 @@ public record PlaceCreateRequest(
         @NotNull(message = "구역 정보 입력은 필수입니다.")
         List<ZoneInfo> zoneInfos
 ) {
-        public Places toEntity(Integer countSeats) {
-                return Places
+        public Place toEntity(Integer countSeats) {
+                return Place
                         .builder()
                         .name(this.name)
                         .address(this.address)

@@ -3,7 +3,7 @@ package me.kimgunwoo.auctionseats.domain.reservation.repository;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import me.kimgunwoo.auctionseats.domain.place.entity.Places;
+import me.kimgunwoo.auctionseats.domain.place.entity.Place;
 import me.kimgunwoo.auctionseats.domain.reservation.dto.ReservationSeatInfo;
 import me.kimgunwoo.auctionseats.domain.reservation.dto.response.ReservationDetailResponse;
 import me.kimgunwoo.auctionseats.domain.reservation.dto.response.ReservationResponse;
@@ -19,13 +19,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static me.kimgunwoo.auctionseats.domain.place.entity.QPlaces.places;
-import static me.kimgunwoo.auctionseats.domain.reservation.entity.QReservation.reservation;
-import static me.kimgunwoo.auctionseats.domain.reservation.reservation_seat.entity.QReservationSeat.reservationSeat;
-import static me.kimgunwoo.auctionseats.domain.schedule.entity.QSchedule.schedule;
-import static me.kimgunwoo.auctionseats.domain.show.entity.QShows.shows;
-import static me.kimgunwoo.auctionseats.domain.user.entity.QUser.user;
-
+import static me.kimgunwoo.auctionseats.domain.reservation.entity.QReservation.*;
+import static me.kimgunwoo.auctionseats.domain.reservation.reservation_seat.entity.QReservationSeat.*;
+import static me.kimgunwoo.auctionseats.domain.schedule.entity.QSchedule.*;
+import static me.kimgunwoo.auctionseats.domain.show.entity.QShows.*;
+import static me.kimgunwoo.auctionseats.domain.user.entity.QUser.*;
+import static me.kimgunwoo.auctionseats.domain.place.entity.QPlace.*;
 @RequiredArgsConstructor
 @Repository
 public class ReservationQueryRepositoryImpl implements ReservationQueryRepository {
@@ -54,7 +53,7 @@ public class ReservationQueryRepositoryImpl implements ReservationQueryRepositor
                 .from(reservationSeat)
                 .innerJoin(reservationSeat.schedule, schedule).fetchJoin()
                 .innerJoin(schedule.shows, shows).fetchJoin()
-                .innerJoin(shows.places, places).fetchJoin()
+                .innerJoin(shows.place, place).fetchJoin()
                 .where(reservationSeat.reservation.id.eq(reservation1.getId()))
                 .fetch();
         List<ReservationSeatInfo> seatInfos = new ArrayList<>();
@@ -68,7 +67,7 @@ public class ReservationQueryRepositoryImpl implements ReservationQueryRepositor
         );
 
         Schedule schedule1 = reservationSeats.get(0).getSchedule();
-        Places place1 = reservationSeats.get(0).getSchedule().getShows().getPlaces();
+        Place place1 = reservationSeats.get(0).getSchedule().getShows().getPlace();
 
         ReservationDetailResponse response = ReservationDetailResponse.builder()
                 .username(reservation1.getUser().getName())

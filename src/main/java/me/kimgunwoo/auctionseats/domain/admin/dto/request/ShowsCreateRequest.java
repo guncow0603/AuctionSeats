@@ -1,11 +1,9 @@
 package me.kimgunwoo.auctionseats.domain.admin.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
-import me.kimgunwoo.auctionseats.domain.place.entity.Places;
+import me.kimgunwoo.auctionseats.domain.place.entity.Place;
 import me.kimgunwoo.auctionseats.domain.show.entity.Shows;
 import me.kimgunwoo.auctionseats.domain.show.entity.ShowsInfo;
 
@@ -29,11 +27,11 @@ public record ShowsCreateRequest(
         @NotNull(message = "상영 시간은 필수입니다")
         @JsonFormat(pattern = "HH:mm")
         LocalTime startTime){
-        public Shows toEntity(Places places, ShowsInfo showsInfo) {
+        public Shows toEntity(Place place, ShowsInfo showsInfo) {
                 return Shows
                         .builder()
                         .title(title)
-                        .places(places)
+                        .place(place)
                         .showsInfo(showsInfo)
                         .startDate(this.startDate)
                         .endDate(this.endDate)

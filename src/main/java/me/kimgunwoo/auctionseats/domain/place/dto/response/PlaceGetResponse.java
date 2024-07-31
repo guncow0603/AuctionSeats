@@ -1,7 +1,7 @@
 package me.kimgunwoo.auctionseats.domain.place.dto.response;
 
 import lombok.Getter;
-import me.kimgunwoo.auctionseats.domain.place.entity.Places;
+import me.kimgunwoo.auctionseats.domain.place.entity.Place;
 
 @Getter
 public class PlaceGetResponse {
@@ -9,8 +9,8 @@ public class PlaceGetResponse {
 
     private final String name;
 
-    public PlaceGetResponse(Places places) {
-        this.placeId = places.getId();
-        this.name = places.getName();
+    public PlaceGetResponse(Place place) {
+        this.placeId = place.getId();
+        this.name = place.getName();
     }
 }

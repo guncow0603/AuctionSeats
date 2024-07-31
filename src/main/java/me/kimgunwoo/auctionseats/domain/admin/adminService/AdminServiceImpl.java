@@ -10,7 +10,7 @@ import me.kimgunwoo.auctionseats.domain.grade.entity.Grade;
 import me.kimgunwoo.auctionseats.domain.grade.entity.ZoneGrade;
 import me.kimgunwoo.auctionseats.domain.grade.service.GradeService;
 import me.kimgunwoo.auctionseats.domain.grade.service.ZoneGradeService;
-import me.kimgunwoo.auctionseats.domain.place.entity.Places;
+import me.kimgunwoo.auctionseats.domain.place.entity.Place;
 import me.kimgunwoo.auctionseats.domain.place.entity.Zone;
 import me.kimgunwoo.auctionseats.domain.place.service.PlaceService;
 import me.kimgunwoo.auctionseats.domain.place.service.ZoneService;
@@ -50,9 +50,9 @@ public class AdminServiceImpl implements AdminService {
     @Transactional
     public List<PlaceCreateResponse> createPlaceAndZone(PlaceCreateRequest placeCreateRequest) {
         List<ZoneInfo> zoneInfos = placeCreateRequest.zoneInfos();
-        Places places = placeService.createPlace(placeCreateRequest);
+        Place place = placeService.createPlace(placeCreateRequest);
         List<Zone> zoneList = zoneService.createZone(zoneInfos);
-        places.updateZone(zoneList);
+        place.updateZone(zoneList);
         return createPlaceResponse(zoneList);
     }
     // 공연장 및 구역 응답 생성
@@ -61,7 +61,7 @@ public class AdminServiceImpl implements AdminService {
         List<PlaceCreateResponse> placeCreateResponseList = new ArrayList<>();
         for (Zone zone : zoneList) {
             placeCreateResponseList.add(
-                    new PlaceCreateResponse(zone.getName(), zone.getSeatNumber(), zone.getPlaces().getId()));
+                    new PlaceCreateResponse(zone.getName(), zone.getSeatNumber(), zone.getPlace().getId()));
         }
         return placeCreateResponseList;
     }
@@ -90,11 +90,11 @@ public class AdminServiceImpl implements AdminService {
             Long showsInfoId,
             Long placeId) {
 
-        Places places = placeService.getReferenceById(placeId);
+        Place place = placeService.getReferenceById(placeId);
 
         ShowsInfo showsInfo = showsService.findByShowsInfoId(showsInfoId);
 
-        Shows shows = showsService.createShows(showsCreateRequest, places, showsInfo);
+        Shows shows = showsService.createShows(showsCreateRequest, place, showsInfo);
         showsInfo.addShows(shows);
         LocalTime startTime = showsCreateRequest.startTime();
         scheduleService.createSchedule(shows, startTime);
@@ -108,7 +108,7 @@ public class AdminServiceImpl implements AdminService {
 
         Grade grade = gradeService.createGrade(gradeCreateRequest, shows);
 
-        return new GradeCreateResponse(shows.getPlaces().getId(), grade.getId());
+        return new GradeCreateResponse(shows.getPlace().getId(), grade.getId());
     }
     // 구역 등급 생성
     @Override

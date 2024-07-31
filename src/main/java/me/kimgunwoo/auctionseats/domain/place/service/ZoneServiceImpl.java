@@ -3,7 +3,7 @@ package me.kimgunwoo.auctionseats.domain.place.service;
 import lombok.RequiredArgsConstructor;
 import me.kimgunwoo.auctionseats.domain.admin.dto.ZoneInfo;
 import me.kimgunwoo.auctionseats.domain.place.dto.response.ZoneGetResponse;
-import me.kimgunwoo.auctionseats.domain.place.entity.Places;
+import me.kimgunwoo.auctionseats.domain.place.entity.Place;
 import me.kimgunwoo.auctionseats.domain.place.entity.Zone;
 import me.kimgunwoo.auctionseats.domain.place.repository.ZoneRepository;
 import me.kimgunwoo.auctionseats.domain.show.entity.Shows;
@@ -44,7 +44,7 @@ public class ZoneServiceImpl implements ZoneService {
     @Override
     @Transactional(readOnly = true)
     public List<ZoneGetResponse> getAllZone(Long placeId) {
-        List<Zone> zoneList = zoneRepository.findAllByPlacesId(placeId);
+        List<Zone> zoneList = zoneRepository.findAllByPlaceId(placeId);
         return zoneList.stream().map(ZoneGetResponse::new).toList();
     }
 
@@ -57,6 +57,6 @@ public class ZoneServiceImpl implements ZoneService {
     @Override
     public List<ZoneGetResponse> getAllZoneFromShows(Long showsId) {
         Shows shows = showsService.findByShowsId(showsId);
-        return shows.getPlaces().getZones().stream().map(ZoneGetResponse::new).toList();
+        return shows.getPlace().getZones().stream().map(ZoneGetResponse::new).toList();
     }
 }

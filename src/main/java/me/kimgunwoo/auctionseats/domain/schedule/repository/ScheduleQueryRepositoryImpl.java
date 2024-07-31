@@ -28,7 +28,7 @@ public class ScheduleQueryRepositoryImpl implements ScheduleQueryRepository {
         }
 
         if (fetchPlace) {
-            jpaQuery.innerJoin(shows.places).fetchJoin();
+            jpaQuery.innerJoin(shows.place).fetchJoin();
         }
 
         return Optional.ofNullable(jpaQuery.fetchOne());

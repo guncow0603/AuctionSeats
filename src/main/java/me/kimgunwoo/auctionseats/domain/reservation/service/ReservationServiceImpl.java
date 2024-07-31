@@ -144,7 +144,7 @@ public class ReservationServiceImpl implements ReservationService {
 
         return ReservationDetailResponse.builder()
                 .reservationId(savedReservation.getId())
-                .address(schedule.getShows().getPlaces().getName() + " / " + schedule.getShows().getPlaces().getAddress())
+                .address(schedule.getShows().getPlace().getName() + " / " + schedule.getShows().getPlace().getAddress())
                 .seats(seatInfos)
                 .title(schedule.getShows().getTitle())
                 .useDate(schedule.getStartDateTime())
@@ -189,7 +189,7 @@ public class ReservationServiceImpl implements ReservationService {
 
         return ReservationDetailResponse.builder()
                 .reservationId(savedReservation.getId())
-                .address(schedule.getShows().getPlaces().getName() + " / " + schedule.getShows().getPlaces().getAddress())
+                .address(schedule.getShows().getPlace().getName() + " / " + schedule.getShows().getPlace().getAddress())
                 .seats(
                         List.of(
                                 new ReservationSeatInfo(

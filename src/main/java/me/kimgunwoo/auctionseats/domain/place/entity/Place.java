@@ -13,8 +13,8 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Table(name = "places")
-public class Places extends BaseEntity {
+@Table(name = "place")
+public class Place extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -33,11 +33,11 @@ public class Places extends BaseEntity {
     private Integer countSeats = 0;
 
     @Comment("공연장 구역")
-    @OneToMany(mappedBy = "places", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "place", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Zone> zones = new ArrayList<>();
 
     @Builder
-    private Places(String name, String address, Integer countSeats) {
+    private Place(String name, String address, Integer countSeats) {
         this.name = name;
         this.address = address;
         this.countSeats = countSeats;
