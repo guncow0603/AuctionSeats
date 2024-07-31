@@ -50,15 +50,18 @@ function clickOnCategoryBtn(name) {
             $("#shows-posters").empty();
             for (let i = 0; i , response.data.showsSlice.content.length; i++) {
                 let d = response.data.showsSlice.content[i];
-                let title = d.title.split(" - ");
                 let pd = $('<div>')
                     .append(
                         $('<img>').attr("src", `${d.s3Url}`).addClass("shows-poster-img")
                             .on("click", function () {
-                                redirectToPageWithParameter("/shows-details.html", "showsId", d.showsId);
+                                redirectToPageWithParameter(
+                                    "/shows-details.html",
+                                    "showsId",
+                                    d.showsId
+                                );
                             })
                     )
-                    .append($('<p>').text(title[0]).addClass("shows-title"))
+                    .append($('<p>').text(d.title.split(" - ")[0]).addClass("shows-title"))
                     .addClass("pd");
                 $("#shows-posters").append(pd);
             }
