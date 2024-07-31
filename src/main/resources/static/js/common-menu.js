@@ -1,7 +1,7 @@
 function getMyInfo(token, id) {
     $.ajax({
         type: "GET",
-        url: getUrl() + `/api/v1/users/${id}`,
+        url: `/api/v1/users/${id}`,
         headers: {
             "Authorization": token
         },
@@ -19,21 +19,49 @@ function getMyInfo(token, id) {
         },
     })
 }
-
+function verificationPhone() {
+    let phoneNumber = $("#update-phone").val();
+    $.ajax({
+        type: "POST",
+        url: `/api/v1/auth/sms`,
+        contentType: "application/json",
+        data: JSON.stringify({
+            to: phoneNumber
+        }),
+        success: function (data) {
+            alert("인증 번호를 발송했습니다.");
+        },
+        error: function (jqXHR, textStatus) {
+            let response = jqXHR.responseJSON;
+            if (response.data) {
+                let data = response.data;
+                if (data.to) {
+                    $("#update-phoneNumber-span").text(data.to);
+                }
+            }
+            if (response.message) {
+                if (response.code.substring(2, 4) === "07") {
+                    $("#update-verificationNumber-span").text(response.message);
+                }
+            }
+        },
+    });
+}
 function updateUserInfo(token, id) {
     let nickname = $("#update-nickname").val();
     let phoneNumber = $("#update-phone").val();
-
+    let verificationNumber = $("#update-verificationCode").val();
     $.ajax({
         type: "PUT",
-        url: getUrl() + `/api/v1/users/${id}`,
+        url: `/api/v1/users/${id}`,
         contentType: "application/json",
         headers: {
             "Authorization": token
         },
         data: JSON.stringify({
             nickname: nickname,
-            phoneNumber: phoneNumber
+            phoneNumber: phoneNumber,
+            verificationNumber: verificationNumber
         }),
         success: function (data) {
             alert("회원 정보를 수정했습니다.")
@@ -49,9 +77,16 @@ function updateUserInfo(token, id) {
                 if (response.code.substring(2, 4) === "06") {
                     $("#update-phoneNumber-span").text(response.message);
                 }
+                if (response.code.substring(2, 4) === "07") {
+                    $("#update-verificationNumber-span").text(response.message);
+                }
             }
         }
     });
+}
+function resetValidationMessages() {
+    $("#update-nickname-span, #update-phoneNumber-span, #update-verificationNumber-span")
+        .text("");
 }
 let readyToUpdate = false;
 function checkPasswordMatch() {
@@ -71,13 +106,41 @@ function checkPasswordMatch() {
         readyToUpdate = false;
     }
 }
-
+function updatePassword(token, id) {
+    let password = $("#update-password").val();
+    $.ajax({
+        type: "PATCH",
+        url: `/api/v1/users/${id}`,
+        contentType: 'application/json',
+        headers: {
+            "Authorization": token
+        },
+        data: JSON.stringify({
+            password: password
+        }),
+        success: function (data) {
+            alert("비밀 번호 변경이 완료되었습니다.");
+            movePageWithToken(`/user-info.html`);
+        },
+        error: function (jqXHR, textStatus) {
+            resetValidationMessages();
+            let response = jqXHR.responseJSON;
+            if (response.data) {
+                $("#update-password-span").text(response.data.password);
+            }
+            if (response) {
+                if (response.code.substring(2, 4) === "02") {
+                    $("#update-password-span").text(response.message);
+                }
+            }
+        }
+    });
+}
 function withdrawUser(token) {
     let password = $("#delete-password").val();
-
     $.ajax({
         type: "DELETE",
-        url: getUrl() + `/api/v1/users`,
+        url: `/api/v1/users`,
         contentType: "application/json",
         headers: {
             "Authorization": token
@@ -102,7 +165,7 @@ function withdrawUser(token) {
 function getPointChargeList(token, page) {
     $.ajax({
         type: "GET",
-        url: getUrl() + `/api/v1/points/charge?page=${page}`,
+        url: `/api/v1/points/charge?page=${page}`,
         contentType: "application/json",
         headers: {
             "Authorization": token
@@ -111,8 +174,9 @@ function getPointChargeList(token, page) {
             "page": page
         },
         success: function (data) {
-            $(".list-tb-body").empty();
+            $(".list-tb-body").empt();
             $(".pagination").empty();
+
             if (data.code === "P00000" && data.data.content) {
                 displayData(data.code, data.data);
             }
@@ -126,7 +190,7 @@ function getPointChargeList(token, page) {
 function getPointList(token, page) {
     $.ajax({
         type: "GET",
-        url: getUrl() + `/api/v1/points/change?page=${page}`,
+        url: `/api/v1/points/change?page=${page}`,
         contentType: "application/json",
         headers: {
             "Authorization": token
