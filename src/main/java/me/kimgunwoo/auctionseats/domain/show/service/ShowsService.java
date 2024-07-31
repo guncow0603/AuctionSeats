@@ -3,7 +3,7 @@ package me.kimgunwoo.auctionseats.domain.show.service;
 import me.kimgunwoo.auctionseats.domain.admin.dto.request.ShowsCreateRequest;
 import me.kimgunwoo.auctionseats.domain.admin.dto.request.ShowsInfoCreateRequest;
 import me.kimgunwoo.auctionseats.domain.admin.dto.response.ShowsGetResponse;
-import me.kimgunwoo.auctionseats.domain.place.entity.Places;
+import me.kimgunwoo.auctionseats.domain.place.entity.Place;
 import me.kimgunwoo.auctionseats.domain.show.dto.response.ShowsCategoryGetResponse;
 import me.kimgunwoo.auctionseats.domain.show.dto.response.ShowsGetSliceResponse;
 import me.kimgunwoo.auctionseats.domain.show.dto.response.ShowsInfoGetResponse;
@@ -18,7 +18,7 @@ import java.util.List;
 
 public interface ShowsService {
     // 공연 생성
-    Shows createShows(ShowsCreateRequest showsCreateRequest, Places places, ShowsInfo showsInfo);
+    Shows createShows(ShowsCreateRequest showsCreateRequest, Place place, ShowsInfo showsInfo);
 
     // 공연 카테고리 생성
     ShowsCategory createShowsCategory(String name);

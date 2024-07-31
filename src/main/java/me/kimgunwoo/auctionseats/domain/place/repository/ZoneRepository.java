@@ -8,5 +8,5 @@ import java.util.List;
 public interface ZoneRepository extends JpaRepository<Zone, Long> {
 
     // 해당 공연장에 있는 구역정보 전체 조회
-    List<Zone> findAllByPlacesId(Long placeId);
+    List<Zone> findAllByPlaceId(Long placeId);
 }

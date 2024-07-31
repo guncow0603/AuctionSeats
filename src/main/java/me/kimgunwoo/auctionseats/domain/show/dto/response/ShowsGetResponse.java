@@ -43,8 +43,8 @@ public class ShowsGetResponse {
                 .map(s3Key -> S3_PATH + s3Key)
                 .collect(Collectors.toList());
         this.ageGrade = shows.getShowsInfo().getAgeGrade().getKorea();
-        this.placeId = shows.getPlaces().getId();
-        this.placeName = shows.getPlaces().getName();
-        this.placeAddress = shows.getPlaces().getAddress();
+        this.placeId = shows.getPlace().getId();
+        this.placeName = shows.getPlace().getName();
+        this.placeAddress = shows.getPlace().getAddress();
     }
 }

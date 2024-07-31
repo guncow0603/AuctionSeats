@@ -28,7 +28,7 @@ public class Zone extends BaseEntity {
     @Comment("공연장")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "place_id")
-    private Places places;
+    private Place place;
 
     @Builder
     private Zone(String name, Integer seatNumber) {
@@ -36,8 +36,8 @@ public class Zone extends BaseEntity {
         this.seatNumber = seatNumber;
     }
 
-    public void addPlace(Places places) {
-        this.places = places;
+    public void addPlace(Place place) {
+        this.place = place;
     }
 
 }

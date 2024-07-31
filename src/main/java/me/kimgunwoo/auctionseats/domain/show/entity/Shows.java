@@ -1,15 +1,24 @@
 package me.kimgunwoo.auctionseats.domain.show.entity;
 
-import jakarta.persistence.*;
+import java.time.LocalDate;
+
+import me.kimgunwoo.auctionseats.domain.place.entity.Place;
+import me.kimgunwoo.auctionseats.global.entity.BaseEntity;
+import org.hibernate.annotations.Comment;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import me.kimgunwoo.auctionseats.domain.place.entity.Places;
-import me.kimgunwoo.auctionseats.global.entity.BaseEntity;
-import org.hibernate.annotations.Comment;
-
-import java.time.LocalDate;
 
 @Getter
 @Entity
@@ -40,15 +49,15 @@ public class Shows extends BaseEntity {
     @Comment("공연장")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "place_id")
-    private Places places;
+    private Place place;
 
     @Builder
-    private Shows(String title, LocalDate startDate, LocalDate endDate, ShowsInfo showsInfo, Places places) {
+    private Shows(String title, LocalDate startDate, LocalDate endDate, ShowsInfo showsInfo, Place place) {
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
         this.showsInfo = showsInfo;
-        this.places = places;
+        this.place = place;
     }
 
 }

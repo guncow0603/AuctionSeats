@@ -6,7 +6,7 @@ import java.util.List;
 import me.kimgunwoo.auctionseats.domain.admin.dto.request.ShowsCreateRequest;
 import me.kimgunwoo.auctionseats.domain.admin.dto.request.ShowsInfoCreateRequest;
 import me.kimgunwoo.auctionseats.domain.admin.dto.response.ShowsGetResponse;
-import me.kimgunwoo.auctionseats.domain.place.entity.Places;
+import me.kimgunwoo.auctionseats.domain.place.entity.Place;
 import me.kimgunwoo.auctionseats.domain.show.dto.response.ShowsCategoryGetResponse;
 import me.kimgunwoo.auctionseats.domain.show.dto.response.ShowsGetSliceResponse;
 import me.kimgunwoo.auctionseats.domain.show.dto.response.ShowsInfoGetResponse;
@@ -49,8 +49,8 @@ public class ShowsServiceImpl implements ShowsService {
     public final ShowsRepository showsRepository;
 
     @Override
-    public Shows createShows(ShowsCreateRequest showsCreateRequest, Places places, ShowsInfo showsInfo) {
-        Shows shows = showsCreateRequest.toEntity(places, showsInfo);
+    public Shows createShows(ShowsCreateRequest showsCreateRequest, Place place, ShowsInfo showsInfo) {
+        Shows shows = showsCreateRequest.toEntity(place, showsInfo);
         return showsRepository.save(shows);
     }
 
