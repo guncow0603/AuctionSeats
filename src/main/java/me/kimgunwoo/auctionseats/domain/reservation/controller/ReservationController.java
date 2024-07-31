@@ -29,19 +29,15 @@ public class ReservationController {
             @RequestBody ReservationCreateRequest request,
             @CurrentUser User user
     ) {
-        try {
-            ReservationDetailResponse response = reservationService.reserve(user, request);
-            return ResponseEntity
-                    .status(SUCCESS_RESERVE.getHttpStatus())
-                    .body(
-                            ApiResponse.of(
-                                    SUCCESS_RESERVE.getCode(),
-                                    SUCCESS_RESERVE.getMessage(),
-                                    response)
-                    );
-        } catch (Exception e) {
-            throw new ApiException(ErrorCode.ALREADY_RESERVED_SEAT);
-        }
+        ReservationDetailResponse response = reservationService.reserve(user, request);
+        return ResponseEntity
+                .status(SUCCESS_RESERVE.getHttpStatus())
+                .body(
+                        ApiResponse.of(
+                                SUCCESS_RESERVE.getCode(),
+                                SUCCESS_RESERVE.getMessage(),
+                                response)
+                );
     }
 
     @GetMapping("/{reservationId}")

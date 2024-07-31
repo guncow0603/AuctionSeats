@@ -59,7 +59,7 @@ public class BidController {
                         )
                 );
     }
-    @GetMapping("/sse")
+    @GetMapping(value = "/sse", produces = "text/event-stream")
     public SseEmitter subscribe(@PathVariable Long auctionId) {
         return bidService.subscribe(auctionId);
     }

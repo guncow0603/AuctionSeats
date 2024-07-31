@@ -1,15 +1,11 @@
 package me.kimgunwoo.auctionseats.domain.show.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import lombok.RequiredArgsConstructor;
 import me.kimgunwoo.auctionseats.domain.admin.dto.request.ShowsCreateRequest;
 import me.kimgunwoo.auctionseats.domain.admin.dto.request.ShowsInfoCreateRequest;
 import me.kimgunwoo.auctionseats.domain.admin.dto.response.ShowsGetResponse;
 import me.kimgunwoo.auctionseats.domain.place.entity.Place;
-import me.kimgunwoo.auctionseats.domain.show.dto.response.ShowsCategoryGetResponse;
-import me.kimgunwoo.auctionseats.domain.show.dto.response.ShowsGetSliceResponse;
-import me.kimgunwoo.auctionseats.domain.show.dto.response.ShowsInfoGetResponse;
+import me.kimgunwoo.auctionseats.domain.show.dto.response.*;
 import me.kimgunwoo.auctionseats.domain.show.entity.Shows;
 import me.kimgunwoo.auctionseats.domain.show.entity.ShowsCategory;
 import me.kimgunwoo.auctionseats.domain.show.entity.ShowsImage;
@@ -28,7 +24,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import lombok.RequiredArgsConstructor;
+import java.util.ArrayList;
+import java.util.List;
 
 import static me.kimgunwoo.auctionseats.domain.admin.adminService.AdminServiceImpl.*;
 import static me.kimgunwoo.auctionseats.global.exception.ErrorCode.NOT_FOUND_SHOWS;
@@ -179,5 +176,20 @@ public class ShowsServiceImpl implements ShowsService {
     public Shows findByShowsId(Long showsId) {
         return showsRepository.findById(showsId)
                 .orElseThrow(() -> new ApiException(NOT_FOUND_SHOWS));
+    }
+
+
+    @Override
+    public ShowsSeatInfoResponse findShowsSeatInfo(Long showsId) {
+        return ShowsSeatInfoResponse.builder()
+                .seatInfos(showsRepository.findShowsSeatInfo(showsId))
+                .build();
+    }
+
+    @Override
+    public ShowsAuctionSeatInfoResponse findShowsAuctionSeatInfo(Long scheduleId, Long showsId) {
+        return ShowsAuctionSeatInfoResponse.builder()
+                .seatInfos(showsRepository.findShowsAuctionSeatInfo(scheduleId, showsId))
+                .build();
     }
 }

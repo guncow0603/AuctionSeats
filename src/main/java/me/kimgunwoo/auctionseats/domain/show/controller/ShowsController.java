@@ -2,9 +2,9 @@ package me.kimgunwoo.auctionseats.domain.show.controller;
 
 import lombok.RequiredArgsConstructor;
 import me.kimgunwoo.auctionseats.domain.admin.dto.response.ShowsGetResponse;
-import me.kimgunwoo.auctionseats.domain.show.dto.response.ShowsCategoryGetResponse;
-import me.kimgunwoo.auctionseats.domain.show.dto.response.ShowsGetSliceResponse;
-import me.kimgunwoo.auctionseats.domain.show.dto.response.ShowsInfoGetResponse;
+import me.kimgunwoo.auctionseats.domain.reservation.reservation_seat.repository.ReservationSeatRepository;
+import me.kimgunwoo.auctionseats.domain.seat.dto.response.ReservedSeatResponse;
+import me.kimgunwoo.auctionseats.domain.show.dto.response.*;
 import me.kimgunwoo.auctionseats.domain.show.service.ShowsService;
 import me.kimgunwoo.auctionseats.domain.user.entity.User;
 import me.kimgunwoo.auctionseats.global.annotaion.CurrentUser;
@@ -23,7 +23,7 @@ import static me.kimgunwoo.auctionseats.global.exception.SuccessCode.*;
 public class ShowsController {
 
     private final ShowsService showsService;
-
+    private final ReservationSeatRepository reservationSeatRepository;
     // 공연 정보 전체 조회
     @GetMapping("shows-infos")
     public ResponseEntity<ApiResponse<List<ShowsInfoGetResponse>>> getAllShowsInfo(@CurrentUser User user) {
@@ -83,5 +83,44 @@ public class ShowsController {
                                 SUCCESS_GET_ALL_SHOWS_CATEGORY.getMessage(),
                                 showsCategoryGetResponseList));
 
+    }
+    @GetMapping("/shows/{showsId}/seats")
+    public ResponseEntity<ApiResponse<ShowsSeatInfoResponse>> getShowsSeatInfo(@PathVariable Long showsId) {
+        ShowsSeatInfoResponse response = showsService.findShowsSeatInfo(showsId);
+        return ResponseEntity
+                .status(SUCCESS_GET_SHOWS_SEAT_INFO.getHttpStatus())
+                .body(ApiResponse.of(
+                        SUCCESS_GET_SHOWS_SEAT_INFO.getCode(),
+                        SUCCESS_GET_SHOWS_SEAT_INFO.getMessage(),
+                        response
+                ));
+    }
+
+    @GetMapping("/shows/{showsId}/auction-seats")
+    public ResponseEntity<ApiResponse<ShowsAuctionSeatInfoResponse>> getShowsAuctionSeatInfo(
+            @PathVariable Long showsId,
+            @RequestParam Long scheduleId
+    ) {
+        ShowsAuctionSeatInfoResponse response = showsService.findShowsAuctionSeatInfo(scheduleId, showsId);
+        return ResponseEntity
+                .status(SUCCESS_GET_SHOWS_AUCTION_INFO.getHttpStatus())
+                .body(ApiResponse.of(
+                        SUCCESS_GET_SHOWS_AUCTION_INFO.getCode(),
+                        SUCCESS_GET_SHOWS_AUCTION_INFO.getMessage(),
+                        response
+                ));
+    }
+
+    @GetMapping("/shows/{scheduleId}/reserved-seats")
+    public ResponseEntity<ApiResponse<List<ReservedSeatResponse>>> getReservedSeats(@PathVariable Long scheduleId) {
+        List<ReservedSeatResponse> response = reservationSeatRepository.findReservedSeats(scheduleId);
+
+        return ResponseEntity
+                .status(SUCCESS_GET_SHOWS_RESERVED_SEAT_INFO.getHttpStatus())
+                .body(ApiResponse.of(
+                        SUCCESS_GET_SHOWS_RESERVED_SEAT_INFO.getCode(),
+                        SUCCESS_GET_SHOWS_RESERVED_SEAT_INFO.getMessage(),
+                        response
+                ));
     }
 }
