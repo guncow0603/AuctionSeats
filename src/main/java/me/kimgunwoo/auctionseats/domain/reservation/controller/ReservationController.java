@@ -12,10 +12,9 @@ import me.kimgunwoo.auctionseats.global.dto.EmptyObject;
 import me.kimgunwoo.auctionseats.global.exception.ApiException;
 import me.kimgunwoo.auctionseats.global.exception.ErrorCode;
 import me.kimgunwoo.auctionseats.global.response.ApiResponse;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 import static me.kimgunwoo.auctionseats.global.exception.SuccessCode.*;
 
@@ -64,12 +63,12 @@ public class ReservationController {
                 );
     }
     @GetMapping
-    public ResponseEntity<ApiResponse<List<ReservationResponse>>> searchReservations(
+    public ResponseEntity<ApiResponse<Page<ReservationResponse>>> searchReservations(
             @CurrentUser User user,
             @RequestParam Integer page,
             @RequestParam Integer size
     ) {
-        List<ReservationResponse> response = reservationService.searchReservations(user, page, size);
+        Page<ReservationResponse> response = reservationService.searchReservations(user, page, size);
         return ResponseEntity
                 .status(SUCCESS_SEARCH_RESERVATIONS.getHttpStatus())
                 .body(

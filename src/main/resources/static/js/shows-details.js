@@ -12,7 +12,7 @@ $(document).ready(function () {
 
 function fetchShowsInfo(showsId) {
     $.ajax({
-        url: getUrl() + `api/v1/shows/${showsId}`,
+        url: getUrl() + `/api/v1/shows/${showsId}`,
         type: 'GET',
         success: function (data) {
             var response = data.data;

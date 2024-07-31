@@ -39,18 +39,13 @@
 </body>
 
 <script>
-    $(document).ready(function () {
-        $.getScript("/token.js", function () {
-            $("#headers").load("/header.html", function (response, status, xhr) {
-                checkLoginStatus();
-            });
-        });
-        getShowsCategories();
-        clickOnCategoryBtn("연극");
-    });
-
     $("#headers").load("/header.html", function (response, status, xhr) {
         checkLoginStatus();
+    });
+
+    $(document).ready(function () {
+        getShowsCategories();
+        clickOnCategoryBtn("연극");
     });
 </script>
 </html>
