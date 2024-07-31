@@ -1,9 +1,10 @@
 $(document).ready(function () {
     var queryParams = getQueryParams();
     if (queryParams["showsId"]) {
-        fetchShowsInfo(queryParams["showsId"]);
-        fetchGradesInfo(queryParams["showsId"]);
-        fetchScheduleInfo(queryParams["showsId"]);
+        let id = decode(queryParams["showsId"]);
+        fetchShowsInfo(id);
+        fetchGradesInfo(id);
+        fetchScheduleInfo(id);
     } else {
         // showsId가 없다면 에러 처리
         console.error('No showsId found');
