@@ -21,7 +21,6 @@
     <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js'></script>
     <script src="/js/token.js"></script>
     <script src="/js/basic.js"></script>
-    <script src="/js/shows-details.js"></script>
     <link href="/css/shows-details.css" rel="stylesheet">
 </head>
 <body>
@@ -87,7 +86,7 @@
         <div id="calendar"></div>
         <div id="schedule-details"></div> <!-- 일정 세부정보 표시 -->
         <div class="d-flex justify-content-center my-4">
-            <button id="book-btn">예매하기</button>
+            <button type="button" id="book-btn">예매하기</button>
         </div>
     </div>
 
@@ -95,7 +94,8 @@
 
 
 <script>
-    $("#headers").load("/header.html", function (response, status, xhr) {
+    <script src="/js/shows-details.js"></script>
+$("#headers").load("/header.html", function (response, status, xhr) {
         checkLoginStatus();
     });
 </script>

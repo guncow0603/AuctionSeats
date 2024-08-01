@@ -1,24 +1,15 @@
 package me.kimgunwoo.auctionseats.domain.show.entity;
 
-import java.time.LocalDate;
-
-import me.kimgunwoo.auctionseats.domain.place.entity.Place;
-import me.kimgunwoo.auctionseats.global.entity.BaseEntity;
-import org.hibernate.annotations.Comment;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import me.kimgunwoo.auctionseats.domain.place.entity.Place;
+import me.kimgunwoo.auctionseats.global.entity.BaseEntity;
+import org.hibernate.annotations.Comment;
+
+import java.time.LocalDate;
 
 @Getter
 @Entity
@@ -43,7 +34,7 @@ public class Shows extends BaseEntity {
 
     @Comment("공연")
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "shows_info")
+    @JoinColumn(name = "shows_info_id")
     private ShowsInfo showsInfo;
 
     @Comment("공연장")

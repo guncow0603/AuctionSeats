@@ -1,4 +1,4 @@
-package me.kimgunwoo.auctionseats.domain.seat.dto;
+package me.kimgunwoo.auctionseats.domain.seat.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
