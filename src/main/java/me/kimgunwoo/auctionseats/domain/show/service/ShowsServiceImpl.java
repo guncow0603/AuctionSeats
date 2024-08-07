@@ -27,7 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.ArrayList;
 import java.util.List;
 
-import static me.kimgunwoo.auctionseats.domain.admin.adminService.AdminServiceImpl.*;
+import static me.kimgunwoo.auctionseats.domain.admin.service.AdminServiceImpl.*;
 import static me.kimgunwoo.auctionseats.global.exception.ErrorCode.NOT_FOUND_SHOWS;
 import static me.kimgunwoo.auctionseats.global.exception.ErrorCode.NOT_FOUND_SHOWS_INFO;
 

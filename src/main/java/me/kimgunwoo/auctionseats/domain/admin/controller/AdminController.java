@@ -3,7 +3,7 @@ package me.kimgunwoo.auctionseats.domain.admin.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import me.kimgunwoo.auctionseats.domain.admin.adminService.AdminServiceImpl;
+import me.kimgunwoo.auctionseats.domain.admin.service.AdminServiceImpl;
 import me.kimgunwoo.auctionseats.domain.admin.dto.request.*;
 import me.kimgunwoo.auctionseats.domain.admin.dto.response.*;
 import me.kimgunwoo.auctionseats.domain.auction.dto.request.AuctionCreateRequest;

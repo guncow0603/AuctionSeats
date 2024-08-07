@@ -1,4 +1,4 @@
-package me.kimgunwoo.auctionseats.domain.admin.adminService;
+package me.kimgunwoo.auctionseats.domain.admin.service;
 
 
 import me.kimgunwoo.auctionseats.domain.admin.dto.ZoneInfo;

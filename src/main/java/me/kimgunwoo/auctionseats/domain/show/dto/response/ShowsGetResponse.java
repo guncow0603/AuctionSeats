@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static me.kimgunwoo.auctionseats.domain.admin.adminService.AdminServiceImpl.S3_PATH;
+import static me.kimgunwoo.auctionseats.domain.admin.service.AdminServiceImpl.S3_PATH;
 
 @Getter
 public class ShowsGetResponse {
