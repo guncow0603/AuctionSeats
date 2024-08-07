@@ -3,7 +3,9 @@ package me.kimgunwoo.auctionseats.domain.user.dto.request;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
 
+@Builder
 public record UserPasswordUpdateRequest(
         @NotBlank(message = "필수 입력입니다.")
         @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).$",
