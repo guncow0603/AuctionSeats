@@ -20,7 +20,9 @@ import static me.kimgunwoo.auctionseats.global.exception.SuccessCode.*;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/users")
 public class UserController {
+
     private final UserService userService;
+
     @PostMapping("/signup")
     public ResponseEntity<ApiResponse> signup(@RequestBody @Valid UserCreateRequest request) {
         UserResponse response = userService.signup(request);
@@ -33,6 +35,7 @@ public class UserController {
                         )
                 );
     }
+
     @PutMapping("/{userId}")
     public ResponseEntity<ApiResponse> updateUserInfo(
             @CurrentUser User user,
@@ -49,6 +52,7 @@ public class UserController {
                         )
                 );
     }
+
     @GetMapping("/{userId}")
     public ResponseEntity<ApiResponse> getUserInfo(
             @CurrentUser User user,
@@ -64,11 +68,12 @@ public class UserController {
                         )
                 );
     }
+
     @PatchMapping("/{userId}")
     public ResponseEntity<ApiResponse> updateUserPassword(
             @CurrentUser User user,
             @PathVariable Long userId,
-            @RequestBody UserPasswordUpdateRequest request
+            @RequestBody @Valid UserPasswordUpdateRequest request
     ) {
         userService.updateUserPassword(user, userId, request);
         return ResponseEntity.status(SUCCESS_UPDATE_USER_PASSWORD.getHttpStatus())
@@ -80,13 +85,12 @@ public class UserController {
                 );
     }
 
-    @DeleteMapping("/{userId}")
+    @DeleteMapping
     public ResponseEntity<ApiResponse> deleteUser(
             @CurrentUser User user,
-            @PathVariable Long userId,
             @RequestBody UserDeleteRequest request
     ) {
-        userService.deleteUser(user, userId, request);
+        userService.deleteUser(user, request);
         return ResponseEntity.status(SUCCESS_DELETE_USER.getHttpStatus())
                 .body(
                         ApiResponse.of(

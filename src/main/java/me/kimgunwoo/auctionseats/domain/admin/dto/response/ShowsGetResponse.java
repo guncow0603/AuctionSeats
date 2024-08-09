@@ -9,7 +9,7 @@ import lombok.Getter;
 import me.kimgunwoo.auctionseats.domain.show.entity.Shows;
 import me.kimgunwoo.auctionseats.domain.show.entity.ShowsImage;
 
-import static me.kimgunwoo.auctionseats.domain.admin.adminService.AdminServiceImpl.S3_PATH;
+import static me.kimgunwoo.auctionseats.domain.admin.service.AdminServiceImpl.S3_PATH;
 
 @Getter
 public class ShowsGetResponse {

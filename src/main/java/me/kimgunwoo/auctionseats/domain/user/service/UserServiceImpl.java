@@ -26,7 +26,6 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final LettuceUtils lettuceUtils;
 
     @Transactional
     @Override
@@ -41,6 +40,7 @@ public class UserServiceImpl implements UserService {
 
         /* 닉네임 중복 검사 */
         checkNickname(nickname);
+
 
         User user = request.toEntity(passwordEncoder);
         userRepository.save(user);
@@ -84,6 +84,7 @@ public class UserServiceImpl implements UserService {
             if (!Pattern.matches(phoneRegexp, request.phoneNumber())) {
                 throw new ApiException(INVALID_PHONE_NUMBER_PATTERN);
             }
+            user.updatePhoneNumber(request.phoneNumber());
         }
         return UserResponse.from(user);
     }
@@ -107,8 +108,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void deleteUser(User loginUser, Long userId, UserDeleteRequest request) {
-        User user = checkAndGetUser(loginUser, userId);
+    public void deleteUser(User loginUser, UserDeleteRequest request) {
+        User user = findByUserId(loginUser.getId());
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new ApiException(NOT_MATCH_PASSWORD);
         }

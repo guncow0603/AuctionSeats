@@ -58,6 +58,7 @@ public class AuthController {
             // 사용자가 인증되어 있지 않을 때
             status.put("isLoggedIn", false);
         }
+
         return ResponseEntity.ok(status);
     }
 }
