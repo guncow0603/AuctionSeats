@@ -1,4 +1,4 @@
-package me.kimgunwoo.auctionseats.domain.admin.dto;
+package me.kimgunwoo.auctionseats.domain.place.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

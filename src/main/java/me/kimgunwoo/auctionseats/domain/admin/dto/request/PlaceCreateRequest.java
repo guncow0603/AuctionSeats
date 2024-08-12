@@ -2,7 +2,7 @@ package me.kimgunwoo.auctionseats.domain.admin.dto.request;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import me.kimgunwoo.auctionseats.domain.admin.dto.ZoneInfo;
+import me.kimgunwoo.auctionseats.domain.place.dto.ZoneInfo;
 import me.kimgunwoo.auctionseats.domain.place.entity.Place;
 
 import java.util.List;

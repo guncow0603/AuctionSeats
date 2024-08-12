@@ -1,7 +1,7 @@
 package me.kimgunwoo.auctionseats.domain.place.service;
 
 import lombok.RequiredArgsConstructor;
-import me.kimgunwoo.auctionseats.domain.admin.dto.ZoneInfo;
+import me.kimgunwoo.auctionseats.domain.place.dto.ZoneInfo;
 import me.kimgunwoo.auctionseats.domain.admin.dto.request.PlaceCreateRequest;
 import me.kimgunwoo.auctionseats.domain.place.dto.response.PlaceGetResponse;
 import me.kimgunwoo.auctionseats.domain.place.entity.Place;

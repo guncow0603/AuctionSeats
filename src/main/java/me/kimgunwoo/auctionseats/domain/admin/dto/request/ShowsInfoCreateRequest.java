@@ -7,23 +7,22 @@ import lombok.RequiredArgsConstructor;
 import me.kimgunwoo.auctionseats.domain.show.entity.ShowsInfo;
 
 @Getter
-@RequiredArgsConstructor
-public class ShowsInfoCreateRequest {
+public record ShowsInfoCreateRequest (
     @Size(min = 1, max = 30, message = "1~30자 사이로 입력해주세요")
-    private final String name;
+    String name,
 
     @Size(min = 1, max = 150, message = "1~150자 사이로 입력해주세요")
-    private final String description;
+    String description,
 
     @NotNull(message = "연령 입력은 필수입니다.")
-    private final Integer ageGrade;
+    Integer ageGrade,
 
     @NotNull(message = "공연 시간은 필수입니다")
-    private final Integer runningTime;
+    Integer runningTime,
 
     @Size(min = 1, max = 30, message = "카테고리 입력은 필수입니다.")
-    private final String categoryName;
-
+    String categoryName
+    ){
     public ShowsInfo toEntity() {
         return ShowsInfo
                 .builder()

@@ -1,7 +1,6 @@
 package me.kimgunwoo.auctionseats.domain.show.controller;
 
 import lombok.RequiredArgsConstructor;
-import me.kimgunwoo.auctionseats.domain.admin.dto.response.ShowsGetResponse;
 import me.kimgunwoo.auctionseats.domain.reservation.reservation_seat.repository.ReservationSeatRepository;
 import me.kimgunwoo.auctionseats.domain.seat.dto.response.ReservedSeatResponse;
 import me.kimgunwoo.auctionseats.domain.show.dto.response.*;
