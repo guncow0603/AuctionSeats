@@ -84,7 +84,7 @@ public class AdminServiceImpl implements AdminService {
         List<ShowsImage> showsImages = showsService.createShowsImage(multipartFiles, showsInfo);
         showsInfo.addShowsImage(showsImages);
 
-        ShowsCategory showsCategory = showsService.createShowsCategory(showsInfoCreateRequest.getCategoryName());
+        ShowsCategory showsCategory = showsService.createShowsCategory(showsInfoCreateRequest.categoryName());
         showsInfo.updateShowsCategory(showsCategory);
 
         return new ShowsInfoCreateResponse(showsInfo.getId());
