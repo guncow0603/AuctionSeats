@@ -3,9 +3,9 @@ package me.kimgunwoo.auctionseats.domain.admin.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import me.kimgunwoo.auctionseats.domain.admin.service.AdminServiceImpl;
 import me.kimgunwoo.auctionseats.domain.admin.dto.request.*;
 import me.kimgunwoo.auctionseats.domain.admin.dto.response.*;
+import me.kimgunwoo.auctionseats.domain.admin.service.AdminServiceImpl;
 import me.kimgunwoo.auctionseats.domain.auction.dto.request.AuctionCreateRequest;
 import me.kimgunwoo.auctionseats.global.dto.EmptyObject;
 import me.kimgunwoo.auctionseats.global.response.ApiResponse;
@@ -42,7 +42,7 @@ public class AdminController {
     }
 
     //  공연과 관련된 공연 정보, 공연 카테고리, 공연 이미지 생성
-    @PostMapping(value = "/admin/shows-Infos",
+    @PostMapping(value = "/admin/shows-infos",
             consumes = {
                     MediaType.APPLICATION_JSON_VALUE,
                     MediaType.MULTIPART_FORM_DATA_VALUE

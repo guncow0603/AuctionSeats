@@ -1,6 +1,6 @@
 package me.kimgunwoo.auctionseats.domain.place.service;
 
-import me.kimgunwoo.auctionseats.domain.admin.dto.ZoneInfo;
+import me.kimgunwoo.auctionseats.domain.place.dto.ZoneInfo;
 import me.kimgunwoo.auctionseats.domain.place.dto.response.ZoneGetResponse;
 import me.kimgunwoo.auctionseats.domain.place.entity.Zone;
 

@@ -1,9 +1,8 @@
 package me.kimgunwoo.auctionseats.domain.place.service;
 
 import lombok.RequiredArgsConstructor;
-import me.kimgunwoo.auctionseats.domain.admin.dto.ZoneInfo;
+import me.kimgunwoo.auctionseats.domain.place.dto.ZoneInfo;
 import me.kimgunwoo.auctionseats.domain.place.dto.response.ZoneGetResponse;
-import me.kimgunwoo.auctionseats.domain.place.entity.Place;
 import me.kimgunwoo.auctionseats.domain.place.entity.Zone;
 import me.kimgunwoo.auctionseats.domain.place.repository.ZoneRepository;
 import me.kimgunwoo.auctionseats.domain.show.entity.Shows;

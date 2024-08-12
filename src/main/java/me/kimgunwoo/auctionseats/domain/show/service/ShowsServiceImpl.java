@@ -3,7 +3,6 @@ package me.kimgunwoo.auctionseats.domain.show.service;
 import lombok.RequiredArgsConstructor;
 import me.kimgunwoo.auctionseats.domain.admin.dto.request.ShowsCreateRequest;
 import me.kimgunwoo.auctionseats.domain.admin.dto.request.ShowsInfoCreateRequest;
-import me.kimgunwoo.auctionseats.domain.admin.dto.response.ShowsGetResponse;
 import me.kimgunwoo.auctionseats.domain.place.entity.Place;
 import me.kimgunwoo.auctionseats.domain.show.dto.response.*;
 import me.kimgunwoo.auctionseats.domain.show.entity.Shows;

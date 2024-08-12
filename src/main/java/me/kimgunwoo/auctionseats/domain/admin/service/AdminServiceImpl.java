@@ -1,7 +1,6 @@
 package me.kimgunwoo.auctionseats.domain.admin.service;
 
 import lombok.RequiredArgsConstructor;
-import me.kimgunwoo.auctionseats.domain.admin.dto.ZoneInfo;
 import me.kimgunwoo.auctionseats.domain.admin.dto.request.*;
 import me.kimgunwoo.auctionseats.domain.admin.dto.response.*;
 import me.kimgunwoo.auctionseats.domain.auction.dto.request.AuctionCreateRequest;
@@ -10,6 +9,7 @@ import me.kimgunwoo.auctionseats.domain.grade.entity.Grade;
 import me.kimgunwoo.auctionseats.domain.grade.entity.ZoneGrade;
 import me.kimgunwoo.auctionseats.domain.grade.service.GradeService;
 import me.kimgunwoo.auctionseats.domain.grade.service.ZoneGradeService;
+import me.kimgunwoo.auctionseats.domain.place.dto.ZoneInfo;
 import me.kimgunwoo.auctionseats.domain.place.entity.Place;
 import me.kimgunwoo.auctionseats.domain.place.entity.Zone;
 import me.kimgunwoo.auctionseats.domain.place.service.PlaceService;
@@ -31,7 +31,9 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class AdminServiceImpl implements AdminService {
+
     private final PlaceService placeService;
+
     private final ShowsService showsService;
 
     private final ZoneService zoneService;
@@ -39,12 +41,15 @@ public class AdminServiceImpl implements AdminService {
     private final ScheduleService scheduleService;
 
     private final GradeService gradeService;
+
     private final ZoneGradeService zoneGradeService;
+
     private final AuctionService auctionService;
     public static final String S3_PATH = "https://ticket-seats.s3.ap-northeast-2.amazonaws.com/";
     public static final String FILE_PATH = "shows/";
     public static final String THUMBNAIL = "thumbnail/";
     public static final String GENERAL = "general/";
+
     // 공연장 및 구역 생성
     @Override
     @Transactional
@@ -53,8 +58,10 @@ public class AdminServiceImpl implements AdminService {
         Place place = placeService.createPlace(placeCreateRequest);
         List<Zone> zoneList = zoneService.createZone(zoneInfos);
         place.updateZone(zoneList);
+
         return createPlaceResponse(zoneList);
     }
+
     // 공연장 및 구역 응답 생성
     @Override
     public List<PlaceCreateResponse> createPlaceResponse(List<Zone> zoneList) {
@@ -114,8 +121,8 @@ public class AdminServiceImpl implements AdminService {
     @Override
     @Transactional
     public ZoneGradeCreateResponse createZoneGrade(ZoneGradeCreateRequest zoneGradeCreateRequest) {
-        Zone zone = zoneService.getReferenceById(zoneGradeCreateRequest.getZoneId());
-        Grade grade = gradeService.getReferenceById(zoneGradeCreateRequest.getGradeId());
+        Zone zone = zoneService.getReferenceById(zoneGradeCreateRequest.zoneId());
+        Grade grade = gradeService.getReferenceById(zoneGradeCreateRequest.gradeId());
         ZoneGrade zoneGrade = zoneGradeService.createZoneGrade(zoneGradeCreateRequest, zone, grade);
         return new ZoneGradeCreateResponse(zoneGrade);
     }
