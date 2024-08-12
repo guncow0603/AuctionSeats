@@ -3,9 +3,11 @@ package me.kimgunwoo.auctionseats.domain.bid.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.kimgunwoo.auctionseats.domain.auction.entity.Auction;
-import me.kimgunwoo.auctionseats.domain.auction.repository.AuctionRepository;
+import me.kimgunwoo.auctionseats.domain.auction.service.AuctionService;
+import me.kimgunwoo.auctionseats.domain.bid.constant.BidStatus;
 import me.kimgunwoo.auctionseats.domain.bid.dto.request.BidRequest;
 import me.kimgunwoo.auctionseats.domain.bid.dto.response.BidInfoResponse;
+import me.kimgunwoo.auctionseats.domain.bid.dto.response.BidInfoWithNickname;
 import me.kimgunwoo.auctionseats.domain.bid.entity.Bid;
 import me.kimgunwoo.auctionseats.domain.bid.redis.RedisSubscriber;
 import me.kimgunwoo.auctionseats.domain.bid.repository.BidRepository;
@@ -22,13 +24,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
-import static me.kimgunwoo.auctionseats.domain.auction.constant.AuctionConstant.AUCTION_BID_KEY_PREFIX;
-import static me.kimgunwoo.auctionseats.domain.auction.constant.AuctionConstant.BID_PRICE_INCREASE_PERCENT;
 import static me.kimgunwoo.auctionseats.domain.bid.constant.BidConstant.AUCTION_SSE_PREFIX;
-import static me.kimgunwoo.auctionseats.global.exception.ErrorCode.*;
-
+import static me.kimgunwoo.auctionseats.domain.bid.constant.BidConstant.BID_PRICE_INCREASE_PERCENT;
+import static me.kimgunwoo.auctionseats.global.exception.ErrorCode.BAD_REQUEST_BID;
+import static me.kimgunwoo.auctionseats.global.exception.ErrorCode.ENDED_AUCTION;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -36,11 +38,13 @@ import static me.kimgunwoo.auctionseats.global.exception.ErrorCode.*;
 public class BidServiceImpl implements BidService {
     private static final Long DEFAULT_SSE_TIMEOUT = 30 * 60 * 1000L;
     private static final String CONNECTED = "CONNECTED";
-    private final AuctionRepository auctionRepository;
+
     private final BidRepository bidRepository;
     private final BidRedisService bidRedisService;
+    private final AuctionService auctionService;
     private final PointService pointService;
     private final UserService userService;
+
     //Sse
     private final SseRepository sseRepository;
     private final RedisSubscriber redisSubscriber;
@@ -48,7 +52,7 @@ public class BidServiceImpl implements BidService {
     @Override
     @DistributedLock(key = "#auctionId")
     public void bid(Long auctionId, BidRequest bidRequest, User loginUser) {
-        Auction auction = getAuction(auctionId);
+        Auction auction = auctionService.getAuction(auctionId);
         boolean isEnded = auction.getIsEnded();
 
         if (isEnded) {
@@ -56,7 +60,7 @@ public class BidServiceImpl implements BidService {
         }
 
         User bidder = userService.findByUserId(loginUser.getId());
-        long newBidPrice = bidRequest.getPrice();
+        long newBidPrice = bidRequest.price();
         long currentBidPrice = bidRedisService.getBidPrice(auctionId)
                 .orElseGet(() -> {
                     //redis에 입찰정보 없는 경우 재처리
@@ -71,11 +75,13 @@ public class BidServiceImpl implements BidService {
             bidRedisService.setBidPrice(auctionId, currentBidPrice);
         }
 
+        Optional<Bid> currentBid = getCurrentBid(auction);
         validateBid(currentBidPrice, newBidPrice);
-        updateBidderPoints(bidder, newBidPrice, currentBidPrice, auction);
-
+        updateBidderPoints(bidder, newBidPrice, currentBidPrice, currentBid);
+        updateBidStatus(currentBid);
         saveBid(bidder, newBidPrice, auction);
     }
+
     @Override
     @Transactional(readOnly = true)
     public Page<BidInfoResponse> getMyBids(Long auctionId, User loginUser, Pageable pageable) {
@@ -91,13 +97,15 @@ public class BidServiceImpl implements BidService {
     public SseEmitter subscribe(Long auctionId) {
         String channelName = AUCTION_SSE_PREFIX + auctionId;
         redisSubscriber.createChannel(channelName);
+
         SseEmitter sseEmitter = new SseEmitter(DEFAULT_SSE_TIMEOUT);
-        sseEmitter.onCompletion(() -> sseRepository.deleteAll(channelName));
+        sseEmitter.onCompletion(() -> sseRepository.delete(channelName, sseEmitter));
         sseEmitter.onTimeout(() -> {
-            sseRepository.deleteAll(channelName);
+            sseRepository.delete(channelName, sseEmitter);
             sseEmitter.complete();
         });
         sseRepository.save(channelName, sseEmitter);
+
         try {
             //503 대비 더미데이터 send
             sseEmitter.send(SseEmitter.event()
@@ -109,15 +117,21 @@ public class BidServiceImpl implements BidService {
         }
         return sseEmitter;
     }
-    public void updateBidderPoints(User bidder, long newBidPrice, long currentBidPrice, Auction auction) {
-        Optional<Bid> currentBid = getCurrentBid(auction);
+
+    public void updateBidStatus(Optional<Bid> currentBid) {
+        currentBid.ifPresent(bid -> bid.updateStatus(BidStatus.FAILED));
+    }
+
+    public void updateBidderPoints(User bidder, long newBidPrice, long currentBidPrice, Optional<Bid> currentBid) {
         if (currentBid.isPresent()) {
             User currentBidder = currentBid.get().getUser();
             pointService.refundPoint(currentBidder, currentBidPrice);
         }
+
         //새 입찰자 포인트 차감 및 경매 입찰가 갱신
         pointService.usePoint(bidder, newBidPrice);
     }
+
     public void saveBid(User bidder, long newBidPrice, Auction auction) {
         Bid newBid = Bid.builder()
                 .price(newBidPrice)
@@ -128,13 +142,11 @@ public class BidServiceImpl implements BidService {
         bidRepository.save(newBid);
         bidRedisService.setBidPrice(auction.getId(), newBidPrice);
     }
-    public Auction getAuction(Long auctionId) {
-        return auctionRepository.findById(auctionId)
-                .orElseThrow(() -> new ApiException(NOT_FOUND_AUCTION));
-    }
+
     public Optional<Bid> getCurrentBid(Auction auction) {
         return bidRepository.findTopByAuctionOrderByIdDesc(auction);
     }
+
     /**
      * 입찰 기준
      * 1. 최근 입찰가보다 5% 이상 커야함
@@ -146,5 +158,15 @@ public class BidServiceImpl implements BidService {
         if (currentBidPrice > bidPrice) {
             throw new ApiException(BAD_REQUEST_BID);
         }
+    }
+
+    @Override
+    public boolean isUserBidHighest(Long userId, Long auctionId) {
+        return bidRepository.isUserBidHighest(userId, auctionId);
+    }
+
+    @Override
+    public List<BidInfoWithNickname> getLastBidsNicknameAndPrice(Long auctionId, Long limit) {
+        return bidRepository.getLastBidsNicknameAndPrice(auctionId, limit);
     }
 }

@@ -51,6 +51,8 @@ public enum SuccessCode {
     /* BID */
     SUCCESS_GET_ALL_BID(HttpStatus.OK, "B00000", "입찰 내역 조회에 성공했습니다."),
     SUCCESS_BID(HttpStatus.CREATED, "B00100", "입찰에 성공했습니다."),
+    SUCCESS_GET_MY_BID_IS_HIGHEST(HttpStatus.OK, "B00200", "내 최상위 입찰 상태 조회에 성공했습니다."),
+    SUCCESS_GET_LAST_BIDS(HttpStatus.OK, "B00400", "마지막 입찰 목록 조회에 성공했습니다."),
 
     /* POINT */
     SUCCESS_GET_CHARGE_POINT_LOG_LIST(HttpStatus.OK, "P00000", "포인트 충전 내역 조회에 성공했습니다."),
