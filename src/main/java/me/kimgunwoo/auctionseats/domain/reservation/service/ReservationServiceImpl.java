@@ -90,18 +90,18 @@ public class ReservationServiceImpl implements ReservationService {
         // 최대 예매 제한 검사
         checkMaxReservationLimit(
                 user,
-                seatRequest.getScheduleId(),
+                seatRequest.scheduleId(),
                 (long)request.reservationSeats().size()
         );
 
         // 공연 시작 시간 검사
-        checkReservationBeforeStart(seatRequest.getScheduleId());
+        checkReservationBeforeStart(seatRequest.scheduleId());
 
         // 좌석 생성 값 검증
         checkReservationSeats(request.reservationSeats(), request.price());
 
         Schedule schedule = scheduleService.findScheduleWithShowsPlace(
-                seatRequest.getScheduleId(),
+                seatRequest.scheduleId(),
                 true,
                 true
         );
@@ -350,9 +350,9 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     private void addReservationSeat(Reservation reservation, ReservationSeatCreateRequest request) {
-        Schedule schedule = scheduleService.findSchedule(request.getScheduleId());
+        Schedule schedule = scheduleService.findSchedule(request.scheduleId());
         ZoneGrade zoneGrade = zoneGradeService
-                .findZoneGradeWithFetch(request.getZoneGradeId(), true, true);
+                .findZoneGradeWithFetch(request.zoneGradeId(), true, true);
 
         reservation.addSeat(
                 ReservationSeat.builder()
@@ -372,11 +372,11 @@ public class ReservationServiceImpl implements ReservationService {
     private void checkReservationSeats(List<ReservationSeatCreateRequest> requests, Long clientPrice) {
         Long totalPrice = requests.stream().map(request -> {
             ZoneGrade zoneGrade = zoneGradeService.findZoneGradeWithFetch(
-                    request.getZoneGradeId(),
+                    request.zoneGradeId(),
                     true,
                     true
             );
-            if (request.getSeatNumber() > zoneGrade.getZone().getSeatNumber()) {
+            if (request.seatNumber() > zoneGrade.getZone().getSeatNumber()) {
                 throw new ApiException(ErrorCode.INVALID_SEAT_NUMBER);
             }
             return zoneGrade.getGrade().getNormalPrice();
