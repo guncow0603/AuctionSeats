@@ -18,7 +18,7 @@ import me.kimgunwoo.auctionseats.domain.reservation.dto.response.ReservationResp
 import me.kimgunwoo.auctionseats.domain.reservation.entity.Reservation;
 import me.kimgunwoo.auctionseats.domain.reservation.entity.ReservationStatus;
 import me.kimgunwoo.auctionseats.domain.reservation.repository.ReservationRepository;
-import me.kimgunwoo.auctionseats.domain.reservation.reservation_seat.dto.ReservationSeatCreateRequest;
+import me.kimgunwoo.auctionseats.domain.reservation.reservation_seat.dto.request.ReservationSeatCreateRequest;
 import me.kimgunwoo.auctionseats.domain.reservation.reservation_seat.entity.ReservationSeat;
 import me.kimgunwoo.auctionseats.domain.reservation.reservation_seat.repository.ReservationSeatRepository;
 import me.kimgunwoo.auctionseats.domain.schedule.entity.Schedule;
