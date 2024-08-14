@@ -6,7 +6,10 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import me.kimgunwoo.auctionseats.domain.auction.entity.Auction;
+import me.kimgunwoo.auctionseats.domain.bid.constant.BidStatus;
 import me.kimgunwoo.auctionseats.domain.bid.dto.response.BidInfoResponse;
+import me.kimgunwoo.auctionseats.domain.bid.dto.response.BidInfoWithNickname;
+import me.kimgunwoo.auctionseats.domain.bid.entity.Bid;
 import me.kimgunwoo.auctionseats.domain.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -76,5 +79,32 @@ public class BidRepositoryCustomImpl implements BidRepositoryCustom {
             }
         }
         return orderSpecifier;
+    }
+
+    @Override
+    public boolean isUserBidHighest(Long userId, Long auctionId) {
+        Bid highestBid = jpaQueryFactory
+                .select(bid)
+                .from(bid)
+                .where(bid.auction.id.eq(auctionId), bid.status.eq(BidStatus.PROCESS))
+                .orderBy(bid.price.desc())
+                .fetchFirst();
+
+        return highestBid != null && userId.equals(highestBid.getUser().getId());
+    }
+
+    @Override
+    public List<BidInfoWithNickname> getLastBidsNicknameAndPrice(Long auctionId, Long limit) {
+        return jpaQueryFactory
+                .select(Projections.constructor(BidInfoWithNickname.class,
+                        bid.user.nickname,
+                        bid.price
+                ))
+                .from(bid)
+                .join(bid.user)
+                .where(bid.auction.id.eq(auctionId))
+                .orderBy(bid.price.desc())
+                .limit(limit)
+                .fetch();
     }
 }

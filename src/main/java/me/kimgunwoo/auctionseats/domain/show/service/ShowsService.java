@@ -8,12 +8,12 @@ import me.kimgunwoo.auctionseats.domain.show.entity.Shows;
 import me.kimgunwoo.auctionseats.domain.show.entity.ShowsCategory;
 import me.kimgunwoo.auctionseats.domain.show.entity.ShowsImage;
 import me.kimgunwoo.auctionseats.domain.show.entity.ShowsInfo;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 public interface ShowsService {
+
     // 공연 생성
     Shows createShows(ShowsCreateRequest showsCreateRequest, Place place, ShowsInfo showsInfo);
 
@@ -39,7 +39,7 @@ public interface ShowsService {
     List<ShowsInfoGetResponse> getAllShowsInfo();
 
     // 전체 공연 페이징 조회
-    ShowsGetSliceResponse getSliceShows(Pageable pageable, String categoryName);
+    ShowsGetCursorResponse getShowsWithCursor(Long cursorId, int size, String categoryName);
 
     // 공연 단건 조회
     ShowsGetResponse getShows(Long showsId);
@@ -57,4 +57,10 @@ public interface ShowsService {
     ShowsSeatInfoResponse findShowsSeatInfo(Long showsId);
 
     ShowsAuctionSeatInfoResponse findShowsAuctionSeatInfo(Long scheduleId, Long showsId);
+
+    // Redis에 저장되어 있는 공연 캐쉬 정보 삭제
+    void evictCacheForCategory(String categoryName);
+
+    // Redis에 저장되어 있는 공연카테고리 캐쉬 정보 삭제
+    void clearShowsCategoryCache();
 }

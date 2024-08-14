@@ -50,13 +50,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public boolean isExistedPhoneNumber(String phoneNumber) {
-        return userRepository.existsByPhoneNumberAndIsDeletedIsFalse(phoneNumber);
-
-    }
-
-    @Override
-    @Transactional(readOnly = true)
     public User findByUserId(Long userId) {
         return userRepository.findByIdAndIsDeletedIsFalse(userId)
                 .orElseThrow(() -> new ApiException(NOT_FOUND_BY_ID));

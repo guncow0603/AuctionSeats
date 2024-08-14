@@ -1,10 +1,24 @@
 package me.kimgunwoo.auctionseats.domain.show.service;
 
+import static me.kimgunwoo.auctionseats.domain.admin.service.AdminServiceImpl.*;
+import static me.kimgunwoo.auctionseats.global.exception.ErrorCode.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
 import me.kimgunwoo.auctionseats.domain.admin.dto.request.ShowsCreateRequest;
 import me.kimgunwoo.auctionseats.domain.admin.dto.request.ShowsInfoCreateRequest;
-import me.kimgunwoo.auctionseats.domain.place.entity.Place;
-import me.kimgunwoo.auctionseats.domain.show.dto.response.*;
 import me.kimgunwoo.auctionseats.domain.show.entity.Shows;
 import me.kimgunwoo.auctionseats.domain.show.entity.ShowsCategory;
 import me.kimgunwoo.auctionseats.domain.show.entity.ShowsImage;
@@ -13,25 +27,20 @@ import me.kimgunwoo.auctionseats.domain.show.repository.ShowsCategoryRepository;
 import me.kimgunwoo.auctionseats.domain.show.repository.ShowsImageRepository;
 import me.kimgunwoo.auctionseats.domain.show.repository.ShowsInfoRepository;
 import me.kimgunwoo.auctionseats.domain.show.repository.ShowsRepository;
+import me.kimgunwoo.auctionseats.domain.show.dto.response.ShowsAuctionSeatInfoResponse;
+import me.kimgunwoo.auctionseats.domain.show.dto.response.ShowsCategoryGetResponse;
+import me.kimgunwoo.auctionseats.domain.show.dto.response.ShowsGetCursorResponse;
+import me.kimgunwoo.auctionseats.domain.show.dto.response.ShowsGetQueryResponse;
+import me.kimgunwoo.auctionseats.domain.show.dto.response.ShowsGetResponse;
+import me.kimgunwoo.auctionseats.domain.show.dto.response.ShowsInfoGetResponse;
+import me.kimgunwoo.auctionseats.domain.show.dto.response.ShowsSeatInfoResponse;
+import me.kimgunwoo.auctionseats.domain.place.entity.Place;
 import me.kimgunwoo.auctionseats.global.exception.ApiException;
 import me.kimgunwoo.auctionseats.global.util.S3Uploader;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static me.kimgunwoo.auctionseats.domain.admin.service.AdminServiceImpl.*;
-import static me.kimgunwoo.auctionseats.global.exception.ErrorCode.NOT_FOUND_SHOWS;
-import static me.kimgunwoo.auctionseats.global.exception.ErrorCode.NOT_FOUND_SHOWS_INFO;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ShowsServiceImpl implements ShowsService {
 
     private final ShowsInfoRepository showsInfoRepository;
@@ -44,9 +53,13 @@ public class ShowsServiceImpl implements ShowsService {
 
     public final ShowsRepository showsRepository;
 
+    private final StringRedisTemplate stringRedisTemplate;
+
+    // 공연 생성
     @Override
     public Shows createShows(ShowsCreateRequest showsCreateRequest, Place place, ShowsInfo showsInfo) {
         Shows shows = showsCreateRequest.toEntity(place, showsInfo);
+
         return showsRepository.save(shows);
     }
 
@@ -146,24 +159,36 @@ public class ShowsServiceImpl implements ShowsService {
     // 공연 정보 카테고리별 페이징 페이징 조회
     @Override
     @Transactional(readOnly = true)
-    public ShowsGetSliceResponse getSliceShows(Pageable pageable, String categoryName) {
-        Sort sort = pageable.getSort();
-        Sort additionalSort = Sort.by(Sort.Direction.ASC, "startDate");
-        Sort finalSort = sort.and(additionalSort);
-        Pageable addFinalPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), finalSort);
+    @Cacheable(value = "showsGlobalCache", key = "{#cursorId ?: 'default', #categoryName}", cacheManager = "redisCacheManager")
+    public ShowsGetCursorResponse getShowsWithCursor(Long cursorId, int size, String categoryName) {
+        List<ShowsGetQueryResponse> showsGetQueryResponses =
+                showsRepository.findAllByShowsAndCategoryName(
+                        cursorId,
+                        size,
+                        categoryName
+                );
+        Long nextCursorId = -1L;
+        if (!showsGetQueryResponses.isEmpty()) {
+            int lastSize = showsGetQueryResponses.size() - 1;
+            nextCursorId = showsGetQueryResponses.get(lastSize).getShowsId();
+        }
 
-        Slice<Shows> showsSlice = showsRepository.findAllByShowsAndCategoryName(addFinalPageable, categoryName);
-        return new ShowsGetSliceResponse(showsSlice);
-
+        return new ShowsGetCursorResponse(showsGetQueryResponses, nextCursorId);
     }
 
     // 공연 카테고리 전체 조회
     @Override
+    @Cacheable(value = "showsCategoryGlobalCache", cacheManager = "redisCacheManager")
     public List<ShowsCategoryGetResponse> getAllShowsCategory() {
         List<ShowsCategory> showsCategorieList = showsCategoryRepository.findAll();
-        return showsCategorieList.stream().map(ShowsCategoryGetResponse::new).toList();
+        return showsCategorieList
+                .stream()
+                .map(category -> new ShowsCategoryGetResponse(category.getName()))
+                .collect(
+                        Collectors.toList()
+                );
     }
-    
+
     // 공연 정보 조회
     @Override
     public ShowsInfo findByShowsInfoId(Long showsInfoId) {
@@ -177,7 +202,6 @@ public class ShowsServiceImpl implements ShowsService {
                 .orElseThrow(() -> new ApiException(NOT_FOUND_SHOWS));
     }
 
-
     @Override
     public ShowsSeatInfoResponse findShowsSeatInfo(Long showsId) {
         return ShowsSeatInfoResponse.builder()
@@ -190,5 +214,30 @@ public class ShowsServiceImpl implements ShowsService {
         return ShowsAuctionSeatInfoResponse.builder()
                 .seatInfos(showsRepository.findShowsAuctionSeatInfo(scheduleId, showsId))
                 .build();
+    }
+
+    // Redis에 저장되어 있는 공연 캐쉬 정보 삭제
+    @CacheEvict(value = "showsGlobalCache", allEntries = true)
+    public void clearShowsCache() {
+
+    }
+
+    // Redis에 저장되어 있는 공연카테고리 캐쉬 정보 삭제
+    @CacheEvict(value = "showsCategoryGlobalCache", allEntries = true)
+    public void clearShowsCategoryCache() {
+
+    }
+
+    /**
+     * 특정 카테고리에 해당하는 캐시를 삭제합니다.
+     *
+     * @param categoryName 삭제할 캐시의 카테고리 이름
+     */
+    public void evictCacheForCategory(String categoryName) {
+        String pattern = "showsGlobalCache::*," + categoryName;
+        Set<String> keys = stringRedisTemplate.keys(pattern);
+        if (keys != null && !keys.isEmpty()) {
+            stringRedisTemplate.delete(keys);
+        }
     }
 }

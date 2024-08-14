@@ -1,5 +1,6 @@
 package me.kimgunwoo.auctionseats.domain.reservation.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import me.kimgunwoo.auctionseats.domain.reservation.dto.ReservationSeatInfo;
 
@@ -8,15 +9,31 @@ import java.util.List;
 
 @Builder
 public record ReservationDetailResponse(
-        Long reservationId, // 예약 번호
+        Long reservationId,
+        String username,
+        String title,
+        Long price,
 
-        String username, // 예매자
+        @JsonFormat(pattern = "yyyy.MM.dd HH:mm")
+        LocalDateTime useDate,
 
-        String title, // 제목
+        String address,
+        List<ReservationSeatInfo> seats
+) {
 
-        LocalDateTime useDate, // 이용일
+    public ReservationDetailResponse() {
+        this(null, null, null, null, null, null, null);
+    }
 
-        String address, // 공연 장소
+    public ReservationDetailResponse(Long reservationId, String username, String title, Long price,
+                                     LocalDateTime useDate, String address, List<ReservationSeatInfo> seats) {
+        this.reservationId = reservationId;
+        this.username = username;
+        this.title = title;
+        this.price = price;
+        this.useDate = useDate;
+        this.address = address;
+        this.seats = seats;
+    }
+}
 
-        List<ReservationSeatInfo> seats // 좌석 정보
-){}

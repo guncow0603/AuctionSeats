@@ -22,20 +22,25 @@ import java.util.List;
 @Entity
 @Table(name = "auction")
 public class Auction extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Comment("공연 회차")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "schedule_id")
     private Schedule schedule;
+
     @Comment("구역등급")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "zone_grade_id")
     private ZoneGrade zoneGrade;
+
     @Comment("시작가")
     @Column(name = "seat_number", nullable = false)
     private Integer seatNumber;
+
     @Comment("시작가")
     @ColumnDefault("0")
     @Column(name = "start_price", nullable = false)
@@ -44,9 +49,11 @@ public class Auction extends BaseEntity {
     @Comment("시작일시")
     @Column(name = "start_date", nullable = false)
     private LocalDateTime startDateTime;
+
     @Comment("마감일시")
     @Column(name = "end_date", nullable = false)
     private LocalDateTime endDateTime;
+
     @Comment("종료여부 T - 종료 / F - 진행 중")
     @ColumnDefault("false")
     @Column(name = "is_ended")

@@ -1,28 +1,20 @@
 package me.kimgunwoo.auctionseats.domain.seat.dto.response;
 
-import lombok.*;
+import lombok.Builder;
 
 import java.time.LocalDateTime;
 
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
-public class AuctionSeatInfoResponse {
-
-    private String zoneName;
-
-    private String gradeName;
-
-    private Long price;
-
-    private Long zoneGradeId;
-
-    private Long auctionId;
-
-    private Integer seatNumber;
-
-    private LocalDateTime deadline;
-
-    private Boolean isEnded;
+public record AuctionSeatInfoResponse(
+        String zoneName,
+        String gradeName,
+        Long price,
+        Long zoneGradeId,
+        Long auctionId,
+        Integer seatNumber,
+        LocalDateTime deadline,
+        Boolean isEnded
+) {
+    @Builder
+    public AuctionSeatInfoResponse {}
 }
+

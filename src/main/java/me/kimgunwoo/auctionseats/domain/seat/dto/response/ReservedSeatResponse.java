@@ -1,17 +1,12 @@
 package me.kimgunwoo.auctionseats.domain.seat.dto.response;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Builder
-public class ReservedSeatResponse {
-
-    private Long zoneGradeId;
-
-    private Integer seatNumber;
+public record ReservedSeatResponse(
+        Long zoneGradeId,
+        Integer seatNumber
+) {
+    @Builder
+    public ReservedSeatResponse {}
 }
+

@@ -1,5 +1,6 @@
 package me.kimgunwoo.auctionseats.domain.user.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -22,13 +23,13 @@ import static me.kimgunwoo.auctionseats.global.jwt.JwtUtil.REFRESH_TOKEN_TIME;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
-
     private static final String PREFIX_REFRESH_TOKEN = "RefreshToken: ";
     private static final String PREFIX_LOGOUT = "Logout: ";
+    private static final long VERIFY_TIME = 5 * 60 * 1000L;
+    private final ObjectMapper objectMapper = new ObjectMapper();
     private final JwtUtil jwtUtil;
     private final LettuceUtils lettuceUtils;
     private final UserService userService;
-
     @Override
     @Transactional
     public void logout(HttpServletRequest request) {
@@ -45,14 +46,18 @@ public class AuthServiceImpl implements AuthService {
         lettuceUtils.save(PREFIX_LOGOUT + username, accessToken, remainingTime);
     }
 
+
     @Override
     @Transactional
     public void reissue(HttpServletRequest request, HttpServletResponse response) {
         String refreshToken = jwtUtil.resolveRefreshToken(request);
+
         // 토큰 검증
         jwtUtil.validateToken(refreshToken);
+
         // 유저 정보 추출
         Claims claims = jwtUtil.getUserInfoFromToken(refreshToken);
+
         String username = claims.getSubject();
         Role role = Role.valueOf(String.valueOf(claims.get("auth")));
         Long id = Long.parseLong(String.valueOf(claims.get("identify")));
@@ -65,8 +70,8 @@ public class AuthServiceImpl implements AuthService {
         String newAccessToken = jwtUtil.createAccessToken(id, username, role, nickname);
         String newRefreshToken = jwtUtil.createRefreshToken(id, username, role, nickname);
 
-        jwtUtil.setAccessTokenInHeader(response, newAccessToken);
-        jwtUtil.setRefreshTokenInCookie(response, newRefreshToken);
+        jwtUtil.setTokenInHeader(response, newAccessToken, newRefreshToken);
+
         lettuceUtils.delete(REFRESH_TOKEN_HEADER + " " + username);
         lettuceUtils.save(
                 REFRESH_TOKEN_HEADER + " " + username,
@@ -79,4 +84,5 @@ public class AuthServiceImpl implements AuthService {
     public Long findPoint(User user) {
         return userService.findUserPoint(user.getId());
     }
+
 }

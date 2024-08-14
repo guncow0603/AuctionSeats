@@ -16,4 +16,11 @@ public interface ReservationSeatQueryRepository {
 
     // 회차에 예약된 좌석들의 목록을 조회한다.
     List<ReservedSeatResponse> findReservedSeats(Long scheduleId);
+
+    /**
+     * 회차에 예매된 좌석들의 목록을 캐시에서 조회한다.
+     * @param scheduleId
+     * @return
+     */
+    List<ReservedSeatResponse> findReservedSeatsFromCache(Long scheduleId);
 }

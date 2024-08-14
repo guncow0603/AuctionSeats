@@ -18,10 +18,6 @@ import java.util.Optional;
 
 import static me.kimgunwoo.auctionseats.domain.bid.constant.BidConstant.AUCTION_BID_KEY_PREFIX;
 
-
-
-
-
 @Slf4j
 @RequiredArgsConstructor
 @Repository

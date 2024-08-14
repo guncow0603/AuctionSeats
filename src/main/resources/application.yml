@@ -3,7 +3,10 @@ spring:
     active: local
 
 ---
-
+server:
+  port: 8080
+  host:
+    front: localhost8080
 spring:
   config:
     activate:

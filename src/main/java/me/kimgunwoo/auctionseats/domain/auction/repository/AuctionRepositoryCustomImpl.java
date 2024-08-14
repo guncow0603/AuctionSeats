@@ -1,6 +1,13 @@
 package me.kimgunwoo.auctionseats.domain.auction.repository;
 
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import me.kimgunwoo.auctionseats.domain.auction.dto.response.AuctionInfoResponse;
+import me.kimgunwoo.auctionseats.domain.auction.entity.Auction;
 import me.kimgunwoo.auctionseats.domain.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -8,13 +15,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
-import com.querydsl.core.types.Order;
-import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.core.types.Projections;
-import com.querydsl.jpa.impl.JPAQuery;
-import com.querydsl.jpa.impl.JPAQueryFactory;
-
 import java.util.List;
+import java.util.Optional;
 
 import static me.kimgunwoo.auctionseats.domain.auction.entity.QAuction.auction;
 import static me.kimgunwoo.auctionseats.domain.bid.entity.QBid.bid;
@@ -47,10 +49,33 @@ public class AuctionRepositoryCustomImpl implements AuctionRepositoryCustom {
         JPAQuery<Long> countQuery = jpaQueryFactory.select(auction.count())
                 .from(auction);
 
-        //getPage -> count 쿼리 지연
-        // 1. 첫 번째 페이지이면서 content 크기가 한 페이지의 사이즈보다 작을 때 (ex, content:3개, page 크기: 10)
-        // 2. 마지막 페이지일 때 (getOffset이 0이 아니면서, content 크기가 한 페이지의 사이즈보다 작을 때)
         return PageableExecutionUtils.getPage(myAuctions, pageable, countQuery::fetchOne);
+    }
+
+    @Override
+    public boolean exists(Auction pAuction) {
+        Integer result = jpaQueryFactory.selectOne().from(auction)
+                .where(searchAuction(pAuction))
+                .fetchFirst();
+        return result != null;
+    }
+
+    @Override
+    public Optional<Auction> findBySeatInfo(Long scheduleId, Long zoneGradeId, Integer seatNumber) {
+        Auction auction1 = jpaQueryFactory
+                .select(auction)
+                .from(auction)
+                .where(auction.schedule.id.eq(scheduleId),
+                        auction.zoneGrade.id.eq(zoneGradeId),
+                        auction.seatNumber.eq(seatNumber))
+                .fetchOne();
+        return Optional.ofNullable(auction1);
+    }
+
+    private Predicate searchAuction(Auction pAuction) {
+        return auction.seatNumber.eq(pAuction.getSeatNumber())
+                .and(auction.zoneGrade.eq(pAuction.getZoneGrade()))
+                .and(auction.schedule.eq(pAuction.getSchedule()));
     }
 
     private OrderSpecifier<?> sortAuction(Pageable pageable) {

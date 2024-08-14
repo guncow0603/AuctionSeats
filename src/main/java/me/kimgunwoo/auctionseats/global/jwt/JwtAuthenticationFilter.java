@@ -35,11 +35,14 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     private final JwtUtil jwtUtil;
     private final LettuceUtils lettuceUtils;
+
     private final ObjectMapper mapper = new ObjectMapper();
+
     @PostConstruct
     public void setup() {
         setFilterProcessesUrl("/api/v1/auth/login");
     }
+
     @Override
     public Authentication attemptAuthentication(
             HttpServletRequest request,
@@ -61,6 +64,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             throw new ApiException(INTERNAL_SERVER_ERROR);
         }
     }
+
     @Override
     protected void successfulAuthentication(
             HttpServletRequest request,
@@ -69,13 +73,12 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             Authentication authResult
     ) throws ServletException, IOException {
         log.info("Login Success, username : {}", authResult.getName());
+
         User user = ((UserDetailsImpl)authResult.getPrincipal()).getUser();
         Role role = ((UserDetailsImpl)authResult.getPrincipal()).getUser().getRole();
         String username = user.getEmail();
         Long id = user.getId();
         String nickname = user.getNickname();
-
-        Long point = user.getPoint();
 
         String accessToken = jwtUtil.createAccessToken(id, username, role, nickname);
         String refreshToken = jwtUtil.createRefreshToken(id, username, role, nickname);
@@ -86,21 +89,21 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 JwtUtil.REFRESH_TOKEN_TIME
         );
 
-
-        jwtUtil.setAccessTokenInHeader(response, accessToken);
-        jwtUtil.setRefreshTokenInCookie(response, refreshToken);
+        jwtUtil.setTokenInHeader(response, accessToken, refreshToken);
+        // jwtUtil.setRefreshTokenInCookie(response, refreshToken);
 
         response.setStatus(SUCCESS_USER_LOGIN.getHttpStatus().value());
 
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-        String result = mapper.writeValueAsString(
 
+        String result = mapper.writeValueAsString(
                 ApiResponse.of(SUCCESS_USER_LOGIN.getCode(), SUCCESS_USER_LOGIN.getMessage(), "{}")
         );
 
         response.getWriter().write(result);
     }
+
     @Override
     protected void unsuccessfulAuthentication(
             HttpServletRequest request,
@@ -110,6 +113,5 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         log.info("Login Fail, msg : {}", failed.getMessage());
 
         throw new ApiException(NOT_FOUND_USER_FOR_LOGIN);
-
     }
 }

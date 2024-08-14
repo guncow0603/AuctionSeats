@@ -1,18 +1,14 @@
 package me.kimgunwoo.auctionseats.domain.seat.dto.response;
 
-import lombok.*;
+import lombok.Builder;
 
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
-public class SeatInfoResponse {
-
-    private String zoneName;
-
-    private String gradeName;
-
-    private Long price;
-
-    private Long zoneGradeId;
+public record SeatInfoResponse(
+        String zoneName,
+        String gradeName,
+        Long price,
+        Long zoneGradeId
+) {
+    @Builder
+    public SeatInfoResponse {}
 }
+

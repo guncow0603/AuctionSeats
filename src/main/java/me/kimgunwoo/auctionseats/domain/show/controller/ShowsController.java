@@ -1,5 +1,6 @@
 package me.kimgunwoo.auctionseats.domain.show.controller;
 
+
 import lombok.RequiredArgsConstructor;
 import me.kimgunwoo.auctionseats.domain.reservation.reservation_seat.repository.ReservationSeatRepository;
 import me.kimgunwoo.auctionseats.domain.seat.dto.response.ReservedSeatResponse;
@@ -8,7 +9,6 @@ import me.kimgunwoo.auctionseats.domain.show.service.ShowsService;
 import me.kimgunwoo.auctionseats.domain.user.entity.User;
 import me.kimgunwoo.auctionseats.global.annotaion.CurrentUser;
 import me.kimgunwoo.auctionseats.global.response.ApiResponse;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +22,9 @@ import static me.kimgunwoo.auctionseats.global.exception.SuccessCode.*;
 public class ShowsController {
 
     private final ShowsService showsService;
+
     private final ReservationSeatRepository reservationSeatRepository;
+
     // 공연 정보 전체 조회
     @GetMapping("shows-infos")
     public ResponseEntity<ApiResponse<List<ShowsInfoGetResponse>>> getAllShowsInfo(@CurrentUser User user) {
@@ -54,17 +56,19 @@ public class ShowsController {
 
     // 공연 페이징 전체 조회
     @GetMapping("/shows")
-    public ResponseEntity<ApiResponse<ShowsGetSliceResponse>> getAllShows(
-            Pageable pageable,
-            @RequestParam(value = "categoryName", required = false) String categoryName) {
-        ShowsGetSliceResponse showsGetSliceResponse = showsService.getSliceShows(pageable, categoryName);
+    public ResponseEntity<ApiResponse<ShowsGetCursorResponse>> getAllShows(
+            @RequestParam(value = "cursorId", required = false) Long cursorId,
+            @RequestParam(value = "size", defaultValue = "10") int size,
+            @RequestParam(value = "categoryName", required = false) String categoryName
+    ) {
+        ShowsGetCursorResponse showsGetCursorResponse = showsService.getShowsWithCursor(cursorId, size, categoryName);
         return ResponseEntity
                 .status(SUCCESS_GET_SLICE_SHOWS.getHttpStatus())
                 .body(
                         ApiResponse.of(
                                 SUCCESS_GET_SLICE_SHOWS.getCode(),
                                 SUCCESS_GET_SLICE_SHOWS.getMessage(),
-                                showsGetSliceResponse)
+                                showsGetCursorResponse)
                 );
     }
 
@@ -83,6 +87,7 @@ public class ShowsController {
                                 showsCategoryGetResponseList));
 
     }
+
     @GetMapping("/shows/{showsId}/seats")
     public ResponseEntity<ApiResponse<ShowsSeatInfoResponse>> getShowsSeatInfo(@PathVariable Long showsId) {
         ShowsSeatInfoResponse response = showsService.findShowsSeatInfo(showsId);
@@ -112,7 +117,7 @@ public class ShowsController {
 
     @GetMapping("/shows/{scheduleId}/reserved-seats")
     public ResponseEntity<ApiResponse<List<ReservedSeatResponse>>> getReservedSeats(@PathVariable Long scheduleId) {
-        List<ReservedSeatResponse> response = reservationSeatRepository.findReservedSeats(scheduleId);
+        List<ReservedSeatResponse> response = reservationSeatRepository.findReservedSeatsFromCache(scheduleId);
 
         return ResponseEntity
                 .status(SUCCESS_GET_SHOWS_RESERVED_SEAT_INFO.getHttpStatus())

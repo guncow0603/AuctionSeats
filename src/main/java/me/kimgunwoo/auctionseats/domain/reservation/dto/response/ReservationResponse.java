@@ -1,23 +1,41 @@
 package me.kimgunwoo.auctionseats.domain.reservation.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import me.kimgunwoo.auctionseats.domain.reservation.entity.ReservationStatus;
 
 import java.time.LocalDateTime;
+
 @Builder
-public record ReservationResponse (
-        Long reservationId, // 예약번호
+public record ReservationResponse(
+        Long reservationId,
+        LocalDateTime reservationDate,
+        String title,
 
-        LocalDateTime reservationDate, // 예매일
+        @JsonFormat(pattern = "yyyy.MM.dd HH:mm")
+        LocalDateTime useDate,
 
-        String title, // 상품명
+        Integer numberOfTicket,
+        Long price,
 
-        LocalDateTime useDate, // 이용일
+        @JsonFormat(pattern = "yyyy.MM.dd HH:mm")
+        LocalDateTime cancelDeadline,
+        ReservationStatus status
+) {
 
-        Integer numberOfTicket, // 매수
+    public ReservationResponse() {
+        this(null, null, null, null, null, null, null, null);
+    }
 
-        LocalDateTime cancelDeadline, // 취소가능일
-
-        ReservationStatus status // 상태
-){
+    public ReservationResponse(Long reservationId, LocalDateTime reservationDate, String title, LocalDateTime useDate,
+                               Integer numberOfTicket, Long price, LocalDateTime cancelDeadline, ReservationStatus status) {
+        this.reservationId = reservationId;
+        this.reservationDate = reservationDate;
+        this.title = title;
+        this.useDate = useDate;
+        this.numberOfTicket = numberOfTicket;
+        this.price = price;
+        this.cancelDeadline = cancelDeadline;
+        this.status = status;
+    }
 }

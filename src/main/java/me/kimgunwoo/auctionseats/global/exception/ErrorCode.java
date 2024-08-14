@@ -29,11 +29,6 @@ public enum ErrorCode {
     NOT_FOUND_SHOWS_INFO(HttpStatus.NOT_FOUND, "S10001", "해당하는 공연 정보가 없습니다."),
 
 
-
-
-
-
-
     /* SCHEDULE */
     NOT_FOUND_SCHEDULE(HttpStatus.NOT_FOUND, "S10000", "해당하는 회차가 없습니다."),
     ALREADY_START_SCHEDULE(HttpStatus.BAD_REQUEST, "S10001", "이미 시작한 공연입니다."),
@@ -41,9 +36,7 @@ public enum ErrorCode {
     /* PLACE */
     NOT_FOUND_PLACE(HttpStatus.NOT_FOUND, "P10000", "해당하는 공연장이 없습니다."),
 
-
-
-
+    /* AUCTION */
     NOT_FOUND_AUCTION(HttpStatus.NOT_FOUND, "", "해당하는 경매를 찾지 못했습니다."),
     ENDED_AUCTION(HttpStatus.BAD_REQUEST, "", "경매가 종료되었습니다."),
 

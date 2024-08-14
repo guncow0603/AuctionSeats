@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import static me.kimgunwoo.auctionseats.global.exception.SuccessCode.*;
 
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/users")
@@ -96,6 +97,20 @@ public class UserController {
                         ApiResponse.of(
                                 SUCCESS_DELETE_USER.getCode(),
                                 SUCCESS_DELETE_USER.getMessage()
+                        )
+                );
+    }
+
+    @GetMapping("/points")
+    public ResponseEntity<ApiResponse<Long>> getMyPoint(@CurrentUser User user) {
+        Long userPoint = userService.findUserPoint(user.getId());
+
+        return ResponseEntity.status(SUCCESS_GET_USER_POINT.getHttpStatus())
+                .body(
+                        ApiResponse.of(
+                                SUCCESS_GET_USER_POINT.getCode(),
+                                SUCCESS_GET_USER_POINT.getMessage(),
+                                userPoint
                         )
                 );
     }
