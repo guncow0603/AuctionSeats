@@ -27,7 +27,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(ApiException.class)
     public ResponseEntity<ApiResponse<EmptyObject>> apiExceptionHandler(ApiException exception) {
         return ResponseEntity.status(exception.getHttpStatus())
-                .body(ApiResponse.of(exception.getCode(), exception.getMessage()));
+                .body(ApiResponse.of(
+                        exception.getCode(), exception.getMessage())
+                );
     }
 
     /*
@@ -36,10 +38,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ApiResponse<EmptyObject>> runtimeExceptionHandler(RuntimeException exception) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ApiResponse.of(ErrorCode.INTERNAL_SERVER_ERROR.getCode(),
-                        ErrorCode.INTERNAL_SERVER_ERROR.getMessage()));
+                .body(ApiResponse.of(
+                        ErrorCode.INTERNAL_SERVER_ERROR.getCode(),
+                        ErrorCode.INTERNAL_SERVER_ERROR.getMessage())
+                );
     }
-
 
     /*
      * IllegalArgumentException 에 대한 handler
@@ -49,7 +52,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             IllegalArgumentException exception
     ) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(ApiResponse.of(ErrorCode.INTERNAL_BAD_REQUEST.getCode(), exception.getMessage()));
+                .body(ApiResponse.of(
+                        ErrorCode.INTERNAL_BAD_REQUEST.getCode(), exception.getMessage())
+                );
     }
 
     /*
@@ -60,8 +65,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                                                                   HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         BindingResult bindingResult = ex.getBindingResult();
         Map<String, String> errors = new HashMap<>();
-        bindingResult.getAllErrors().forEach(error ->
-                errors.put(((FieldError)error).getField(), error.getDefaultMessage()));
+        bindingResult.getAllErrors()
+                .forEach(
+                        error -> errors.put(
+                                ((FieldError)error).getField(),
+                                error.getDefaultMessage()
+                        )
+                );
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(ApiResponse.of(
