@@ -65,7 +65,6 @@ public class PointServiceImpl implements PointService {
         pointRepository.save(chargePoint);
     }
 
-
     @Override
     public Page<PointChargeResponse> getChargePointLogList(User loginUser, Pageable pageable) {
         return pointRepository.findChargePointListByPage(loginUser.getId(), pageable);
@@ -75,4 +74,5 @@ public class PointServiceImpl implements PointService {
     public Page<PointResponse> getUseAndRefundPointLogList(User user, Pageable pageable) {
         return pointRepository.findUseAndRefundpointListByPage(user.getId(), pageable);
     }
+
 }

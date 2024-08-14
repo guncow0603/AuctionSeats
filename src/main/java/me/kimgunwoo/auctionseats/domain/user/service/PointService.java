@@ -42,6 +42,7 @@ public interface PointService {
      * @return 				페이징 된 포인트 충전 내역
      * */
     Page<PointChargeResponse> getChargePointLogList(User user, Pageable pageable);
+
     /*
      * 해당 유저의 포인트 사용 및 환불 내역 페이징 리스트 조회
      *
