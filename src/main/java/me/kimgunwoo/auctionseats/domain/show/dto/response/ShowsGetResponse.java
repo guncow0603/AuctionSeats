@@ -1,5 +1,6 @@
 package me.kimgunwoo.auctionseats.domain.show.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import me.kimgunwoo.auctionseats.domain.show.entity.Shows;
 import me.kimgunwoo.auctionseats.domain.show.entity.ShowsImage;
@@ -9,15 +10,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static me.kimgunwoo.auctionseats.domain.admin.service.AdminServiceImpl.S3_PATH;
-
 @Getter
 public class ShowsGetResponse {
     private final Long showsId;
 
     private final String title;
 
+    @JsonFormat(pattern = "yyyy.MM.dd")
     private final LocalDate startDate;
 
+    @JsonFormat(pattern = "yyyy.MM.dd")
     private final LocalDate endDate;
 
     private final Integer runningTime;

@@ -1,14 +1,10 @@
 package me.kimgunwoo.auctionseats.domain.admin.dto.request;
 
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import me.kimgunwoo.auctionseats.domain.grade.entity.Grade;
 import me.kimgunwoo.auctionseats.domain.grade.entity.ZoneGrade;
 import me.kimgunwoo.auctionseats.domain.place.entity.Zone;
 
-@Getter
-@RequiredArgsConstructor
 public record ZoneGradeCreateRequest (
     @NotNull(message = "구역 Id값은 필수입니다.")
     Long zoneId,

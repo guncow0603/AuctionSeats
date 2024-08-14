@@ -2,12 +2,10 @@ package me.kimgunwoo.auctionseats.domain.reservation.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
-import lombok.Getter;
 import me.kimgunwoo.auctionseats.domain.reservation.entity.ReservationStatus;
 
 import java.time.LocalDateTime;
 
-@Getter
 @Builder
 public record ReservationResponse(
         Long reservationId,

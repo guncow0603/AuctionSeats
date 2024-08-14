@@ -1,14 +1,16 @@
 package me.kimgunwoo.auctionseats.domain.show.dto.response;
 
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
-import me.kimgunwoo.auctionseats.domain.show.entity.ShowsCategory;
 
 @Getter
 public class ShowsCategoryGetResponse {
     private final String categoryName;
 
-    public ShowsCategoryGetResponse(ShowsCategory showsCategory) {
-        this.categoryName = showsCategory.getName();
+    @JsonCreator
+    public ShowsCategoryGetResponse(@JsonProperty("showsCategory") String showsCategory) {
+        this.categoryName = showsCategory;
     }
 }

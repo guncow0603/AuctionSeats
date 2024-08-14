@@ -1,15 +1,14 @@
 package me.kimgunwoo.auctionseats.domain.auction.service;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import me.kimgunwoo.auctionseats.domain.auction.dto.request.AuctionCreateRequest;
 import me.kimgunwoo.auctionseats.domain.auction.dto.response.AuctionDetailResponse;
 import me.kimgunwoo.auctionseats.domain.auction.dto.response.AuctionInfoResponse;
 import me.kimgunwoo.auctionseats.domain.auction.entity.Auction;
 import me.kimgunwoo.auctionseats.domain.auction.repository.AuctionRepository;
+import me.kimgunwoo.auctionseats.domain.bid.constant.BidStatus;
 import me.kimgunwoo.auctionseats.domain.bid.entity.Bid;
+import me.kimgunwoo.auctionseats.domain.bid.repository.BidRepository;
 import me.kimgunwoo.auctionseats.domain.bid.service.BidRedisService;
-import me.kimgunwoo.auctionseats.domain.bid.service.BidService;
 import me.kimgunwoo.auctionseats.domain.grade.entity.ZoneGrade;
 import me.kimgunwoo.auctionseats.domain.grade.repository.ZoneGradeRepository;
 import me.kimgunwoo.auctionseats.domain.reservation.service.ReservationService;
@@ -23,6 +22,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.Optional;
 
 @Slf4j(topic = "경매 서비스")
@@ -32,7 +34,7 @@ public class AuctionServiceImpl implements AuctionService {
     private final AuctionRepository auctionRepository;
     private final ScheduleRepository scheduleRepository;
     private final ZoneGradeRepository zoneGradeRepository;
-    private final BidService bidService;
+    private final BidRepository bidRepository;
     private final BidRedisService bidRedisService;
     private final ReservationService reservationService;
 
@@ -43,6 +45,9 @@ public class AuctionServiceImpl implements AuctionService {
         ZoneGrade zoneGrade = zoneGradeRepository.getReferenceById(zoneGradeId);
 
         Auction auction = request.toEntity(schedule, zoneGrade);
+        if (auctionRepository.exists(auction)) {
+            throw new ApiException(ErrorCode.ACCESS_DENIED);
+        }
         auctionRepository.save(auction);
         bidRedisService.saveWithExpire(auction);
     }
@@ -54,8 +59,12 @@ public class AuctionServiceImpl implements AuctionService {
         auction.ended();
 
         //경매 종료 시 입찰자가 없으면 예매 x
-        Optional<Bid> bidOptional = bidService.getCurrentBid(auction);
-        bidOptional.ifPresent(bid -> reservationService.reserve(bid, auction));
+        Optional<Bid> bidOptional = bidRepository.findTopByAuctionOrderByIdDesc(auction);
+        bidOptional.ifPresent(bid -> {
+            bid.updateStatus(BidStatus.SUCCESS);
+            reservationService.reserve(bid, auction);
+
+        });
     }
 
     @Override
@@ -64,7 +73,7 @@ public class AuctionServiceImpl implements AuctionService {
         Auction auction = getAuction(auctionId);
         long bidPrice = bidRedisService.getBidPrice(auctionId)
                 .orElseGet(() ->
-                        bidService.getMaxBidPrice(auction).orElse(auction.getStartPrice())
+                        bidRepository.getMaxBidPrice(auction).orElse(auction.getStartPrice())
                 );
         return AuctionDetailResponse.from(auction, bidPrice);
     }

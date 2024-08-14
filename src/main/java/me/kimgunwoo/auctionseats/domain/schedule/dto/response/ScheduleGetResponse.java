@@ -1,11 +1,9 @@
 package me.kimgunwoo.auctionseats.domain.schedule.dto.response;
 
-import lombok.Getter;
 import me.kimgunwoo.auctionseats.domain.schedule.entity.Schedule;
 
 import java.time.LocalDateTime;
 
-@Getter
 public record ScheduleGetResponse(
         Long scheduleId,
         Integer sequence,
