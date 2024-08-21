@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <title>Auction Seats</title>
 
-    <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
-          name="viewport">
+    <meta content="width=device-width, user-scalable=no, initial-scale=0.8, maximum-scale=1.0" name="viewport">
     <meta content="ie=edge" http-equiv="X-UA-Compatible">
 
     <script crossorigin="anonymous"
@@ -74,7 +73,7 @@
     $("#delete-btn").on("click", function () {
         if (confirm("잔여 포인트는 모두 소멸됩니다. 정말 탈퇴하시겠습니까? ")) {
             reissueToken((token => {
-                withdrawUser(token, id);
+                withdrawUser(token);
             }));
         }
     });

@@ -5,8 +5,7 @@
     <title>Auction Seats</title>
 
 
-    <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
-          name="viewport">
+    <meta content="width=device-width, user-scalable=no, initial-scale=0.8, maximum-scale=1.0" name="viewport">
     <meta content="ie=edge" http-equiv="X-UA-Compatible">
 
     <script crossorigin="anonymous"
@@ -16,26 +15,28 @@
             integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
             src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+
     <link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css' rel='stylesheet'/>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js'></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js'></script>
+
     <script src="/js/token.js"></script>
     <script src="/js/basic.js"></script>
     <link href="/css/shows-details.css" rel="stylesheet">
 </head>
 <body>
 <header id="headers"></header>
-<div class="container-flex">
+<div class="container-flex container">
 
     <div id="shows-info-container">
         <div class="px-5" id="shows-container">
-            <div class="shows-info-box container mx-5 ">
-                <h1 class="fw-bolder" id="showsTitle">공연 제목</h1>
+            <div class="shows-info-box">
+                <h2 class="fw-bolder" id="showsTitle">공연 제목</h2>
                 <div class="d-flex  mt-4">
-                    <div class="image-container">
+                    <div class="image-container" id="post-image-div">
                         <img alt="대표 이미지" id="main-image" src=""/>
                     </div>
-                    <div class="shows-info mx-5">
+                    <div class="shows-info" id="shows-info-table">
                         <table>
                             <tr>
                                 <td class="col-title">장소</td>
@@ -57,15 +58,13 @@
                                 <td class="col-title">관람 연령</td>
                                 <td id="showsAge"></td>
                             </tr>
-                            <!--                        <p id="placeFullName">장소</p>-->
-                            <!--                        <p id="placeLocationAddress">주소: </p>-->
-                            <!--                        <p id="showsDate">공연 기간: </p>-->
-                            <!--                        <p id="showsTime">공연 시간: </p>-->
-                            <!--                        <p id="showsAge">관람 연령: </p>-->
                         </table>
                         <div id="grades-container">
                             <button class="btn" onclick="showGrades()">전체 가격 보기</button>
-                            <div id="grades-list" style="display:none;"></div>
+                            <div id="grades-list" style="display:none;">
+                                <table class="mt-3" id="grades-table">
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -82,20 +81,21 @@
     </div>
 
     <div class="px-5" id="schedule-container">
-        <h2>일정</h2>
-        <div id="calendar"></div>
-        <div id="schedule-details"></div> <!-- 일정 세부정보 표시 -->
+        <div class="justify-content-center" id="calendar"></div>
+        <div class="text-center" id="schedule-details">
+            <p class="fs-5 fw-bolder" id="selected-scheduled-p">선택한 회차</p>
+            <p class="fs-6" id="selected-scheduled-fix"></p>
+        </div> <!-- 일정 세부정보 표시 -->
         <div class="d-flex justify-content-center my-4">
-            <button type="button" id="book-btn">예매하기</button>
+            <button id="book-btn" type="button">예매하기</button>
         </div>
     </div>
 
 </div>
-
+<script src="/js/shows-details.js"></script>
 
 <script>
-    <script src="/js/shows-details.js"></script>
-$("#headers").load("/header.html", function (response, status, xhr) {
+    $("#headers").load("/header.html", function (response, status, xhr) {
         checkLoginStatus();
     });
 </script>
