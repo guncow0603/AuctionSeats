@@ -1,75 +1,96 @@
+var curCategoryName = null;
+var cursorId = null;
+var index = 0;
+var loading = false;
+
 function getShowsCategories() {
+    return new Promise(function (resolve, reject) {
+        $.ajax({
+            type: "GET",
+            url: `${getUrl()}/api/v1/shows-categorys`,
+            success: function (response) {
+                for (let i = 0; i < response.data.length; i++) {
+                    let name = response.data[i].categoryName;
+
+                    let div = $('<div>').addClass("btn-div")
+                    let btn = $('<button>').text(name)
+                        .addClass("btn round-btn")
+                        .addClass(response.data[i].categoryName);
+
+                    if (curCategoryName === null && i === 0) {
+                        btn.addClass("active");
+                        curCategoryName = response.data[i].categoryName;
+                    }
+
+                    btn.on("click", function () {
+                        $(".btn-div button").removeClass("active");
+                        $(`.${name}`).addClass("active");
+
+                        curCategoryName = response.data[i].categoryName;
+                        cursorId = null;
+                        $(".shows-posters-row").empty();
+
+                        loadShows();
+                    });
+
+                    let db = div.append(btn);
+                    $(".btn-by-category").append(db);
+                }
+                resolve(response.data);
+            },
+            error: function (qXHR, textStatus) {
+                reject(qXHR);
+                console.log(qXHR);
+            }
+        });
+    });
+}
+
+
+function loadShows() {
+    if (cursorId === -1 || loading) {
+        return;
+    }
+
+    loading = true;
+    var apiUrl = cursorId === null
+        ? `${getUrl()}/api/v1/shows?categoryName=${curCategoryName}&size=20`
+        : `${getUrl()}/api/v1/shows?cursorId=${cursorId}&categoryName=${curCategoryName}&size=20`;
+
     $.ajax({
         type: "GET",
-        url: getUrl() + `/api/v1/shows-categorys`,
+        url: apiUrl,
         success: function (response) {
-            for (let i = 0; i < response.data.length; i++) {
-                let name = response.data[i].categoryName;
-                if (name === "서커스마술") name = "서커스/마술";
-                let a = $('<a>').text(name)
-                    .addClass("nav-link link-dark category-a")
-                    .on("click", function () {
-                        // 카테고리별 공연 리스트 페이지로 이동
-                    });
-                let li = $('<li>').append(a);
-                $(".shows-menu-ul").append(li);
-                let div = $('<div>').addClass("btn-div")
-                let btn = $('<button>').text(name)
-                    .addClass("btn round-btn")
-                    .addClass(response.data[i].categoryName);
-                if (name === '연극') {
-                    btn = $('<button>').text(response.data[i].categoryName)
-                        .addClass("btn round-btn active")
-                        .addClass(response.data[i].categoryName);
-                }
-                btn.on("click", function () {
-                    clickOnCategoryBtn(response.data[i].categoryName);
-                });
-                let db = div.append(btn);
-                $(".btn-by-category").append(db);
-            }
+            displayPosters(response.data);
         },
-        error: function (qXHR, textStatus) {
-            console.log(qXHR);
+        complete: function () {
+            loading = false;  // 호출이 완료되면 loading을 false로 설정
         }
     });
 }
-function clickOnCategoryBtn(name) {
-    $.ajax({
-        type: "GET",
-        url: getUrl() + `/api/v1/shows`,
-        data: {
-            page: 0,
-            size: 5,
-            sort: "endDate",
-            categoryName: name
-        },
-        success: function (response) {
-            $(".btn-div button").removeClass("active");
-            $(`.${name}`).addClass("active");
-            $("#shows-posters").empty();
-            for (let i = 0; i , response.data.showsSlice.content.length; i++) {
-                let d = response.data.showsSlice.content[i];
 
-                let eid = encode(d.showsId);
-                let pd = $('<div>')
-                    .append(
-                        $('<img>').attr("src", `${d.s3Url}`).addClass("shows-poster-img")
-                            .on("click", function () {
-                                redirectToPageWithParameter(
-                                    "/shows/shows-details.html",
-                                    "showsId",
-                                    eid
-                                );
-                            })
-                    )
-                    .append($('<p>').text(d.title.split(" - ")[0]).addClass("shows-title"))
-                    .addClass("pd");
-                $("#shows-posters").append(pd);
-            }
-        },
-        error: function (qXHR, textStatus) {
-            console.log(qXHR);
-        }
+function displayPosters(data) {
+    var div = $(".shows-posters-row")
+    var row = $('<div>').addClass("d-flex justify-content-start posters-div row shows-posters");
+
+    data.showsResponses.forEach(function (shows) {
+        var row_div = $('<div>')
+            .addClass("col-md-2 poster")
+            .append($('<img>').attr("src", `${shows.s3Url}`).addClass("shows-poster-img"))
+            .append($('<p>').text(shows.title.split(" - ")[0]).addClass("shows-title")
+            );
+
+        row_div.on("click", function () {
+            redirectToPageWithParameter(
+                "/shows/shows-details.html",
+                "showsId",
+                encode(shows.showsId)
+            );
+        });
+
+        row.append(row_div);
+        index += 1;
     });
+    div.append(row);
+    cursorId = data.nextCursorId;
 }

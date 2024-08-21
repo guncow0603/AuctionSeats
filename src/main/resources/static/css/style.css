@@ -51,8 +51,8 @@ body {
 }
 
 .btn-div > .active {
-    color: white;
-    background-color: white !important;
+    color: darkgray;
+    background-color: whitesmoke  !important;
     border-color: whitesmoke;
 }
 

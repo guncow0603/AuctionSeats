@@ -1,7 +1,7 @@
 function getMyInfo(token, id) {
     $.ajax({
         type: "GET",
-        url: `/api/v1/users/${id}`,
+        url: `${getUrl()}/api/v1/users/${id}`,
         headers: {
             "Authorization": token
         },
@@ -19,19 +19,24 @@ function getMyInfo(token, id) {
         },
     })
 }
+
 function verificationPhone() {
     let phoneNumber = $("#update-phone").val();
     $.ajax({
         type: "POST",
-        url: `/api/v1/auth/sms`,
+        url: `${getUrl()}/api/v1/auth/sms`,
         contentType: "application/json",
         data: JSON.stringify({
             to: phoneNumber
         }),
-        success: function (data) {
-            alert("인증 번호를 발송했습니다.");
+        success: function (response) {
+            let endTime = new Date(response.data);
+            $("#update-verification-btn").addClass("disabled");
+            okAlert("인증 번호를 발송했습니다.");
+            displayRemainingTimeOfUpdate(endTime);
         },
         error: function (jqXHR, textStatus) {
+
             let response = jqXHR.responseJSON;
             if (response.data) {
                 let data = response.data;
@@ -47,13 +52,15 @@ function verificationPhone() {
         },
     });
 }
+
 function updateUserInfo(token, id) {
     let nickname = $("#update-nickname").val();
     let phoneNumber = $("#update-phone").val();
     let verificationNumber = $("#update-verificationCode").val();
+
     $.ajax({
         type: "PUT",
-        url: `/api/v1/users/${id}`,
+        url: `${getUrl()}/api/v1/users/${id}`,
         contentType: "application/json",
         headers: {
             "Authorization": token
@@ -64,7 +71,7 @@ function updateUserInfo(token, id) {
             verificationNumber: verificationNumber
         }),
         success: function (data) {
-            alert("회원 정보를 수정했습니다.")
+            okAlert("회원 정보를 수정했습니다.")
             movePageWithToken(`/user/user-info.html`);
         },
         error: function (jqXHR, textStatus) {
@@ -84,11 +91,14 @@ function updateUserInfo(token, id) {
         }
     });
 }
+
 function resetValidationMessages() {
     $("#update-nickname-span, #update-phoneNumber-span, #update-verificationNumber-span")
         .text("");
 }
+
 let readyToUpdate = false;
+
 function checkPasswordMatch() {
     let password = $(".password").val();
     let confirmPassword = $(".password-check").val();
@@ -106,11 +116,13 @@ function checkPasswordMatch() {
         readyToUpdate = false;
     }
 }
+
 function updatePassword(token, id) {
     let password = $("#update-password").val();
+
     $.ajax({
         type: "PATCH",
-        url: `/api/v1/users/${id}`,
+        url: `${getUrl()}/api/v1/users/${id}`,
         contentType: 'application/json',
         headers: {
             "Authorization": token
@@ -119,7 +131,7 @@ function updatePassword(token, id) {
             password: password
         }),
         success: function (data) {
-            alert("비밀 번호 변경이 완료되었습니다.");
+            okAlert("비밀 번호 변경이 완료되었습니다.");
             movePageWithToken(`/user/user-info.html`);
         },
         error: function (jqXHR, textStatus) {
@@ -132,15 +144,18 @@ function updatePassword(token, id) {
                 if (response.code.substring(2, 4) === "02") {
                     $("#update-password-span").text(response.message);
                 }
+
             }
         }
     });
 }
+
 function withdrawUser(token) {
     let password = $("#delete-password").val();
+
     $.ajax({
         type: "DELETE",
-        url: `/api/v1/users`,
+        url: `${getUrl()}/api/v1/users`,
         contentType: "application/json",
         headers: {
             "Authorization": token
@@ -149,7 +164,7 @@ function withdrawUser(token) {
             password: password
         }),
         success: function (data) {
-            alert('탈퇴가 완료되었습니다.');
+            okAlert('탈퇴가 완료되었습니다.');
             requestLogout();
         },
         error: function (jqXHR, textStatus) {
@@ -162,10 +177,11 @@ function withdrawUser(token) {
         }
     });
 }
+
 function getPointChargeList(token, page) {
     $.ajax({
         type: "GET",
-        url: `/api/v1/points/charge?page=${page}`,
+        url: `${getUrl()}/api/v1/points/charge?page=${page}`,
         contentType: "application/json",
         headers: {
             "Authorization": token
@@ -182,15 +198,15 @@ function getPointChargeList(token, page) {
             }
         },
         error: function (jqXHR, textStatus) {
-            console.log(jqXHR);
-            console.log(textStatus);
+            errorAlert("포인트 충전 목록 조회에 오류가 발생했습니다.");
         },
     });
 }
+
 function getPointList(token, page) {
     $.ajax({
         type: "GET",
-        url: `/api/v1/points/change?page=${page}`,
+        url: `${getUrl()}/api/v1/points/change?page=${page}`,
         contentType: "application/json",
         headers: {
             "Authorization": token
@@ -201,16 +217,17 @@ function getPointList(token, page) {
         success: function (data) {
             $(".list-tb-body").empty();
             $(".pagination").empty();
+
             if (data.code === "P00001" && data.data.content) {
                 displayData(data.code, data.data);
             }
         },
         error: function (jqXHR, textStatus) {
-            console.log(jqXHR);
-            console.log(textStatus);
+            errorAlert("포인트 목록 조회에 오류가 발생했습니다.");
         },
     });
 }
+
 function displayData(code, data) {
     let size = data.pageable.pageSize;
     let curIndex = data.number;
@@ -224,9 +241,11 @@ function displayData(code, data) {
         } else {
             content = $('<td>').text(data.content[i].type);
         }
+
         let tr = $('<tr>').append(id).append(content).append(date).append(amount);
         $(".list-tb-body").append(tr);
     }
+
     let totalPage = data.totalPages;
     for (let i = 0; i < totalPage; i++) {
         const pageNumber = i + 1;
@@ -234,9 +253,11 @@ function displayData(code, data) {
         link.addClass('list-a');
         link.href = '#';
         link.text(pageNumber);
+
         if (i === data.number) {
             link.addClass('now');
         }
+
         if (code === 'P00000') {
             link.on("click", function () {
                 reissueToken((token => {
@@ -252,6 +273,35 @@ function displayData(code, data) {
                 ));
             });
         }
+
         $(".pagination").append(link);
+
+    }
+}
+
+function displayRemainingTimeOfUpdate(endTime) {
+    let now = new Date();
+    let timeDiff = endTime - now;
+
+    if (timeDiff <= 0) {
+        $("#update-remaining-time").empty();
+        $("#update-verification-btn").removeClass("disabled");
+    } else {
+        // 남은 시간을 초로 변환
+        let secondsRemaining = Math.floor(timeDiff / 1000);
+
+        // 분과 초 계산
+        let minutes = Math.floor(secondsRemaining / 60);
+        let seconds = secondsRemaining % 60;
+
+        // 시간 표시를 위해 2자리로 포맷팅
+        let formattedTime = `${padZero(minutes)}:${padZero(seconds)}`;
+
+        // 화면에 남은 시간 표시
+        $("#update-remaining-time").text(`  ${formattedTime}`);
+
+        setTimeout(function () {
+            displayRemainingTimeOfUpdate(endTime);
+        }, 1000);
     }
 }

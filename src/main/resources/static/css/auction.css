@@ -21,7 +21,7 @@
 }
 
 #auction-table thead th {
-    background-color: whitesmoke; /* 테이블 헤더 배경색 설정 */
+    background-color: white; /* 테이블 헤더 배경색 설정 */
     color: grey; /* 테이블 헤더 글자색 설정 */
 }
 
@@ -61,7 +61,7 @@ label {
 
 #add-zone-button {
     padding: 8px 12px;
-    background-color: plum;
+    background-color: skyblue;
     color: white;
     border: none;
     border-radius: 4px;
@@ -70,7 +70,7 @@ label {
 }
 
 #add-zone-button:hover {
-    background-color: plum;
+    background-color: skyblue;
 }
 
 #goToPlacePage {
@@ -78,11 +78,11 @@ label {
     font-weight: bold; /* 글자 두껍게 */
     margin-top: 20px; /* 상단 여백 추가 */
     /* 기타 필요한 스타일 */
-    background-color: grey;
+    background-color: darkgray;
     color: white;
 }
 
 #auction-seat-save-btn {
-    background-color: whitesmoke;
+    background-color: darkgray;
     color: white;
 }
