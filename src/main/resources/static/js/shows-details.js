@@ -113,7 +113,7 @@ $('#book-btn').click(function () {
             showsId: showsId,
             scheduleId: selectScheduleId
         };
-        redirectToPageWithParameters('/reservation/shows_reserve.html', paramValueMap);
+        redirectToPageWithParameters('/reservation/shows-reserve.html', paramValueMap);
     } else {
         errorAlert('선택한 회차가 없습니다');
     }

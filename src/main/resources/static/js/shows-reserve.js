@@ -59,7 +59,6 @@ function initShowsReservePage() {
     // 유저 포인트 업데이트
     updateUserPointText();
 
-    // 경매 정보 받아오기
     function getAuctionInfo() {
         if (currentViewAuctionLabel === -1) {
             errorAlert('경매 좌석을 선택해주세요!');
@@ -72,15 +71,24 @@ function initShowsReservePage() {
                 "Authorization": token
             },
             success: function (data) {
-                // 경매 정보 갱신
+                // 콘솔 로그 추가
+                console.log("Received data:", data);
                 data = data['data'];
+                console.log("Parsed data:", data);
+
                 $('#bid-select-seat').text(currentViewAuctionLabel);
                 var currentPrice = data['bidPrice'].toLocaleString('ko-KR');
                 var startPrice = data['startPrice'].toLocaleString('ko-KR');
 
                 $('#bid-current-price').text(`${currentPrice}원`);
                 $('#bid-start-price').text(`${startPrice}원`);
-                let leftTime = Math.floor(data['remainTimeSeconds']);
+
+                // 남은 시간 계산
+                let endDateTime = new Date(data['endDateTime']);
+                let currentTime = new Date();
+                let leftTime = Math.floor((endDateTime - currentTime) / 1000); // 초 단위로 변환
+
+                console.log("leftTime:", leftTime); // 남은 시간 로그
                 auctionCloseCountdownStart(leftTime);
                 initMyBidStatus();
                 getLast3Bids();
@@ -90,6 +98,7 @@ function initShowsReservePage() {
             }
         });
     }
+
 
     // 경매 새로고침 버튼 클릭
     $('#auction-info-refresh-btn').click(function () {
