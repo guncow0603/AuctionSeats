@@ -4,11 +4,11 @@
     margin: 20px auto;
 }
 
-#goods-info-container {
+#shows-info-container {
     flex: 0 0 60%;
 }
 
-#goods-container {
+#shows-container {
     padding: 20px;
 }
 
@@ -18,7 +18,7 @@
     width: 400px;
 }
 
-#goodsTitle {
+#showsTitle {
     margin-bottom: 20px;
 }
 
@@ -28,7 +28,7 @@
     border-radius: 15px;
 }
 
-.goods-info > table {
+.shows-info > table {
     border: none;
     font-size: 15px;
     font-weight: 500;
@@ -39,7 +39,7 @@
 }
 
 
-.goods-info > table > tbody > tr > .col-title {
+.shows-info > table > tbody > tr > .col-title {
     width: 90px;
     height: 50px;
 
