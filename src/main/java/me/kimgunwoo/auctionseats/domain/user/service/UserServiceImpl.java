@@ -15,7 +15,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Objects;
 import java.util.regex.Pattern;
 
 import static me.kimgunwoo.auctionseats.global.exception.ErrorCode.*;
@@ -26,6 +25,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final LettuceUtils lettuceUtils;  // LettuceUtils 주입
 
     @Transactional
     @Override
@@ -33,17 +33,30 @@ public class UserServiceImpl implements UserService {
         String email = request.getEmail();
         String nickname = request.getNickname();
 
-        /* 이메일 중복 검사 */
+        // Redis에서 이메일 중복 확인
+        if (lettuceUtils.hasKey("email:" + email)) {
+            throw new ApiException(ErrorCode.EXISTED_USER_EMAIL);
+        }
+
+        // 이메일 중복 검사 (DB)
         if (userRepository.existsByEmailAndIsDeletedIsFalse(email)) {
             throw new ApiException(ErrorCode.EXISTED_USER_EMAIL);
         }
 
-        /* 닉네임 중복 검사 */
-        checkNickname(nickname);
+        // Redis에서 닉네임 중복 확인
+        if (lettuceUtils.hasKey("nickname:" + nickname)) {
+            throw new ApiException(ErrorCode.EXISTED_USER_NICKNAME);
+        }
 
+        // 닉네임 중복 검사 (DB)
+        checkNickname(nickname);
 
         User user = request.toEntity(passwordEncoder);
         userRepository.save(user);
+
+        // 회원가입 성공 시 Redis에 이메일과 닉네임 캐싱 (중복 체크용)
+        lettuceUtils.save("email:" + email, "1", 3600000); // 1시간 캐싱
+        lettuceUtils.save("nickname:" + nickname, "1", 3600000); // 1시간 캐싱
 
         return UserResponse.from(user);
     }
@@ -70,6 +83,9 @@ public class UserServiceImpl implements UserService {
             }
             checkNickname(request.nickname());
             user.updateUserNickName(request.nickname());
+
+            // 닉네임 변경 시, 새로운 닉네임을 Redis에 캐싱
+            lettuceUtils.save("nickname:" + request.nickname(), "1", 3600000); // 1시간 캐싱
         }
 
         if (!request.phoneNumber().isBlank()) {
@@ -134,3 +150,4 @@ public class UserServiceImpl implements UserService {
         }
     }
 }
+
