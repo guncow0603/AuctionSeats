@@ -80,10 +80,10 @@ class BidRepositoryCustomImplTest {
 
         //then
         assertThat(responses.getContent()).hasSize(4);
-        assertThat(responses.getContent().get(0).getId()).isEqualTo(4L);
-        assertThat(responses.getContent().get(1).getId()).isEqualTo(3L);
-        assertThat(responses.getContent().get(2).getId()).isEqualTo(2L);
-        assertThat(responses.getContent().get(3).getId()).isEqualTo(1L);
+        assertThat(responses.getContent().get(0).id()).isEqualTo(4L);
+        assertThat(responses.getContent().get(1).id()).isEqualTo(3L);
+        assertThat(responses.getContent().get(2).id()).isEqualTo(2L);
+        assertThat(responses.getContent().get(3).id()).isEqualTo(1L);
     }
 
 

@@ -227,7 +227,7 @@ public class AdminServiceTest {
                 );
         assertEquals(zoneGrade.getGrade(), grade);
         assertEquals(zoneGrade.getZone(), zone);
-        assertEquals(zoneGradeCreateResponse.getGradeName(), zoneGrade.getGrade().getName());
-        assertEquals(zoneGradeCreateResponse.getAuctionPrice(), zoneGrade.getGrade().getAuctionPrice());
+        assertEquals(zoneGradeCreateResponse.gradeName(), zoneGrade.getGrade().getName());
+        assertEquals(zoneGradeCreateResponse.auctionPrice(), zoneGrade.getGrade().getAuctionPrice());
     }
 }

@@ -56,9 +56,9 @@ public class ZoneServiceTest {
         List<ZoneGetResponse> zoneGetResponse = zoneService.getAllZone(1L);
 
         // then
-        assertEquals(zoneGetResponse.get(0).getZoneId(), zoneList.get(0).getId());
-        assertEquals(zoneGetResponse.get(0).getName(), zoneList.get(0).getName());
-        assertEquals(zoneGetResponse.get(0).getSeatNumber(), zoneList.get(0).getSeatNumber());
+        assertEquals(zoneGetResponse.get(0).zoneId(), zoneList.get(0).getId());
+        assertEquals(zoneGetResponse.get(0).name(), zoneList.get(0).getName());
+        assertEquals(zoneGetResponse.get(0).seatNumber(), zoneList.get(0).getSeatNumber());
     }
 
 }

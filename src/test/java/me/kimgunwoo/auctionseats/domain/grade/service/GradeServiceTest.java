@@ -59,14 +59,14 @@ public class GradeServiceTest {
         List<GradeGetResponse> gradeGetResponseList = gradeService.getAllGrade(anyLong());
 
         // then
-        assertEquals(gradeGetResponseList.get(0).getName(), gradeList.get(0).getName());
-        assertEquals(gradeGetResponseList.get(1).getName(), gradeList.get(1).getName());
-        assertEquals(gradeGetResponseList.get(0).getGradeId(), gradeList.get(0).getId());
-        assertEquals(gradeGetResponseList.get(1).getGradeId(), gradeList.get(1).getId());
-        assertEquals(gradeGetResponseList.get(0).getNormalPrice(), gradeList.get(0).getNormalPrice());
-        assertEquals(gradeGetResponseList.get(1).getNormalPrice(), gradeList.get(1).getNormalPrice());
-        assertEquals(gradeGetResponseList.get(0).getAuctionPrice(), gradeList.get(0).getAuctionPrice());
-        assertEquals(gradeGetResponseList.get(1).getAuctionPrice(), gradeList.get(1).getAuctionPrice());
+        assertEquals(gradeGetResponseList.get(0).name(), gradeList.get(0).getName());
+        assertEquals(gradeGetResponseList.get(1).name(), gradeList.get(1).getName());
+        assertEquals(gradeGetResponseList.get(0).gradeId(), gradeList.get(0).getId());
+        assertEquals(gradeGetResponseList.get(1).gradeId(), gradeList.get(1).getId());
+        assertEquals(gradeGetResponseList.get(0).normalPrice(), gradeList.get(0).getNormalPrice());
+        assertEquals(gradeGetResponseList.get(1).normalPrice(), gradeList.get(1).getNormalPrice());
+        assertEquals(gradeGetResponseList.get(0).auctionPrice(), gradeList.get(0).getAuctionPrice());
+        assertEquals(gradeGetResponseList.get(1).auctionPrice(), gradeList.get(1).getAuctionPrice());
     }
 
 }

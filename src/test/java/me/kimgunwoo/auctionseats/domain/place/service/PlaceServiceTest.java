@@ -50,10 +50,10 @@ public class PlaceServiceTest {
         List<PlaceGetResponse> placeGetResponses = placeService.getAllPlace();
 
         //then
-        assertEquals(placeGetResponses.get(0).getPlaceId(), placeList.get(0).getId());
-        assertEquals(placeGetResponses.get(1).getPlaceId(), placeList.get(1).getId());
-        assertEquals(placeGetResponses.get(0).getName(), placeList.get(0).getName());
-        assertEquals(placeGetResponses.get(1).getName(), placeList.get(1).getName());
+        assertEquals(placeGetResponses.get(0).placeId(), placeList.get(0).getId());
+        assertEquals(placeGetResponses.get(1).placeId(), placeList.get(1).getId());
+        assertEquals(placeGetResponses.get(0).name(), placeList.get(0).getName());
+        assertEquals(placeGetResponses.get(1).name(), placeList.get(1).getName());
     }
 
 }
