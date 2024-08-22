@@ -76,10 +76,10 @@ class AuctionRepositoryCustomImplTest {
 
         //then
         assertThat(responses.getContent()).hasSize(2);
-        assertThat(responses.getContent().get(0).getId()).isEqualTo(2L);
-        assertThat(responses.getContent().get(1).getId()).isEqualTo(1L);
-        System.out.println(responses.getContent().get(0).getStartDateTime());
-        System.out.println(responses.getContent().get(1).getStartDateTime());
+        assertThat(responses.getContent().get(0).id()).isEqualTo(2L);
+        assertThat(responses.getContent().get(1).id()).isEqualTo(1L);
+        System.out.println(responses.getContent().get(0).startDateTime());
+        System.out.println(responses.getContent().get(1).startDateTime());
     }
 
     private static Bid getBid(Long bidId, Auction auction, User user, Long price, int plusDays) {

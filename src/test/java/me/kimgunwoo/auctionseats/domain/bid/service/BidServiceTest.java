@@ -78,7 +78,7 @@ class BidServiceTest {
         //Then
         then(bidRepository).should().save(any(Bid.class));
         then(bidRedisService).should().setBidPrice(any(), any());
-        then(pointService).should().usePoint(bidder, bidRequest.getPrice());
+        then(pointService).should().usePoint(bidder, bidRequest.price());
     }
 
     @Test

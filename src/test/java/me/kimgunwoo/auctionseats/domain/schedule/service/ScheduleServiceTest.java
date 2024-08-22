@@ -78,12 +78,12 @@ public class ScheduleServiceTest {
 
         // then
         verify(scheduleRepository, times(1)).findAllByShowsId(anyLong());
-        assertEquals(scheduleGetResponses.get(0).getScheduleId(), scheduleList.get(0).getId());
-        assertEquals(scheduleGetResponses.get(1).getScheduleId(), scheduleList.get(1).getId());
-        assertEquals(scheduleGetResponses.get(0).getSequence(), scheduleList.get(0).getSequence());
-        assertEquals(scheduleGetResponses.get(1).getSequence(), scheduleList.get(1).getSequence());
-        assertEquals(scheduleGetResponses.get(0).getStartDateTime(), scheduleList.get(0).getStartDateTime());
-        assertEquals(scheduleGetResponses.get(1).getStartDateTime(), scheduleList.get(1).getStartDateTime());
+        assertEquals(scheduleGetResponses.get(0).scheduleId(), scheduleList.get(0).getId());
+        assertEquals(scheduleGetResponses.get(1).scheduleId(), scheduleList.get(1).getId());
+        assertEquals(scheduleGetResponses.get(0).sequence(), scheduleList.get(0).getSequence());
+        assertEquals(scheduleGetResponses.get(1).sequence(), scheduleList.get(1).getSequence());
+        assertEquals(scheduleGetResponses.get(0).startDateTime(), scheduleList.get(0).getStartDateTime());
+        assertEquals(scheduleGetResponses.get(1).startDateTime(), scheduleList.get(1).getStartDateTime());
     }
 
 }
