@@ -1,3 +1,7 @@
+server:
+  host:
+    front: "http://localhost:3000"  # 예시로 기본 URL을 설정
+
 spring:
   config:
     activate:
