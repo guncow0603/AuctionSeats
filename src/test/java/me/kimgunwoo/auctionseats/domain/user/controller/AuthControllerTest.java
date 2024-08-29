@@ -33,7 +33,6 @@ import jakarta.servlet.http.Cookie;
 import jakarta.transaction.Transactional;
 @SpringBootTest
 @AutoConfigureMockMvc
-@ActiveProfiles("test")
 public class AuthControllerTest {
 
     @Autowired
