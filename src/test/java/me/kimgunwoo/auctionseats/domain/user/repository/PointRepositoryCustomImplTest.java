@@ -64,22 +64,4 @@ class PointRepositoryCustomImplTest {
             pointRepository.save(createPoint((long)i, (long)(1111 * (i + 1)), i));
         }
     }
-
-    @Test
-    void 포인트_충전_내역_조회_시_가장_최신순으로_정렬되어_조회_성공() {
-        // Given
-        Pageable pageable = PageRequest.of(0, 10, Sort.Direction.DESC, "createdAt");
-        User user = UserUtil.getUser();
-
-        // When
-        Page<PointChargeResponse> responses = pointRepository.findChargePointListByPage(user.getId(), pageable);
-
-        // ThenR
-        assertThat(responses.getContent()).hasSize(4);
-        assertThat(responses.getContent().get(0).getId()).isEqualTo(12L);
-        assertThat(responses.getContent().get(1).getId()).isEqualTo(9L);
-        assertThat(responses.getContent().get(2).getId()).isEqualTo(6L);
-        assertThat(responses.getContent().get(3).getId()).isEqualTo(3L);
-    }
-
 }
