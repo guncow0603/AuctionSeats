@@ -1,9 +1,5 @@
 package me.kimgunwoo.auctionseats.domain.bid.repository;
 
-import static org.assertj.core.api.Assertions.*;
-
-import java.time.LocalDateTime;
-
 import me.kimgunwoo.auctionseats.domain.auction.entity.Auction;
 import me.kimgunwoo.auctionseats.domain.auction.repository.AuctionRepository;
 import me.kimgunwoo.auctionseats.domain.bid.dto.response.BidInfoResponse;
@@ -16,7 +12,7 @@ import me.kimgunwoo.auctionseats.global.config.QueryDslConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,8 +21,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.util.ReflectionTestUtils;
 
-@DataJpaTest
-@ActiveProfiles("test")
+import java.time.LocalDateTime;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+@SpringBootTest
 @Import({QueryDslConfig.class, AuditingConfig.class})
 class BidRepositoryCustomImplTest {
     @Autowired

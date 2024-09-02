@@ -9,6 +9,7 @@ import me.kimgunwoo.auctionseats.domain.user.entity.User;
 import me.kimgunwoo.auctionseats.domain.user.repository.UserRepository;
 import me.kimgunwoo.auctionseats.domain.user.util.UserUtil;
 import me.kimgunwoo.auctionseats.global.exception.ApiException;
+import me.kimgunwoo.auctionseats.global.util.LettuceUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -43,6 +44,8 @@ class UserServiceImplTest {
     UserServiceImpl sut;
     @Captor
     ArgumentCaptor<User> argumentCaptor;
+    @Mock
+    private LettuceUtils lettuceUtils;
 
     @Nested
     class 회원_가입_검증_테스트 {

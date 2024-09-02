@@ -1,7 +1,7 @@
 server:
+  port: 8080
   host:
-    front: "http://localhost:3000"  # 예시로 기본 URL을 설정
-
+    front: localhost8080
 spring:
   config:
     activate:
