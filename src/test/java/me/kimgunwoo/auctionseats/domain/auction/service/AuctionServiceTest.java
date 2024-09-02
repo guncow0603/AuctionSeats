@@ -4,6 +4,7 @@ import me.kimgunwoo.auctionseats.domain.auction.dto.request.AuctionCreateRequest
 import me.kimgunwoo.auctionseats.domain.auction.entity.Auction;
 import me.kimgunwoo.auctionseats.domain.auction.repository.AuctionRepository;
 import me.kimgunwoo.auctionseats.domain.bid.entity.Bid;
+import me.kimgunwoo.auctionseats.domain.bid.repository.BidRepository;
 import me.kimgunwoo.auctionseats.domain.bid.service.BidRedisService;
 import me.kimgunwoo.auctionseats.domain.bid.service.BidServiceImpl;
 import me.kimgunwoo.auctionseats.domain.grade.entity.Grade;
@@ -38,6 +39,9 @@ import static org.mockito.BDDMockito.then;
 class AuctionServiceTest {
     @InjectMocks
     private AuctionServiceImpl sut;
+
+    @Mock
+    private BidRepository bidRepository;
 
     @Mock
     private AuctionRepository auctionRepository;
@@ -85,16 +89,18 @@ class AuctionServiceTest {
             Long bidId = 1L;
             Auction auction = getAuction(auctionId);
             Bid bid = getBid(auction, bidId);
+
             given(auctionRepository.findById(auctionId))
                     .willReturn(Optional.of(auction));
 
-            given(bidService.getCurrentBid(auction))
+            given(bidRepository.findTopByAuctionOrderByIdDesc(auction))
                     .willReturn(Optional.of(bid));
 
-            //when
+            // When
             sut.endAuction(auctionId);
 
-            //then
+            // Then
+            then(bidRepository).should().findTopByAuctionOrderByIdDesc(auction);
             then(reservationService).should().reserve(bid, auction);
         }
 
