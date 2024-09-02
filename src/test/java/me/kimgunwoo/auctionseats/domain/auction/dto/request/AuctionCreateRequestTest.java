@@ -51,26 +51,28 @@ class AuctionCreateRequestTest {
                 1
         );
 
+        // 현재 시간을 고정하여 사용합니다.
+        LocalDateTime fixedNow = LocalDateTime.now().withSecond(0).withNano(0); // 초와 나노초를 0으로 설정하여 비교를 단순화합니다.
         Schedule schedule = Schedule.builder()
-                .startDateTime(LocalDateTime.now())
+                .startDateTime(fixedNow)
                 .build();
 
         ZoneGrade zoneGrade = ZoneGrade.builder()
                 .grade(Grade.builder().auctionPrice(1000L).normalPrice(10000L).build())
                 .build();
-        //when
+
+        // when
         var auction = request.toEntity(schedule, zoneGrade);
 
-        //then
-        //yyyy-MM-dd HH:00
+        // then
         var startDateTime = auction.getStartDateTime();
-        var now = LocalDateTime.now();
 
-        assertThat(startDateTime.getYear()).isEqualTo(now.getYear());
-        assertThat(startDateTime.getMonthValue()).isEqualTo(now.getMonthValue());
-        assertThat(startDateTime.getDayOfMonth()).isEqualTo(now.getDayOfMonth());
-        assertThat(startDateTime.getHour()).isEqualTo(now.getHour());
-        assertThat(startDateTime.getMinute()).isEqualTo(0);
+        // startDateTime이 fixedNow와 일치하는지 검증합니다.
+        assertThat(startDateTime.getYear()).isEqualTo(fixedNow.getYear());
+        assertThat(startDateTime.getMonthValue()).isEqualTo(fixedNow.getMonthValue());
+        assertThat(startDateTime.getDayOfMonth()).isEqualTo(fixedNow.getDayOfMonth());
+        assertThat(startDateTime.getHour()).isEqualTo(fixedNow.getHour());
+        assertThat(startDateTime.getMinute()).isEqualTo(fixedNow.getMinute()); // `fixedNow`의 분과 비교
     }
 
     @Test
@@ -79,21 +81,29 @@ class AuctionCreateRequestTest {
                 1
         );
 
+        // 현재 시간으로 Schedule을 생성합니다.
+        LocalDateTime now = LocalDateTime.now();
         Schedule schedule = Schedule.builder()
-                .startDateTime(LocalDateTime.now())
+                .startDateTime(now)
                 .build();
 
         ZoneGrade zoneGrade = ZoneGrade.builder()
                 .grade(Grade.builder().auctionPrice(1000L).normalPrice(10000L).build())
                 .build();
-        //when
+
+        // when
         var auction = request.toEntity(schedule, zoneGrade);
 
-        //then
-        //yyyy-MM-dd HH:00
+        // then
+        // `endDateTime`이 `startDateTime`보다 1일 전이어야 합니다.
         var endDateTime = auction.getEndDateTime();
-        var now = LocalDateTime.now();
+        var startDateTime = schedule.getStartDateTime();
 
-        assertThat(endDateTime.getDayOfMonth()).isEqualTo(now.getDayOfMonth() - 3);
+        assertThat(endDateTime.getYear()).isEqualTo(startDateTime.getYear());
+        assertThat(endDateTime.getMonthValue()).isEqualTo(startDateTime.getMonthValue());
+        assertThat(endDateTime.getDayOfMonth()).isEqualTo(startDateTime.getDayOfMonth() - 1);
+        assertThat(endDateTime.getHour()).isEqualTo(startDateTime.getHour());
+        assertThat(endDateTime.getMinute()).isEqualTo(startDateTime.getMinute());
     }
+
 }

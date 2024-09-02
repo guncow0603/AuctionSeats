@@ -11,6 +11,7 @@ spring:
   config:
     activate:
       on-profile: local
+
   data:
     redis:
       host: localhost
@@ -20,9 +21,13 @@ spring:
     username: ${db_username}
     password: ${db_password}
     url: jdbc:mysql://localhost:3306/auctionseats
-  sql:
-     init:
-       mode: always
+
+    hikari:
+      connection-timeout: 3000
+      validation-timeout: 3000
+      minimum-idle: 10
+      max-lifetime: 240000
+      maximum-pool-size: 20
   jpa:
     hibernate:
       ddl-auto: update
@@ -34,6 +39,9 @@ spring:
   jackson:
     serialization:
       fail-on-empty-beans: false
+  sql:
+    init:
+      mode: never
 
 jwt:
   secret:
