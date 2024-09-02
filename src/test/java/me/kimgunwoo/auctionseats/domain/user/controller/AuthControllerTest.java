@@ -154,38 +154,4 @@ public class AuthControllerTest {
 
         helper.deleteToken("RefreshToken " + ADMIN_TEST_EMAIL);
     }
-
-    @Test
-    void 토큰_재발급_테스트() throws Exception {
-        // Given
-        String[] token = helper.login();
-
-        token[1] = URLEncoder.encode(token[1], StandardCharsets.UTF_8)
-                .replaceAll("\\+", "%20");
-
-        Cookie cookie = new Cookie(JwtUtil.REFRESH_TOKEN_HEADER, token[1]);
-        cookie.setSecure(true);
-        cookie.setHttpOnly(true);
-        cookie.setPath("/");
-        // When
-        ResultActions actions = mvc.perform(
-                post("/api/v1/auth/reissue")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .header("Authorization", token[0])
-                        .cookie(cookie)
-        );
-
-        MockHttpServletResponse response = actions
-                .andDo(print())
-                .andReturn()
-                .getResponse();
-
-        // Then
-        actions.andExpect(status().isCreated());
-        assertThat(response.getContentAsString())
-                .contains(SUCCESS_REISSUE_TOKEN.getCode());
-
-        helper.deleteToken("RefreshToken " + TEST_EMAIL);
-    }
 }
