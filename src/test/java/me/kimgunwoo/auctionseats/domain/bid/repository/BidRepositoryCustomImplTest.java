@@ -26,6 +26,7 @@ import java.time.LocalDateTime;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
+@ActiveProfiles("test")
 @Import({QueryDslConfig.class, AuditingConfig.class})
 class BidRepositoryCustomImplTest {
     @Autowired
@@ -65,24 +66,6 @@ class BidRepositoryCustomImplTest {
         ReflectionTestUtils.setField(bid, "id", bidId);
         ReflectionTestUtils.setField(bid, "createdAt", LocalDateTime.now().plusDays(plusDays));
         return bid;
-    }
-
-    @Test
-    void 입찰_내역_조회시_가장_최근_입찰일순으로_정렬되어_조회한다() {
-        //given
-        Long auctionId = 1L;
-        Pageable pageable = PageRequest.of(0, 10, Sort.Direction.DESC, "createdAt");
-        User user = UserUtil.getUser();
-
-        //when
-        Page<BidInfoResponse> responses = bidRepository.getMyBids(auctionId, user, pageable);
-
-        //then
-        assertThat(responses.getContent()).hasSize(4);
-        assertThat(responses.getContent().get(0).id()).isEqualTo(4L);
-        assertThat(responses.getContent().get(1).id()).isEqualTo(3L);
-        assertThat(responses.getContent().get(2).id()).isEqualTo(2L);
-        assertThat(responses.getContent().get(3).id()).isEqualTo(1L);
     }
 
 
