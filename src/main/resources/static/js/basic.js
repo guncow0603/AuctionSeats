@@ -10,7 +10,7 @@ var white_list = {
 
 function getUrl() {
     const hostname = window.location.hostname;
-    const url = hostname === 'localhost' ? 'http://localhost:8080' : 'https://43.203.228.222:8080';
+    const url = hostname === 'localhost' ? 'http://localhost:8080' : 'https://43.203.228.222:443';
 
     return url;
 }
