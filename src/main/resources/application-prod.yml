@@ -3,15 +3,11 @@ spring:
     active: local
 
 ---
-server:
-  port: 8080
-  host:
-    front: localhost8080
+
 spring:
   config:
     activate:
       on-profile: local
-
   data:
     redis:
       host: localhost
@@ -21,27 +17,16 @@ spring:
     username: ${db_username}
     password: ${db_password}
     url: jdbc:mysql://localhost:3306/auction_seats
-
-    hikari:
-      connection-timeout: 3000
-      validation-timeout: 3000
-      minimum-idle: 10
-      max-lifetime: 240000
-      maximum-pool-size: 20
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     properties:
       hibernate:
         show_sql: true
         format_sql: true
-    defer-datasource-initialization: true
   jackson:
     serialization:
       fail-on-empty-beans: false
-  sql:
-    init:
-      mode: never
 
 jwt:
   secret:
@@ -58,10 +43,3 @@ cloud: # S3
       static: ap-northeast-2
     stack:
       auto: false
-
-payment:
-  toss:
-    client-key: ${TOSS_CLIENT_KEY}
-    secret-key: ${TOSS_SECRET_KEY}
-    success-url: ${SUCCESS_URL}
-    fail-url: ${FAIL_URL}
