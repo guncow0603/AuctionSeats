@@ -21,12 +21,12 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: make application.yml
+      - name: make application-prod.yml
         if: contains(github.ref, 'main')
         run: |
           cd ./src/main/resources
-          touch ./application.yml
-          echo "${{ secrets.YML }}" | base64 --decode > ./application.yml
+          touch ./application-prod.yml
+          echo "${{ secrets.YML_PROD }}" | base64 --decode > ./application-prod.yml
         shell: bash
 
       - name: Grant execute permission for gradlew
