@@ -44,7 +44,7 @@ public class ShowsCreateRequestTest {
 
     @BeforeEach
     void createInit() {
-        this.title = "레미제라블-서울";
+        this.title = "레미제라블 - 서울";
         this.startDate = LocalDate.of(2023, 3, 1);
         this.endDate = LocalDate.of(2023, 4, 1);
         this.startTime = LocalTime.of(12, 30);
