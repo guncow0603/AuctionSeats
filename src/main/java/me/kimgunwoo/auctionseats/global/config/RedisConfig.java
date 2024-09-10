@@ -38,16 +38,16 @@ public class RedisConfig {
     @Value("${spring.data.redis.port}")
     private int port;
 
-    @Value("${spring.data.redis.cluster.nodes}")
+    @Value("${spring.data.redis.cluster.nodes:}")
     private List<String> redisClusterNodes;
 
-    @Value("${spring.profiles.active}")
+    @Value("${spring.profiles.active:local}")
     private String activeProfile;
 
     @Bean
     public RedissonClient redissonClient() {
         Config config = new Config();
-        if (activeProfile.equals("local")) {
+        if ("local".equals(activeProfile)) {
             config.useSingleServer()
                     .setAddress("redis://" + host + ":" + port);
         } else {
@@ -60,7 +60,7 @@ public class RedisConfig {
 
     @Bean
     public LettuceConnectionFactory lettuceConnectionFactory() {
-        if (activeProfile.equals("local")) {
+        if ("local".equals(activeProfile)) {
             return new LettuceConnectionFactory(host, port);
         } else {
             RedisClusterConfiguration clusterConfiguration = new RedisClusterConfiguration(redisClusterNodes);
@@ -76,12 +76,11 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisTemplate<String, Object> lettuceTemplate() {
+    public RedisTemplate<String, Object> redisTemplate() {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(Object.class));
         redisTemplate.setConnectionFactory(lettuceConnectionFactory());
-
         return redisTemplate;
     }
 
@@ -96,14 +95,10 @@ public class RedisConfig {
     public CacheManager redisCacheManager(RedisConnectionFactory cf) {
         RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
                 .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
-                .serializeValuesWith(
-                        RedisSerializationContext.SerializationPair.fromSerializer(
-                                new GenericJackson2JsonRedisSerializer()))
+                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()))
                 .entryTtl(Duration.ofMinutes(30L)); // 캐쉬 저장 시간 30분 설정
 
-        return RedisCacheManager
-                .RedisCacheManagerBuilder
-                .fromConnectionFactory(cf)
+        return RedisCacheManager.RedisCacheManagerBuilder.fromConnectionFactory(cf)
                 .cacheDefaults(redisCacheConfiguration)
                 .build();
     }
@@ -112,5 +107,4 @@ public class RedisConfig {
     public StringRedisTemplate stringRedisTemplate(RedisConnectionFactory connectionFactory) {
         return new StringRedisTemplate(connectionFactory);
     }
-
 }
