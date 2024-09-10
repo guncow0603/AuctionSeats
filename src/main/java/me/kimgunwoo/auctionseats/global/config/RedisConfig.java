@@ -26,6 +26,7 @@ import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.time.Duration;
+import java.util.List;
 
 @Configuration
 @EnableCaching
@@ -36,6 +37,9 @@ public class RedisConfig {
 
     @Value("${spring.data.redis.port}")
     private int port;
+
+    @Value("${spring.data.redis.cluster.nodes}")
+    private List<String> redisClusterNodes;
 
     @Value("${spring.profiles.active}")
     private String activeProfile;
@@ -49,9 +53,7 @@ public class RedisConfig {
         } else {
             config.useClusterServers()
                     .setScanInterval(3000)
-                    .addNodeAddress("redis://" + host + ":" + port) // 클러스터 노드 주소 수정
-                    .addNodeAddress("redis://" + host + ":" + port)
-                    .addNodeAddress("redis://" + host + ":" + port);
+                    .addNodeAddress(redisClusterNodes.toArray(new String[0]));
         }
         return Redisson.create(config);
     }
@@ -61,8 +63,7 @@ public class RedisConfig {
         if (activeProfile.equals("local")) {
             return new LettuceConnectionFactory(host, port);
         } else {
-            RedisClusterConfiguration clusterConfiguration = new RedisClusterConfiguration();
-            clusterConfiguration.clusterNode(host, port);
+            RedisClusterConfiguration clusterConfiguration = new RedisClusterConfiguration(redisClusterNodes);
             LettuceClientConfiguration clientConfiguration = LettuceClientConfiguration.builder()
                     .clientOptions(ClientOptions.builder()
                             .socketOptions(SocketOptions.builder()
