@@ -1,5 +1,7 @@
 server:
   port: 80
+  host:
+    front: auction-seats.com
 
 spring:
   config:
