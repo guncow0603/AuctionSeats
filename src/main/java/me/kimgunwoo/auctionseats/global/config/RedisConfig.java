@@ -1,11 +1,7 @@
 package me.kimgunwoo.auctionseats.global.config;
 
-
 import io.lettuce.core.ClientOptions;
 import io.lettuce.core.SocketOptions;
-import org.redisson.Redisson;
-import org.redisson.api.RedissonClient;
-import org.redisson.config.Config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
@@ -32,10 +28,10 @@ import java.util.List;
 @EnableCaching
 public class RedisConfig {
 
-    @Value("${spring.data.redis.host}")
+    @Value("${spring.data.redis.host:localhost}")
     private String host;
 
-    @Value("${spring.data.redis.port}")
+    @Value("${spring.data.redis.port:6379}")
     private int port;
 
     @Value("${spring.data.redis.cluster.nodes:}")
@@ -43,20 +39,6 @@ public class RedisConfig {
 
     @Value("${spring.profiles.active:local}")
     private String activeProfile;
-
-    @Bean
-    public RedissonClient redissonClient() {
-        Config config = new Config();
-        if ("local".equals(activeProfile)) {
-            config.useSingleServer()
-                    .setAddress("redis://" + host + ":" + port);
-        } else {
-            config.useClusterServers()
-                    .setScanInterval(3000)
-                    .addNodeAddress(redisClusterNodes.toArray(new String[0]));
-        }
-        return Redisson.create(config);
-    }
 
     @Bean
     public LettuceConnectionFactory lettuceConnectionFactory() {
