@@ -1,9 +1,12 @@
 server:
   port: 80
+  host:
+    front: auction-seats.com
+
 spring:
   config:
     activate:
-      on-profile: local
+      on-profile: prod  # 'prod' 프로파일이 활성화될 때 이 설정이 사용됩니다.
   data:
     redis:
       host: localhost
