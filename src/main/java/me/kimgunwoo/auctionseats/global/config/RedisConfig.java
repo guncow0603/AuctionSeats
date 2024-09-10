@@ -49,7 +49,9 @@ public class RedisConfig {
         } else {
             config.useClusterServers()
                     .setScanInterval(3000)
-                    .addNodeAddress("redis://" + host + ":" + port);
+                    .addNodeAddress("redis://node1-host:node1-port")
+                    .addNodeAddress("redis://node2-host:node2-port")
+                    .addNodeAddress("redis://node3-host:node3-port");
         }
         return Redisson.create(config);
     }
