@@ -1,7 +1,11 @@
 package me.kimgunwoo.auctionseats.global.config;
 
+
 import io.lettuce.core.ClientOptions;
 import io.lettuce.core.SocketOptions;
+import org.redisson.Redisson;
+import org.redisson.api.RedissonClient;
+import org.redisson.config.Config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
@@ -28,24 +32,39 @@ import java.util.List;
 @EnableCaching
 public class RedisConfig {
 
-    @Value("${spring.data.redis.host:localhost}")
+    @Value("${spring.data.redis.host}")
     private String host;
 
-    @Value("${spring.data.redis.port:6379}")
+    @Value("${spring.data.redis.port}")
     private int port;
+
+    @Value("${spring.profiles.active}")
+    private String activeProfile;
 
     @Value("${spring.data.redis.cluster.nodes:}")
     private List<String> redisClusterNodes;
 
-    @Value("${spring.profiles.active:local}")
-    private String activeProfile;
+    @Bean
+    public RedissonClient redissonClient() {
+        Config config = new Config();
+        if (activeProfile.equals("local")) {
+            config.useSingleServer()
+                    .setAddress("redis://" + host + ":" + port);
+        } else {
+            config.useClusterServers()
+                    .setScanInterval(3000)
+                    .addNodeAddress(redisClusterNodes.toArray(new String[0]));
+        }
+        return Redisson.create(config);
+    }
 
     @Bean
     public LettuceConnectionFactory lettuceConnectionFactory() {
-        if ("local".equals(activeProfile)) {
+        if (activeProfile.equals("local")) {
             return new LettuceConnectionFactory(host, port);
         } else {
-            RedisClusterConfiguration clusterConfiguration = new RedisClusterConfiguration(redisClusterNodes);
+            RedisClusterConfiguration clusterConfiguration = new RedisClusterConfiguration();
+            clusterConfiguration.clusterNode(host, port);
             LettuceClientConfiguration clientConfiguration = LettuceClientConfiguration.builder()
                     .clientOptions(ClientOptions.builder()
                             .socketOptions(SocketOptions.builder()
@@ -58,11 +77,12 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisTemplate<String, Object> redisTemplate() {
+    public RedisTemplate<String, Object> lettuceTemplate() {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(Object.class));
         redisTemplate.setConnectionFactory(lettuceConnectionFactory());
+
         return redisTemplate;
     }
 
@@ -77,10 +97,14 @@ public class RedisConfig {
     public CacheManager redisCacheManager(RedisConnectionFactory cf) {
         RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
                 .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
-                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()))
+                .serializeValuesWith(
+                        RedisSerializationContext.SerializationPair.fromSerializer(
+                                new GenericJackson2JsonRedisSerializer()))
                 .entryTtl(Duration.ofMinutes(30L)); // 캐쉬 저장 시간 30분 설정
 
-        return RedisCacheManager.RedisCacheManagerBuilder.fromConnectionFactory(cf)
+        return RedisCacheManager
+                .RedisCacheManagerBuilder
+                .fromConnectionFactory(cf)
                 .cacheDefaults(redisCacheConfiguration)
                 .build();
     }
@@ -89,4 +113,5 @@ public class RedisConfig {
     public StringRedisTemplate stringRedisTemplate(RedisConnectionFactory connectionFactory) {
         return new StringRedisTemplate(connectionFactory);
     }
+
 }
