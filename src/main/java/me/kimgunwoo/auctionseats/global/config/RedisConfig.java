@@ -32,12 +32,6 @@ import java.util.List;
 @EnableCaching
 public class RedisConfig {
 
-    @Value("${spring.data.redis.host}")
-    private String host;
-
-    @Value("${spring.data.redis.port}")
-    private int port;
-
     @Value("${spring.profiles.active}")
     private String activeProfile;
 
@@ -49,7 +43,7 @@ public class RedisConfig {
         Config config = new Config();
         if (activeProfile.equals("local")) {
             config.useSingleServer()
-                    .setAddress("redis://" + host + ":" + port);
+                    .setAddress("redis://" + "localhost" + ":" + 6379);
         } else {
             config.useClusterServers()
                     .setScanInterval(3000)
@@ -61,10 +55,10 @@ public class RedisConfig {
     @Bean
     public LettuceConnectionFactory lettuceConnectionFactory() {
         if (activeProfile.equals("local")) {
-            return new LettuceConnectionFactory(host, port);
+            return new LettuceConnectionFactory("localhost", 6379 );
         } else {
             RedisClusterConfiguration clusterConfiguration = new RedisClusterConfiguration();
-            clusterConfiguration.clusterNode(host, port);
+            clusterConfiguration.clusterNode("localhost", 6379 );
             LettuceClientConfiguration clientConfiguration = LettuceClientConfiguration.builder()
                     .clientOptions(ClientOptions.builder()
                             .socketOptions(SocketOptions.builder()
