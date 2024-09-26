@@ -28,16 +28,15 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      # 환경 변수를 사용하여 테스트 실행
       - name: Test with Gradle
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          DB_USERNAME: ${{ secrets.db_username }}
-          DB_PASSWORD: ${{ secrets.db_password }}
+          db_username: ${{ secrets.DB_USERNAME }}
+          db_password: ${{ secrets.DB_PASSWORD }}
           FAIL_URL: ${{ secrets.FAIL_URL }}
-          JWT_SECRET_KEY: ${{ secrets.jwt_secret_key }}
-          S3_BUCKET_NAME: ${{ secrets.s3_bucket_name }}
+          jwt_secret_key: ${{ secrets.JWT_SECRET_KEY }}
+          s3_bucket_name: ${{ secrets.S3_BUCKET_NAME }}
           SUCCESS_URL: ${{ secrets.SUCCESS_URL }}
           TOSS_CLIENT_KEY: ${{ secrets.TOSS_CLIENT_KEY }}
           TOSS_SECRET_KEY: ${{ secrets.TOSS_SECRET_KEY }}
