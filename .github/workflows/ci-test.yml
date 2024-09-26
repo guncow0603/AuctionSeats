@@ -15,6 +15,19 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Print environment variables
+        run: |
+          echo "AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}"
+          echo "AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}"
+          echo "db_username: ${{ secrets.db_username }}"
+          echo "db_password: ${{ secrets.db_password }}"
+          echo "FAIL_URL: ${{ secrets.FAIL_URL }}"
+          echo "jwt_secret_key: ${{ secrets.jwt_secret_key }}"
+          echo "s3_bucket_name: ${{ secrets.s3_bucket_name }}"
+          echo "SUCCESS_URL: ${{ secrets.SUCCESS_URL }}"
+          echo "TOSS_CLIENT_KEY: ${{ secrets.TOSS_CLIENT_KEY }}"
+          echo "TOSS_SECRET_KEY: ${{ secrets.TOSS_SECRET_KEY }}"
+
       - name: Cache Gradle packages
         uses: actions/cache@v3
         with:
@@ -40,7 +53,7 @@ jobs:
           SUCCESS_URL: ${{ secrets.SUCCESS_URL }}
           TOSS_CLIENT_KEY: ${{ secrets.TOSS_CLIENT_KEY }}
           TOSS_SECRET_KEY: ${{ secrets.TOSS_SECRET_KEY }}
-        run: ./gradlew clean test --info
+        run: ./gradlew clean --no-build-cache --refresh-dependencies test --info --stacktrace
 
       - name: Publish unit test results
         uses: EnricoMi/publish-unit-test-result-action@v2
