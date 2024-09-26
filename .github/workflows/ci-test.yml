@@ -6,6 +6,17 @@ jobs:
   test:
     runs-on: ubuntu-latest
     permissions: write-all
+    services:
+      redis:
+        image: redis:alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - uses: actions/checkout@v3
 
@@ -53,6 +64,8 @@ jobs:
           SUCCESS_URL: ${{ secrets.SUCCESS_URL }}
           TOSS_CLIENT_KEY: ${{ secrets.TOSS_CLIENT_KEY }}
           TOSS_SECRET_KEY: ${{ secrets.TOSS_SECRET_KEY }}
+          REDIS_HOST: redis   # Redis 호스트
+          REDIS_PORT: 6379    # Redis 포트
         run: ./gradlew clean --no-build-cache --refresh-dependencies test --info --stacktrace
 
       - name: Publish unit test results
