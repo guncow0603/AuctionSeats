@@ -8,6 +8,7 @@ jobs:
     permissions: write-all
     steps:
       - uses: actions/checkout@v3
+
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
@@ -27,21 +28,19 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      # 환경 변수 출력 단계 추가
-      - name: Print Environment Variables
-        run: |
-          echo "AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}"
-          echo "AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}"
-          echo "DB_USERNAME: ${{ secrets.db_username }}"
-          echo "DB_PASSWORD: ${{ secrets.db_password }}"
-          echo "FAIL_URL: ${{ secrets.FAIL_URL }}"
-          echo "JWT_SECRET_KEY: ${{ secrets.jwt_secret_key }}"
-          echo "S3_BUCKET_NAME: ${{ secrets.s3_bucket_name }}"
-          echo "SUCCESS_URL: ${{ secrets.SUCCESS_URL }}"
-          echo "TOSS_CLIENT_KEY: ${{ secrets.TOSS_CLIENT_KEY }}"
-          echo "TOSS_SECRET_KEY: ${{ secrets.TOSS_SECRET_KEY }}"
-
+      # 환경 변수를 사용하여 테스트 실행
       - name: Test with Gradle
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          DB_USERNAME: ${{ secrets.db_username }}
+          DB_PASSWORD: ${{ secrets.db_password }}
+          FAIL_URL: ${{ secrets.FAIL_URL }}
+          JWT_SECRET_KEY: ${{ secrets.jwt_secret_key }}
+          S3_BUCKET_NAME: ${{ secrets.s3_bucket_name }}
+          SUCCESS_URL: ${{ secrets.SUCCESS_URL }}
+          TOSS_CLIENT_KEY: ${{ secrets.TOSS_CLIENT_KEY }}
+          TOSS_SECRET_KEY: ${{ secrets.TOSS_SECRET_KEY }}
         run: ./gradlew --info test
 
       - name: Publish unit test results
