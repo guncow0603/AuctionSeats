@@ -6,8 +6,21 @@ jobs:
   test:
     runs-on: ubuntu-latest
     permissions: write-all
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      db_password: ${{ secrets.db_password }}
+      db_username: ${{ secrets.db_username }}
+      FAIL_URL: ${{ secrets.FAIL_URL }}
+      jwt_secret_key: ${{ secrets.jwt_secret_key }}
+      s3_bucket_name: ${{ secrets.s3_bucket_name }}
+      SUCCESS_URL: ${{ secrets.SUCCESS_URL }}
+      TOSS_CLIENT_KEY: ${{ secrets.TOSS_CLIENT_KEY }}
+      TOSS_SECRET_KEY: ${{ secrets.TOSS_SECRET_KEY }}
+
     steps:
       - uses: actions/checkout@v3
+
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
