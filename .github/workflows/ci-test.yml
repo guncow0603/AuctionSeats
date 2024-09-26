@@ -32,11 +32,11 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          db_username: ${{ secrets.DB_USERNAME }}
-          db_password: ${{ secrets.DB_PASSWORD }}
+          db_username: ${{ secrets.db_username }}
+          db_password: ${{ secrets.db_password }}
           FAIL_URL: ${{ secrets.FAIL_URL }}
-          jwt_secret_key: ${{ secrets.JWT_SECRET_KEY }}
-          s3_bucket_name: ${{ secrets.S3_BUCKET_NAME }}
+          jwt_secret_key: ${{ secrets.jwt_secret_key }}
+          s3_bucket_name: ${{ secrets.s3_bucket_name }}
           SUCCESS_URL: ${{ secrets.SUCCESS_URL }}
           TOSS_CLIENT_KEY: ${{ secrets.TOSS_CLIENT_KEY }}
           TOSS_SECRET_KEY: ${{ secrets.TOSS_SECRET_KEY }}
