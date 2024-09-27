@@ -1,0 +1,81 @@
+on:
+  pull_request:
+    branches: [ "develop" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions: write-all
+    services:
+      redis:
+        image: redis:alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Print environment variables
+        run: |
+          echo "AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}"
+          echo "AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}"
+          echo "db_username: ${{ secrets.db_username }}"
+          echo "db_password: ${{ secrets.db_password }}"
+          echo "FAIL_URL: ${{ secrets.FAIL_URL }}"
+          echo "jwt_secret_key: ${{ secrets.jwt_secret_key }}"
+          echo "s3_bucket_name: ${{ secrets.s3_bucket_name }}"
+          echo "SUCCESS_URL: ${{ secrets.SUCCESS_URL }}"
+          echo "TOSS_CLIENT_KEY: ${{ secrets.TOSS_CLIENT_KEY }}"
+          echo "TOSS_SECRET_KEY: ${{ secrets.TOSS_SECRET_KEY }}"
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Disable Gradle cache and test
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          db_username: ${{ secrets.db_username }}
+          db_password: ${{ secrets.db_password }}
+          FAIL_URL: ${{ secrets.FAIL_URL }}
+          jwt_secret_key: ${{ secrets.jwt_secret_key }}
+          s3_bucket_name: ${{ secrets.s3_bucket_name }}
+          SUCCESS_URL: ${{ secrets.SUCCESS_URL }}
+          TOSS_CLIENT_KEY: ${{ secrets.TOSS_CLIENT_KEY }}
+          TOSS_SECRET_KEY: ${{ secrets.TOSS_SECRET_KEY }}
+          REDIS_HOST: redis   # Redis 호스트
+          REDIS_PORT: 6379    # Redis 포트
+        run: ./gradlew clean --no-build-cache --refresh-dependencies test --info --stacktrace
+
+      - name: Publish unit test results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: ${{ always() }}
+        with:
+          files: build/test-results/**/*.xml
+
+      - name: Cleanup Gradle Cache
+        if: ${{ always() }}
+        run: |
+          rm -f ~/.gradle/caches/modules-2/modules-2.lock
+          rm -f ~/.gradle/caches/modules-2/gc.properties
