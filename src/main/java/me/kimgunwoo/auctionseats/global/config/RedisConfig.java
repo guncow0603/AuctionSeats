@@ -47,7 +47,11 @@ public class RedisConfig {
         } else {
             config.useClusterServers()
                     .setScanInterval(3000)
-                    .addNodeAddress(redisClusterNodes.toArray(new String[0]));
+                    .addNodeAddress(
+                            "redis://localhost:6379",
+                            "redis://localhost:6380",
+                            "redis://localhost:6381"
+                    );
         }
         return Redisson.create(config);
     }
@@ -57,8 +61,11 @@ public class RedisConfig {
         if (activeProfile.equals("local")) {
             return new LettuceConnectionFactory("localhost", 6379 );
         } else {
-            RedisClusterConfiguration clusterConfiguration = new RedisClusterConfiguration();
-            clusterConfiguration.clusterNode("localhost", 6379 );
+            // 클러스터 환경: Redis 클러스터 설정
+            RedisClusterConfiguration clusterConfiguration = new RedisClusterConfiguration()
+                    .clusterNode("localhost", 6379)
+                    .clusterNode("localhost", 6380)
+                    .clusterNode("localhost", 6381);
             LettuceClientConfiguration clientConfiguration = LettuceClientConfiguration.builder()
                     .clientOptions(ClientOptions.builder()
                             .socketOptions(SocketOptions.builder()
