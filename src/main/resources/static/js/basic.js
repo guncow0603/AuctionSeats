@@ -10,7 +10,7 @@ var white_list = {
 
 function getUrl() {
     const hostname = window.location.hostname;
-    const url = hostname === 'localhost' ? 'http://localhost:8080' : 'https://www.auction-seats.com';
+    const url = hostname === 'localhost' ? 'http://localhost:8080' : 'http://www.auction-seats.com';
 
     return url;
 }
