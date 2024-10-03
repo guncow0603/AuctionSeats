@@ -1,9 +1,11 @@
 version: 0.0
 os: linux
+
 files:
   - source: /
-    destination: /home/ubuntu/tago
+    destination: /home/ubuntu/auction-seats
     overwrite: yes
+file_exists_behavior: OVERWRITE
 
 permissions:
   - object: /
@@ -14,7 +16,6 @@ permissions:
 
 hooks:
   AfterInstall:
-    - location: scripts/afterInstall.sh
-      timeout: 60
-      runas: ubuntu
-
+    - location: scripts/deploy.sh
+      timeout: 200
+      runas : root
