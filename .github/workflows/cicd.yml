@@ -54,6 +54,8 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: auction-seats
           IMAGE_TAG: ${{ github.sha }}
+          DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+          DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
@@ -71,7 +73,7 @@ jobs:
           echo "  sudo docker rm -f \$CONTAINER_ID" >> scripts/deploy.sh
           echo "  sleep 5" >> scripts/deploy.sh
           echo "fi" >> scripts/deploy.sh
-          echo "aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin \$ECR_REGISTRY" >> scripts/deploy.sh
+          echo "echo \"\$DOCKER_HUB_PASSWORD\" | docker login --username \"\$DOCKER_HUB_USERNAME\" --password-stdin" >> scripts/deploy.sh
           echo "docker pull \$ECR_REGISTRY/\$ECR_REPOSITORY:\$IMAGE_TAG" >> scripts/deploy.sh
           echo "if sudo lsof -i :6379; then" >> scripts/deploy.sh
           echo "  echo '포트 6379가 사용 중입니다. 다른 포트를 사용합니다.' >> /home/ubuntu/deploy.log" >> scripts/deploy.sh
