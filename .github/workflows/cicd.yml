@@ -6,9 +6,9 @@ on:
 
 env:
   PROJECT_NAME: auction-seats
-  BUCKET_NAME: auction-seats-deploy
-  CODE_DEPLOY_APP_NAME: auction-seats-deploy-app
-  DEPLOYMENT_GROUP_NAME: auction-seats-blue-green-deploy-group
+  BUCKET_NAME: bluegreen-auctionseats
+  CODE_DEPLOY_APP_NAME: BlueGreen
+  DEPLOYMENT_GROUP_NAME: BlueGreen
 
 jobs:
   build-docker:
