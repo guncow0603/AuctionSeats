@@ -24,9 +24,9 @@ jobs:
       - name: make application-prod.yml
         if: contains(github.ref, 'main')
         run: |
-          cd ./src/main/resources
+          cd ./src/main/resources || exit 1
           touch ./application-prod.yml
-          echo "${{ secrets.YML_PROD }}" | base64 --decode > ./application-prod.yml
+          echo "${{ secrets.YML_PROD }}" | base64 --decode > ./application-prod.yml || { echo "Failed to create application-prod.yml"; exit 1; }
         shell: bash
 
       - name: Grant execute permission for gradlew
