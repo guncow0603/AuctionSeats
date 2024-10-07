@@ -29,12 +29,16 @@ jobs:
           # 파일 존재 여부 확인
           if [ -f ./application-prod.yml ]; then
               echo "application-prod.yml already exists. Deleting it."
-              rm ./application-prod.yml
+              rm ./application-prod.yml || { echo "Failed to delete application-prod.yml"; exit 1; }
           fi
           
           # 새 파일 생성 및 내용 작성
-          touch ./application-prod.yml
-          echo "${{ secrets.YML_PROD }}" | base64 --decode > ./application-prod.yml || { echo "Failed to create application-prod.yml"; exit 1; }
+          touch ./application-prod.yml || { echo "Failed to create application-prod.yml"; exit 1; }
+          echo "${{ secrets.YML_PROD }}" | base64 --decode > ./application-prod.yml || { echo "Failed to write to application-prod.yml"; exit 1; }
+          
+          # 생성된 파일 내용 확인
+          echo "Contents of application-prod.yml:"
+          cat ./application-prod.yml
         shell: bash
 
       - name: Grant execute permission for gradlew
