@@ -6,9 +6,9 @@ on:
 
 env:
   PROJECT_NAME: auction-seats
-  BUCKET_NAME: tago-deploy1
-  CODE_DEPLOY_APP_NAME: tago-dev
-  DEPLOYMENT_GROUP_NAME: tago-deploy-group
+  BUCKET_NAME: bluegreen-auctionseats
+  CODE_DEPLOY_APP_NAME: BlueGreen
+  DEPLOYMENT_GROUP_NAME: BlueGreen
 
 jobs:
   build-docker:
