@@ -88,13 +88,7 @@ jobs:
             fi \n' >> scripts/deploy.sh  
           echo "aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin $ECR_REGISTRY" >> scripts/deploy.sh
           echo "docker pull $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> scripts/deploy.sh
-          echo "docker run -p 8080:8080 -p 6379:6379 -p 3306:3306 -v /home/ubuntu/auction-seats/logs:/logs -v /etc/localtime:/etc/localtime:ro -e TZ=Asia/Seoul -d --restart always --name auction-seats-api $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> scripts/deploy.sh
-
-          # Redis 3개 인스턴스 실행
-          echo "docker run -p 6379:6379 -v /path/to/redis-6379.conf:/usr/local/etc/redis/redis.conf --name redis-6379 --restart always -d redis:latest redis-server /usr/local/etc/redis/redis.conf" >> scripts/deploy.sh
-          echo "docker run -p 6380:6379 -v /path/to/redis-6380.conf:/usr/local/etc/redis/redis.conf --name redis-6380 --restart always -d redis:latest redis-server /usr/local/etc/redis/redis.conf" >> scripts/deploy.sh
-          echo "docker run -p 6381:6379 -v /path/to/redis-6381.conf:/usr/local/etc/redis/redis.conf --name redis-6381 --restart always -d redis:latest redis-server /usr/local/etc/redis/redis.conf" >> scripts/deploy.sh
-
+          echo "docker run -p 8080:8080 -v /home/ubuntu/auction-seats/logs:/logs -v /etc/localtime:/etc/localtime:ro -e TZ=Asia/Seoul -d --restart always --name auction-seats-api $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> scripts/deploy.sh
       - name: upload to s3
         env:
           IMAGE_TAG: ${{ github.sha }}
