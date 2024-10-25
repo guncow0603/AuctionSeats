@@ -19,7 +19,3 @@ hooks:
     - location: scripts/deploy.sh
       timeout: 200
       runas : root
-  ApplicationStart:
-    - location: scripts/healthcheck.sh  # 헬스 체크 스크립트 추가
-      timeout: 60
-      runas: root
