@@ -99,3 +99,14 @@ jobs:
         env:
           IMAGE_TAG: ${{ github.sha }}
         run: aws deploy create-deployment --application-name $CODE_DEPLOY_APP_NAME --deployment-group-name $DEPLOYMENT_GROUP_NAME --deployment-config-name CodeDeployDefault.OneAtATime --s3-location bucket=$BUCKET_NAME,bundleType=zip,key=$PROJECT_NAME/$IMAGE_TAG.zip
+      - name: Health Check
+        run: |
+          echo "Performing health check on the application..."
+          sleep 10  # Wait for the application to start
+          HTTP_RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" http://www.auction-seats.com/health)  # 헬스 체크 엔드포인트
+          if [ "$HTTP_RESPONSE" -ne 200 ]; then
+              echo "Health check failed with response code $HTTP_RESPONSE."
+              exit 1
+          else
+              echo "Health check succeeded with response code $HTTP_RESPONSE."
+          fi
