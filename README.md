@@ -1,5 +1,4 @@
 # AuctionSeats
-# AuctionSeats
 
 ## 소개
 
